@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --col-count: 5;
+    --nav-height: 3.5rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg-dark text-white antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgb(255, 115, 0);
+    color: #000;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(to right,
+        rgb(255, 115, 0),
+        rgb(255, 0, 0));
+  }
+}
