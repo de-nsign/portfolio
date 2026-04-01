@@ -142,8 +142,8 @@ export const stroika: CaseStudy = {
     },
   ],
   nextProject: {
-    slug: "domsvech",
-    name: "DOM SVECH",
-    image: "/images/projects/domsvech/hero.jpg",
+    slug: "vtb",
+    name: "VTB BANK",
+    image: "/images/projects/vtb/hero.jpg",
   },
 };

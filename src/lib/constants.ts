@@ -22,9 +22,23 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
+    id: "vtb",
+    slug: "vtb",
+    number: "01",
+    name: "VTB BANK",
+    description:
+      "Digital banking platform for one of Russia's largest banks — 3D visuals, product pages, and design direction.",
+    image: "/images/projects/vtb/hero.jpg",
+    industry: "Banking / Finance",
+    published: "2026",
+    deliverables: ["3D Graphics", "Web Design", "Design Direction", "Page Assembly"],
+    liveUrl: "https://www.vtb.ru/",
+    hasCaseStudy: true,
+  },
+  {
     id: "domsvech",
     slug: "domsvech",
-    number: "01",
+    number: "02",
     name: "DOM SVECH",
     description:
       "High-converting landing page for an online candle-making academy with tiered pricing and payment integration.",
@@ -38,7 +52,7 @@ export const PROJECTS: Project[] = [
   {
     id: "constantine-rytvin",
     slug: "constantine-rytvin",
-    number: "02",
+    number: "03",
     name: "CONSTANTINE RYTVIN",
     description:
       "Personal portfolio for a game designer showcasing AAA and indie projects with cinematic dark aesthetic.",
@@ -52,7 +66,7 @@ export const PROJECTS: Project[] = [
   {
     id: "valsydev",
     slug: "valsydev",
-    number: "03",
+    number: "04",
     name: "VALSYDEV",
     description:
       "Developer portfolio showcasing technical projects with modern dark aesthetic.",
@@ -66,7 +80,7 @@ export const PROJECTS: Project[] = [
   {
     id: "stroika",
     slug: "stroika",
-    number: "04",
+    number: "05",
     name: "STROIKA",
     description:
       "Corporate website for a heavy equipment rental company in Cyprus with focus on lead generation.",
@@ -80,7 +94,7 @@ export const PROJECTS: Project[] = [
   {
     id: "gam",
     slug: "gam",
-    number: "05",
+    number: "06",
     name: "GAM",
     description:
       "A comprehensive brand and web redesign for a leading SaaS analytics platform.",
@@ -93,7 +107,7 @@ export const PROJECTS: Project[] = [
   {
     id: "thesystemsboss",
     slug: "thesystemsboss",
-    number: "06",
+    number: "07",
     name: "THE SYSTEMS BOSS",
     description:
       "Strategic brand identity and website for an AI-powered business automation platform.",
@@ -106,7 +120,7 @@ export const PROJECTS: Project[] = [
   {
     id: "pharsalus",
     slug: "pharsalus",
-    number: "07",
+    number: "08",
     name: "PHARSALUS",
     description:
       "End-to-end design system and marketing site for a fintech startup.",
@@ -119,7 +133,7 @@ export const PROJECTS: Project[] = [
   {
     id: "expert-insights",
     slug: "expert-insights",
-    number: "08",
+    number: "09",
     name: "EXPERT INSIGHTS",
     description:
       "A content-driven platform redesign for B2B technology research and analysis.",
