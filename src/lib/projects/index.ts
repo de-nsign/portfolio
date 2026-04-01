@@ -1,7 +1,13 @@
 import type { CaseStudy } from "./types";
+import { domsvech } from "./domsvech";
+import { constantineRytvin } from "./constantine-rytvin";
+import { valsydev } from "./valsydev";
 import { stroika } from "./stroika";
 
 const caseStudies: Record<string, CaseStudy> = {
+  domsvech,
+  "constantine-rytvin": constantineRytvin,
+  valsydev,
   stroika,
 };
 

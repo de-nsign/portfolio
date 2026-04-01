@@ -142,8 +142,8 @@ export const stroika: CaseStudy = {
     },
   ],
   nextProject: {
-    slug: "gam",
-    name: "GAM",
-    image: "/images/projects/project-01.jpg",
+    slug: "domsvech",
+    name: "DOM SVECH",
+    image: "/images/projects/domsvech/hero.jpg",
   },
 };

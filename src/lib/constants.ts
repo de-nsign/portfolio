@@ -22,9 +22,51 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
+    id: "domsvech",
+    slug: "domsvech",
+    number: "01",
+    name: "DOM SVECH",
+    description:
+      "High-converting landing page for an online candle-making academy with tiered pricing and payment integration.",
+    image: "/images/projects/domsvech/hero.jpg",
+    industry: "Education / E-commerce",
+    published: "2024",
+    deliverables: ["UI/UX Design", "Web Design", "Webflow Development", "Conversion Optimization"],
+    liveUrl: "https://domm-svech.webflow.io/",
+    hasCaseStudy: true,
+  },
+  {
+    id: "constantine-rytvin",
+    slug: "constantine-rytvin",
+    number: "02",
+    name: "CONSTANTINE RYTVIN",
+    description:
+      "Personal portfolio for a game designer showcasing AAA and indie projects with cinematic dark aesthetic.",
+    image: "/images/projects/constantine-rytvin/hero.jpg",
+    industry: "Gaming / Portfolio",
+    published: "2024",
+    deliverables: ["UI/UX Design", "Web Design", "Webflow Development"],
+    liveUrl: "https://constantine-rytvin.webflow.io/",
+    hasCaseStudy: true,
+  },
+  {
+    id: "valsydev",
+    slug: "valsydev",
+    number: "03",
+    name: "VALSYDEV",
+    description:
+      "Developer portfolio showcasing technical projects with modern dark aesthetic.",
+    image: "/images/projects/valsydev/hero.jpg",
+    industry: "Development / Portfolio",
+    published: "2025",
+    deliverables: ["UI/UX Design", "Next.js Development", "Portfolio", "Dark Theme"],
+    liveUrl: "https://www.valsydev.com/",
+    hasCaseStudy: true,
+  },
+  {
     id: "stroika",
     slug: "stroika",
-    number: "01",
+    number: "04",
     name: "STROIKA",
     description:
       "Corporate website for a heavy equipment rental company in Cyprus with focus on lead generation.",
@@ -38,7 +80,7 @@ export const PROJECTS: Project[] = [
   {
     id: "gam",
     slug: "gam",
-    number: "02",
+    number: "05",
     name: "GAM",
     description:
       "A comprehensive brand and web redesign for a leading SaaS analytics platform.",
@@ -51,7 +93,7 @@ export const PROJECTS: Project[] = [
   {
     id: "thesystemsboss",
     slug: "thesystemsboss",
-    number: "03",
+    number: "06",
     name: "THE SYSTEMS BOSS",
     description:
       "Strategic brand identity and website for an AI-powered business automation platform.",
@@ -64,7 +106,7 @@ export const PROJECTS: Project[] = [
   {
     id: "pharsalus",
     slug: "pharsalus",
-    number: "04",
+    number: "07",
     name: "PHARSALUS",
     description:
       "End-to-end design system and marketing site for a fintech startup.",
@@ -77,7 +119,7 @@ export const PROJECTS: Project[] = [
   {
     id: "expert-insights",
     slug: "expert-insights",
-    number: "05",
+    number: "08",
     name: "EXPERT INSIGHTS",
     description:
       "A content-driven platform redesign for B2B technology research and analysis.",
