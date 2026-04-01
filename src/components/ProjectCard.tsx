@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { Project } from "@/lib/constants";
 
 type ProjectCardProps = {
@@ -7,11 +8,11 @@ type ProjectCardProps = {
 };
 
 export default function ProjectCard({ project }: ProjectCardProps) {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 border-t border-divider-light">
+  const cardContent = (
+    <div className="grid grid-cols-1 md:grid-cols-2 border-t border-divider-light group">
       {/* Left: Project Image */}
       <div className="relative aspect-[16/10] bg-gray-100 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
           <span className="text-gray-400 text-label uppercase tracking-widest">
             {project.name}
           </span>
@@ -24,7 +25,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {/* Header Row */}
           <div className="flex justify-between items-start mb-4">
             <div>
-              <h3 className="text-xl font-display font-bold uppercase">
+              <h3 className="text-xl font-display font-bold uppercase group-hover:text-accent-orange transition-colors">
                 {project.name}
               </h3>
               <p className="text-sm text-black/60 mt-2 max-w-sm">
@@ -44,14 +45,25 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             <span>{project.published}</span>
             <span>{project.deliverables.join(" / ")}</span>
           </div>
-          <a
-            href={project.liveUrl}
-            className="inline-block mt-4 text-sm font-medium uppercase tracking-widest text-black hover:text-accent-orange transition-colors"
-          >
-            VIEW PROJECT &rarr;
-          </a>
+          <span className="inline-block mt-4 text-sm font-medium uppercase tracking-widest text-black group-hover:text-accent-orange transition-colors">
+            {project.hasCaseStudy ? "VIEW CASE STUDY" : "VIEW PROJECT"} &rarr;
+          </span>
         </div>
       </div>
     </div>
+  );
+
+  if (project.hasCaseStudy) {
+    return (
+      <Link href={`/projects/${project.slug}`} className="block">
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return (
+    <a href={project.liveUrl} className="block">
+      {cardContent}
+    </a>
   );
 }

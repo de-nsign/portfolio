@@ -8,6 +8,7 @@ export const NAV_LINKS = [
 
 export type Project = {
   id: string;
+  slug: string;
   number: string;
   name: string;
   description: string;
@@ -16,12 +17,28 @@ export type Project = {
   published: string;
   deliverables: string[];
   liveUrl: string;
+  hasCaseStudy?: boolean;
 };
 
 export const PROJECTS: Project[] = [
   {
-    id: "gam",
+    id: "stroika",
+    slug: "stroika",
     number: "01",
+    name: "STROIKA",
+    description:
+      "Corporate website for a heavy equipment rental company in Cyprus with focus on lead generation.",
+    image: "/images/projects/stroika/hero.jpg",
+    industry: "Construction / B2B",
+    published: "2025",
+    deliverables: ["UI/UX Design", "Web Design", "Development"],
+    liveUrl: "https://stroika-one.vercel.app",
+    hasCaseStudy: true,
+  },
+  {
+    id: "gam",
+    slug: "gam",
+    number: "02",
     name: "GAM",
     description:
       "A comprehensive brand and web redesign for a leading SaaS analytics platform.",
@@ -33,7 +50,8 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "thesystemsboss",
-    number: "02",
+    slug: "thesystemsboss",
+    number: "03",
     name: "THE SYSTEMS BOSS",
     description:
       "Strategic brand identity and website for an AI-powered business automation platform.",
@@ -45,7 +63,8 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "pharsalus",
-    number: "03",
+    slug: "pharsalus",
+    number: "04",
     name: "PHARSALUS",
     description:
       "End-to-end design system and marketing site for a fintech startup.",
@@ -57,7 +76,8 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "expert-insights",
-    number: "04",
+    slug: "expert-insights",
+    number: "05",
     name: "EXPERT INSIGHTS",
     description:
       "A content-driven platform redesign for B2B technology research and analysis.",
