@@ -10,9 +10,9 @@ const inter = Inter({
 });
 
 const displayFont = localFont({
-  src: "./fonts/GeistVF.woff",
+  src: "./fonts/Sk-Modernist-Regular.otf",
   variable: "--font-display",
-  weight: "100 900",
+  weight: "400",
 });
 
 const serifFont = Playfair_Display({

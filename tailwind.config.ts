@@ -28,15 +28,15 @@ const config: Config = {
       },
       fontSize: {
         "display-xl": [
-          "clamp(4rem, 15vw, 20rem)",
+          "clamp(4.84rem, 18.15vw, 24.2rem)",
           { lineHeight: "0.9", letterSpacing: "-0.02em" },
         ],
         "display-lg": [
-          "clamp(3rem, 10vw, 12rem)",
+          "clamp(3.63rem, 12.1vw, 14.52rem)",
           { lineHeight: "0.95", letterSpacing: "-0.02em" },
         ],
         "display-md": [
-          "clamp(2rem, 6vw, 6rem)",
+          "clamp(2.42rem, 7.26vw, 7.26rem)",
           { lineHeight: "1", letterSpacing: "-0.01em" },
         ],
         label: [

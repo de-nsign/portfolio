@@ -5,11 +5,9 @@ import { useEffect } from "react";
 import Nav from "@/components/Nav";
 import HeroSection from "@/components/HeroSection";
 import WorksSection from "@/components/WorksSection";
-import MarqueeStrip from "@/components/MarqueeStrip";
 import ServicesSection from "@/components/ServicesSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
-import { MARQUEE_LOGOS } from "@/lib/constants";
 import { initAllAnimations } from "@/lib/animations";
 
 const GradientCanvas = dynamic(
@@ -29,15 +27,6 @@ const GradientCanvas = dynamic(
   }
 );
 
-const logoItems = MARQUEE_LOGOS.map((name) => (
-  <span
-    key={name}
-    className="text-sm uppercase tracking-widest text-black/30 font-medium whitespace-nowrap"
-  >
-    {name}
-  </span>
-));
-
 export default function Home() {
   useEffect(() => {
     // Small delay to ensure DOM is ready
@@ -56,11 +45,6 @@ export default function Home() {
         <WorksSection />
         {/* Everything after works sits above the fixed gradient canvas */}
         <div className="relative z-10" style={{ willChange: "transform" }}>
-          <MarqueeStrip
-            items={logoItems}
-            speed={25}
-            className="py-8 bg-white border-y border-divider-light"
-          />
           <ServicesSection />
         </div>
         {/* CTA has its own gradient background */}
