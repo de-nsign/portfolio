@@ -28,7 +28,7 @@ export default function Projects({
                 alt={p.title}
                 width={1600}
                 height={900}
-                className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.01]"
+                className="h-auto w-full object-cover"
               />
             </a>
 

@@ -1,3 +1,5 @@
+import MagneticLink from "./MagneticLink";
+
 const links = [
   { label: "CV", href: "#" },
   { label: "Telegram", href: "https://t.me/de_nsign" },
@@ -37,7 +39,7 @@ export default function Hero() {
 
       <p className="mt-5 text-[17px] text-neutral-500">Hi, I&apos;m Denis!</p>
 
-      <h1 className="hero-heading mt-3 max-w-[460px] text-[40px] font-semibold leading-[1.05] tracking-[-0.04em]">
+      <h1 className="hero-heading mt-3 max-w-[460px] py-1 text-[40px] font-semibold leading-[1.2] tracking-[-0.04em]">
         Design System Designer
       </h1>
 
@@ -49,16 +51,16 @@ export default function Hero() {
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         {links.map((l) => (
-          <a
+          <MagneticLink
             key={l.label}
             href={l.href}
             target={l.href.startsWith("http") ? "_blank" : undefined}
             rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="inline-flex items-center gap-2 rounded-full bg-neutral-100 px-6 py-3 text-[17px] text-ink transition-colors hover:bg-neutral-200"
+            className="inline-flex items-center gap-2 rounded-full bg-neutral-100 px-6 py-3 text-[17px] text-ink hover:bg-neutral-200"
           >
             {l.label}
             <ArrowUpRight />
-          </a>
+          </MagneticLink>
         ))}
       </div>
     </section>
