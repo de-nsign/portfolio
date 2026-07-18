@@ -67,13 +67,12 @@ export default function Career() {
   const ladderRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const climberRef = useRef<HTMLDivElement>(null);
-  const rowsRef = useRef<HTMLOListElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       let stopTimer: ReturnType<typeof setTimeout>;
 
-      const tw = gsap.fromTo(
+      gsap.fromTo(
         trackRef.current,
         { top: "0%", yPercent: 0 },
         {
@@ -116,9 +115,6 @@ export default function Career() {
       const refresh = () => ScrollTrigger.refresh();
       window.addEventListener("load", refresh);
       const t = setTimeout(refresh, 400);
-      if (process.env.NODE_ENV !== "production") {
-        (window as unknown as { __ST?: unknown }).__ST = tw.scrollTrigger;
-      }
       return () => {
         window.removeEventListener("load", refresh);
         clearTimeout(t);
@@ -151,7 +147,7 @@ export default function Career() {
         </div>
 
         {/* Entries */}
-        <ol ref={rowsRef} className="flex-1 space-y-14 sm:space-y-[72px]">
+        <ol className="flex-1 space-y-14 sm:space-y-[72px]">
           {career.map((entry) => (
             <li key={entry.company} className="career-row">
               <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
