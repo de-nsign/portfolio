@@ -107,6 +107,7 @@ export type CareerEntry = {
   role: string;
   period: string;
   projects?: string[];
+  blurb?: string;
   logo: string;
 };
 
@@ -115,24 +116,32 @@ export const career: CareerEntry[] = [
     company: "Re:Luna",
     role: "Senior Product Designer",
     period: "2024 — Now",
+    blurb:
+      "Building a fintech wealth-management platform — a B2B analyst workspace and a client-facing iOS app for portfolio performance and clearer investment decisions.",
     logo: "/images/logos/career-reluna.png",
   },
   {
     company: "MTS",
     role: "Senior Product Designer",
     period: "2023 — 2024",
+    blurb:
+      "Led accessibility across the MTS design system — color contrast, touch targets, font scaling and component behavior, with internal guides so others could design for everyone.",
     logo: "/images/logos/career-mts.png",
   },
   {
     company: "Helper",
     role: "Design Mentor",
     period: "2023",
+    blurb:
+      "Mentored junior designers — building learning plans, reviewing work and talking through the craft one project at a time.",
     logo: "/images/logos/career-helper.png",
   },
   {
     company: "Yandex Practicum",
     role: "Reviewer and Author",
     period: "2023 — 2024",
+    blurb:
+      "Reviewed student projects and authored course material for one of the largest EdTech platforms in the region.",
     logo: "/images/logos/career-yandex.png",
   },
   {
@@ -140,6 +149,8 @@ export const career: CareerEntry[] = [
     role: "Middle Designer → Lead Designer",
     period: "2020 — 2023 · Full Time",
     projects: ["RuStore", "Bioniq", "VTB"],
+    blurb:
+      "Grew from product designer on VTB's website redesign into a lead managing a team of four, later moving into hands-on work across VK and RuStore.",
     logo: "/images/home/pinkman-logo.svg",
   },
 ];
