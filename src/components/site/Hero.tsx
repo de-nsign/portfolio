@@ -1,24 +1,56 @@
-"use client";
-
-import { useState } from "react";
-
-const tabs = ["Info", "Images", "About"];
+export type HeroTab = "Info" | "Images" | "About";
+const tabs: HeroTab[] = ["Info", "Images", "About"];
 const socials = ["LinkedIn", "Telegram", "Email", "Resume"];
 
-export default function Hero() {
-  const [active, setActive] = useState("Info");
-
+export default function Hero({
+  active,
+  onTab,
+}: {
+  active: HeroTab;
+  onTab: (t: HeroTab) => void;
+}) {
   return (
-    <section className="flex min-h-[90vh] flex-col items-center justify-center px-6 text-center">
+    <section className="flex flex-col items-center justify-center px-6 pt-24 text-center">
+      <div className="relative h-[313px] w-[313px] max-w-full">
+        <video
+          className="h-full w-full object-cover dark:hidden"
+          src="/videos/profile/profile-portrait-light.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+        <video
+          className="hidden h-full w-full object-cover dark:block"
+          src="/videos/profile/profile-portrait-dark.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+        <img
+          src="/images/profile/profile-portrait-gradient.png"
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute -bottom-2 left-1/2 w-[365px] max-w-none -translate-x-1/2 dark:hidden"
+        />
+        <img
+          src="/images/profile/profile-portrait-gradient-dark.png"
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute -bottom-2 left-1/2 hidden w-[365px] max-w-none -translate-x-1/2 dark:block"
+        />
+      </div>
+
       <a
         href="#"
-        className="mb-8 inline-flex items-center gap-2 rounded-full bg-[#DFF3E4] px-4 py-1.5 text-[13px] text-[#1c1b1b] transition-colors hover:bg-[#d2edd9]"
+        className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#DFF3E4] px-4 py-1.5 text-[13px] text-[#1c1b1b] transition-colors hover:bg-[#d2edd9]"
       >
         Schedule a Call
         <span aria-hidden>→</span>
       </a>
 
-      <h1 className="text-[34px] font-semibold tracking-tight text-ink sm:text-[38px]">
+      <h1 className="mt-6 text-[34px] font-semibold tracking-tight text-ink sm:text-[38px]">
         Vlad Kalashnikov
       </h1>
 
@@ -43,7 +75,7 @@ export default function Hero() {
         {tabs.map((t) => (
           <button
             key={t}
-            onClick={() => setActive(t)}
+            onClick={() => onTab(t)}
             className={`rounded-full px-4 py-1.5 transition-colors ${
               active === t
                 ? "bg-white text-ink shadow-sm"

@@ -1,15 +1,26 @@
 import Image from "next/image";
-import { projects } from "@/lib/site-data";
+import type { Project } from "@/lib/site-data";
+import { latestProjects } from "@/lib/site-data";
 import SectionHeader from "./SectionHeader";
 import ProjectLogo from "./ProjectLogo";
 
-export default function Projects() {
+export default function Projects({
+  title = "Latest Projects",
+  count,
+  items = latestProjects,
+  topPadding = "pt-24",
+}: {
+  title?: string;
+  count?: number;
+  items?: Project[];
+  topPadding?: string;
+}) {
   return (
-    <section className="mx-auto max-w-[1200px] px-6 pt-24">
-      <SectionHeader title="Latest Projects" count={5} />
+    <section className={`mx-auto max-w-[1200px] px-6 ${topPadding}`}>
+      <SectionHeader title={title} count={count ?? items.length} />
 
       <div className="mt-14 flex flex-col gap-28">
-        {projects.map((p) => (
+        {items.map((p) => (
           <article key={p.slug} className="group">
             <a href="#" className="block overflow-hidden rounded-2xl bg-neutral-50">
               <Image
@@ -18,7 +29,6 @@ export default function Projects() {
                 width={1600}
                 height={900}
                 className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.01]"
-                priority={p.slug === "re-luna"}
               />
             </a>
 

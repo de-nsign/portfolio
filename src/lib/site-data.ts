@@ -152,6 +152,40 @@ export const articles: Article[] = [
   { title: "Mental Health in the Life of a Designer", meta: "Essay · Wellbeing" },
 ];
 
+export const latestProjects = projects.slice(0, 5);
+export const sideActivity = projects.slice(5);
+
+export const aboutParagraphs: string[] = [
+  'I first thought about becoming a designer in 2018 while studying law in Irkutsk. One day in class, I realized I couldn\'t see myself as a lawyer. I googled "digital professions" and found "UX/UI designer." I read the description and instantly knew that was it.',
+  "I dropped out of university and started learning design. Created fake projects, built my first portfolio, and worked on a construction site at the same time. It was tough, but it felt like I was building a new life - one layout at a time.",
+  "In 2019, I got my first job at a small studio in Omsk called Renoda. That was the first time I got paid for design. I worked on SaaS products, mobile apps, and marketing pages - and realized design could actually be a profession, not just a hobby.",
+  "In 2020, I joined Pinkman Studio. Started as a product designer on VTB Bank's website redesign, and later became a lead managing a team of four. It was a big step up, but after a year I missed hands-on work. I switched to other projects - including VK and RuStore.",
+  "Then came MTS. I joined the design system team to focus on digital accessibility. That experience changed how I see design - less about looks, more about care. I worked on color contrast, touch areas, font scaling, component behavior, and wrote internal guides that helped others design for everyone.",
+  "At the same time, I reviewed student projects for Yandex.Practicum and mentored at Helper. Helping others grow - building plans, giving feedback, discussing design - turned out to be one of the most rewarding experiences.",
+  "At the beginning of 2024, I planned to take a short break. But a week after leaving MTS, I got a message from Re:Luna. The product instantly clicked with me, and I joined as a Senior Product Designer. It's a startup full of diverse, genuinely interesting challenges.",
+  "If I had to sum it up - it all started with one lecture and a Google search. Since then, design has become more than a profession. It's a way of thinking, observing, solving, and improving things - both on screen and beyond.",
+];
+
+export type GalleryImage = { src: string; span: 1 | 2 | 3; ratio: string };
+
+export const galleryImages: GalleryImage[] = [
+  { src: "/images/home/gallery/variants/gemx-grid.jpg", span: 2, ratio: "4 / 3" },
+  { src: "/images/home/gallery/variants/ios-widget-player.jpg", span: 1, ratio: "4 / 3" },
+  { src: "/images/home/gallery/variants/ios-app-icons-camera.jpg", span: 1, ratio: "4 / 3" },
+  { src: "/images/home/gallery/variants/digital-watch-neon.jpg", span: 1, ratio: "4 / 3" },
+  { src: "/images/home/gallery/variants/gemx-phones.jpg", span: 3, ratio: "16 / 9" },
+  { src: "/images/home/gallery/variants/dreamguard-poster.jpg", span: 2, ratio: "1 / 1" },
+  { src: "/images/home/gallery/ios-widget-challenge.jpg", span: 1, ratio: "4 / 3" },
+  { src: "/images/home/gallery/variants/digital-watch-square.jpg", span: 1, ratio: "4 / 3" },
+  { src: "/images/home/gallery/variants/lifewell-floating.jpg", span: 1, ratio: "4 / 3" },
+  { src: "/images/home/gallery/variants/smart-fridge-shelf.jpg", span: 1, ratio: "4 / 3" },
+  { src: "/images/home/gallery/variants/ios-widget-clock.jpg", span: 1, ratio: "4 / 3" },
+  { src: "/images/home/gallery/variants/focus-wide.jpg", span: 1, ratio: "4 / 3" },
+  { src: "/images/home/gallery/variants/ios-app-icons-metal.jpg", span: 1, ratio: "4 / 3" },
+  { src: "/images/home/gallery/variants/smart-fridge-dashboard.jpg", span: 1, ratio: "4 / 3" },
+  { src: "/images/home/gallery/variants/swipedish-green.jpg", span: 1, ratio: "4 / 3" },
+];
+
 export const footerColumns: { heading: string; links: string[] }[] = [
   { heading: "Contact", links: ["Telegram", "LinkedIn", "Email"] },
   { heading: "Channels", links: ["Design Mind", "Design Resources", "Daily Aestethics"] },
