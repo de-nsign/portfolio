@@ -5,8 +5,8 @@ import ProjectLogo from "./ProjectLogo";
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex gap-4 py-1">
-      <span className="w-24 shrink-0 text-[13px] text-neutral-400">{label}</span>
-      <span className="text-[14px] text-ink">{children}</span>
+      <span className="w-28 shrink-0 text-[16px] text-neutral-400">{label}</span>
+      <span className="text-[16px] text-ink">{children}</span>
     </div>
   );
 }

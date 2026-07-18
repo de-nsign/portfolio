@@ -44,7 +44,7 @@ export default function Hero({
 
       <a
         href="#"
-        className="inline-flex items-center gap-2 rounded-full bg-[#DFF3E4] px-4 py-1.5 text-[13px] text-[#1c1b1b] transition-colors hover:bg-[#d2edd9]"
+        className="inline-flex items-center gap-2 rounded-full bg-[#DFF3E4] px-4 py-2 text-[14px] font-medium text-[#1c1b1b] transition-colors hover:bg-[#d2edd9]"
       >
         Schedule a Call
         <span aria-hidden>→</span>
@@ -74,7 +74,7 @@ export default function Hero({
         ))}
       </div>
 
-      <div className="mt-6 inline-flex items-center rounded-full bg-neutral-100 p-1 text-[13px]">
+      <div className="mt-6 inline-flex items-center rounded-full bg-neutral-100 p-1 text-[16px]">
         {tabs.map((t) => (
           <button
             key={t}

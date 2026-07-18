@@ -41,24 +41,24 @@ export default function Projects({
                   title={p.title}
                 />
                 <div>
-                  <h3 className="text-[15px] font-semibold text-ink">{p.title}</h3>
-                  <p className="mt-0.5 text-[13px] text-neutral-500">
+                  <h3 className="text-[16px] font-semibold text-ink">{p.title}</h3>
+                  <p className="mt-1 text-[16px] text-neutral-500">
                     {p.role} · {p.period}
                   </p>
-                  <p className="mt-1 text-[13px] text-neutral-400">
+                  <p className="mt-1 text-[16px] text-neutral-400">
                     {p.tags.join(" · ")}
                   </p>
                 </div>
               </div>
 
-              <p className="max-w-[380px] text-[14px] leading-relaxed text-ink md:text-right">
+              <p className="max-w-[496px] text-[18px] font-medium leading-[1.4] text-ink md:text-right">
                 {p.description}
               </p>
             </div>
 
             <a
               href="#"
-              className="mt-4 inline-block text-[13px] text-neutral-500 transition-colors hover:text-ink"
+              className="mt-4 inline-block text-[16px] text-neutral-500 transition-colors hover:text-ink"
             >
               See Details
             </a>

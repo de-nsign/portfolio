@@ -10,13 +10,13 @@ export default function SiteFooter() {
       <div className="mt-20 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 md:grid-cols-5">
         {footerColumns.map((col) => (
           <div key={col.heading}>
-            <p className="mb-4 text-[13px] text-neutral-400">{col.heading}</p>
+            <p className="mb-4 text-[16px] text-neutral-400">{col.heading}</p>
             <ul className="space-y-3">
               {col.links.map((l) => (
                 <li key={l}>
                   <a
                     href="#"
-                    className="text-[14px] text-ink transition-opacity hover:opacity-60"
+                    className="text-[16px] text-ink transition-opacity hover:opacity-60"
                   >
                     {l}
                   </a>

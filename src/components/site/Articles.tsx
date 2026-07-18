@@ -13,15 +13,15 @@ export default function Articles() {
             href="#"
             className="flex items-center justify-between py-5 transition-opacity hover:opacity-60"
           >
-            <span className="text-[16px] text-ink">{a.title}</span>
-            <span className="text-[13px] text-neutral-400">{a.meta}</span>
+            <span className="text-[16px] font-semibold text-ink">{a.title}</span>
+            <span className="text-[16px] text-neutral-400">{a.meta}</span>
           </a>
         ))}
       </div>
 
       <a
         href="#"
-        className="mt-6 inline-block text-[13px] text-neutral-500 transition-colors hover:text-ink"
+        className="mt-6 inline-block text-[16px] text-neutral-500 transition-colors hover:text-ink"
       >
         3 More Articles
       </a>

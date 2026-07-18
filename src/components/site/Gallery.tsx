@@ -10,10 +10,10 @@ export default function Gallery() {
   return (
     <section className="mx-auto max-w-[1056px] px-6 pt-24">
       <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
-        <h2 className="text-[22px] font-medium text-ink">Images</h2>
+        <h2 className="text-[24px] font-medium leading-none text-ink">Images</h2>
         <button
           onClick={() => setByProjects((v) => !v)}
-          className="flex items-center gap-3 text-[14px] text-ink"
+          className="flex items-center gap-3 text-[16px] text-ink"
         >
           By Projects
           <span
