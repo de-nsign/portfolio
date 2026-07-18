@@ -1,0 +1,178 @@
+export type Project = {
+  slug: string;
+  title: string;
+  role: string;
+  period: string;
+  tags: string[];
+  description: string;
+  image: string;
+  logo?: string;
+  logoBg?: string;
+  logoText?: string;
+};
+
+export const projects: Project[] = [
+  {
+    slug: "re-luna",
+    title: "Re:Luna",
+    role: "Sr. Product Designer",
+    period: "2024 — Now",
+    tags: ["B2B", "Fintech", "SaaS"],
+    description:
+      "Fintech wealth-management platform with two connected products: a B2B workspace for analysts and advisors, and a client-facing iOS app for tracking portfolio performance, strategy updates, daily investment activity, and clearer communication around portfolio decisions",
+    image: "/images/home/latest/re-luna-download.png",
+    logo: "/images/home/re-luna-logo.png",
+  },
+  {
+    slug: "mts",
+    title: "MTS",
+    role: "Sr. Product Designer",
+    period: "2023 — 2024",
+    tags: ["Design System", "Accessibility"],
+    description:
+      "Led accessibility work across the MTS design system: planned rollout, reviewed implementation, refined tokens and touch targets, and improved consistency across web and mobile surfaces",
+    image: "/images/home/latest/mts-download.png",
+    logo: "/images/home/mts-logo.png",
+  },
+  {
+    slug: "rustore",
+    title: "RuStore",
+    role: "Sr. Product Designer",
+    period: "2022",
+    tags: ["B2C", "Mobile App"],
+    description:
+      "Worked on RuStore, VK's Android marketplace, with a focus on trust, paid-app conversion, and faster product delivery through a stronger design system, cleaner Figma workflows, tighter collaboration with development, and more reliable handoff patterns",
+    image: "/images/home/latest/rustore-download.png",
+    logoBg: "#0077FF",
+    logoText: "R",
+  },
+  {
+    slug: "bioniq",
+    title: "Bioniq",
+    role: "Sr. Product Designer",
+    period: "2022",
+    tags: ["B2C", "Mobile App", "HealthTech"],
+    description:
+      "Designed key subscription and tracking flows for Bioniq, a personalized healthcare product, helping users follow blood-test progress, manage nutrient plans, and move through a clearer mobile experience from onboarding to retention with less friction in core health journeys",
+    image: "/images/home/latest/bioniq-download.png",
+    logoBg: "#111111",
+    logoText: "B",
+  },
+  {
+    slug: "vtb",
+    title: "VTB",
+    role: "Middle to Lead Designer",
+    period: "2020 — 2022",
+    tags: ["B2C", "Fintech", "Website"],
+    description:
+      "Worked on the redesign of VTB's public web ecosystem, growing from middle designer to design lead while shaping major landing pages, coordinating a team of four designers, improving business-critical customer journeys, and aligning larger batches of product communication work",
+    image: "/images/home/latest/vtb-download.png",
+    logoBg: "#0A2896",
+    logoText: "VTB",
+  },
+  {
+    slug: "spenlog",
+    title: "SpenLog",
+    role: "Product Designer",
+    period: "2026",
+    tags: ["Personal Project", "Fintech"],
+    description:
+      "A personal project for personal finance: expense tracking, AI-assisted input, planned payments, debts, goals, and clearer budget insights in one app built to make everyday money management faster and easier",
+    image: "/images/home/latest/spenlog-download.png",
+    logo: "/images/home/spenlog-logo.png",
+  },
+  {
+    slug: "gemx",
+    title: "GemX",
+    role: "Sr. Product Designer",
+    period: "2024",
+    tags: ["Hackathons", "Crypto"],
+    description:
+      "A hackathon project: a Telegram Mini-App where users earn crypto cases by completing tasks, inviting friends, and keeping daily streaks, shaped as a lightweight reward loop inside the app",
+    image: "/images/home/latest/gemx-download.png",
+    logoBg: "#D8F651",
+    logoText: "G",
+  },
+  {
+    slug: "her",
+    title: "Her",
+    role: "Sr. Product Designer",
+    period: "2024",
+    tags: ["Hackathons", "HealthTech"],
+    description:
+      "A hackathon project: a Telegram Mini-App that helps women track their cycle, understand daily changes, and receive more useful advice based on their data through a simple and friendly UX",
+    image: "/images/home/latest/her-download.png",
+    logoBg: "#F5B8C4",
+    logoText: "H",
+  },
+];
+
+export type CareerEntry = {
+  company: string;
+  role: string;
+  period: string;
+  projects?: string[];
+  logoBg: string;
+  logoText: string;
+  logoColor?: string;
+};
+
+export const career: CareerEntry[] = [
+  {
+    company: "Re:Luna",
+    role: "Senior Product Designer",
+    period: "2024 — Now",
+    logoBg: "#9BF3D8",
+    logoText: "RE:",
+    logoColor: "#0A0A0A",
+  },
+  {
+    company: "MTS",
+    role: "Senior Product Designer",
+    period: "2023 — 2024",
+    logoBg: "#E4001C",
+    logoText: "MTC",
+    logoColor: "#ffffff",
+  },
+  {
+    company: "Helper",
+    role: "Design Mentor",
+    period: "2023",
+    logoBg: "#98D66E",
+    logoText: "H",
+    logoColor: "#ffffff",
+  },
+  {
+    company: "Yandex Practicum",
+    role: "Reviewer and Author",
+    period: "2023 — 2024",
+    logoBg: "#111111",
+    logoText: "П",
+    logoColor: "#ffffff",
+  },
+  {
+    company: "Pinkman",
+    role: "Middle Designer → Lead Designer",
+    period: "2020 — 2023 · Full Time",
+    projects: ["RuStore", "Bioniq", "VTB"],
+    logoBg: "#F53B9E",
+    logoText: "p",
+    logoColor: "#0A0A0A",
+  },
+];
+
+export type Article = { title: string; meta: string };
+
+export const articles: Article[] = [
+  { title: "Exercises to Boost UI Skills for Product Designers", meta: "Guide · UI" },
+  { title: "A Detailed Guide to Soft Skills for a Designer", meta: "Guide · Soft Skills" },
+  { title: "Mental Health in the Life of a Designer", meta: "Essay · Wellbeing" },
+];
+
+export const footerColumns: { heading: string; links: string[] }[] = [
+  { heading: "Contact", links: ["Telegram", "LinkedIn", "Email"] },
+  { heading: "Channels", links: ["Design Mind", "Design Resources", "Daily Aestethics"] },
+  { heading: "Articles", links: ["VC", "DSGNRS", "Medium"] },
+  { heading: "Concepts", links: ["X (Twitter)", "Dribbble", "Behance"] },
+  { heading: "Vlad Kalashnikov", links: ["© 2019 — Now", "Privacy", "Licenses"] },
+];
