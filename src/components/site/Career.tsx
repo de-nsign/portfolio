@@ -37,9 +37,7 @@ export default function Career() {
               )}
             </div>
             <ProjectLogo
-              logoBg={c.logoBg}
-              logoText={c.logoText}
-              logoColor={c.logoColor}
+              logo={c.logo}
               title={c.company}
               size={70}
               radius={10}

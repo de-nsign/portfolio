@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export default function ProjectLogo({
   logo,
   logoBg,
@@ -19,19 +17,20 @@ export default function ProjectLogo({
 }) {
   if (logo) {
     return (
-      <Image
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
         src={logo}
         alt={title}
         width={size}
         height={size}
-        className="object-cover"
+        className="shrink-0 object-cover"
         style={{ width: size, height: size, borderRadius: radius }}
       />
     );
   }
   return (
     <div
-      className="grid place-items-center font-semibold"
+      className="grid shrink-0 place-items-center font-semibold"
       style={{
         width: size,
         height: size,

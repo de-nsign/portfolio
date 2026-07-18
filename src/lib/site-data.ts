@@ -43,8 +43,7 @@ export const projects: Project[] = [
     description:
       "Worked on RuStore, VK's Android marketplace, with a focus on trust, paid-app conversion, and faster product delivery through a stronger design system, cleaner Figma workflows, tighter collaboration with development, and more reliable handoff patterns",
     image: "/images/home/latest/rustore-download.png",
-    logoBg: "#0077FF",
-    logoText: "R",
+    logo: "/images/logos/rustore.png",
   },
   {
     slug: "bioniq",
@@ -55,8 +54,7 @@ export const projects: Project[] = [
     description:
       "Designed key subscription and tracking flows for Bioniq, a personalized healthcare product, helping users follow blood-test progress, manage nutrient plans, and move through a clearer mobile experience from onboarding to retention with less friction in core health journeys",
     image: "/images/home/latest/bioniq-download.png",
-    logoBg: "#111111",
-    logoText: "B",
+    logo: "/images/logos/bioniq.png",
   },
   {
     slug: "vtb",
@@ -67,8 +65,7 @@ export const projects: Project[] = [
     description:
       "Worked on the redesign of VTB's public web ecosystem, growing from middle designer to design lead while shaping major landing pages, coordinating a team of four designers, improving business-critical customer journeys, and aligning larger batches of product communication work",
     image: "/images/home/latest/vtb-download.png",
-    logoBg: "#0A2896",
-    logoText: "VTB",
+    logo: "/images/logos/vtb.png",
   },
   {
     slug: "spenlog",
@@ -90,8 +87,7 @@ export const projects: Project[] = [
     description:
       "A hackathon project: a Telegram Mini-App where users earn crypto cases by completing tasks, inviting friends, and keeping daily streaks, shaped as a lightweight reward loop inside the app",
     image: "/images/home/latest/gemx-download.png",
-    logoBg: "#D8F651",
-    logoText: "G",
+    logo: "/images/logos/gemx.png",
   },
   {
     slug: "her",
@@ -102,8 +98,7 @@ export const projects: Project[] = [
     description:
       "A hackathon project: a Telegram Mini-App that helps women track their cycle, understand daily changes, and receive more useful advice based on their data through a simple and friendly UX",
     image: "/images/home/latest/her-download.png",
-    logoBg: "#F5B8C4",
-    logoText: "H",
+    logo: "/images/logos/her.png",
   },
 ];
 
@@ -112,9 +107,7 @@ export type CareerEntry = {
   role: string;
   period: string;
   projects?: string[];
-  logoBg: string;
-  logoText: string;
-  logoColor?: string;
+  logo: string;
 };
 
 export const career: CareerEntry[] = [
@@ -122,42 +115,32 @@ export const career: CareerEntry[] = [
     company: "Re:Luna",
     role: "Senior Product Designer",
     period: "2024 — Now",
-    logoBg: "#9BF3D8",
-    logoText: "RE:",
-    logoColor: "#0A0A0A",
+    logo: "/images/logos/career-reluna.png",
   },
   {
     company: "MTS",
     role: "Senior Product Designer",
     period: "2023 — 2024",
-    logoBg: "#E4001C",
-    logoText: "MTC",
-    logoColor: "#ffffff",
+    logo: "/images/logos/career-mts.png",
   },
   {
     company: "Helper",
     role: "Design Mentor",
     period: "2023",
-    logoBg: "#98D66E",
-    logoText: "H",
-    logoColor: "#ffffff",
+    logo: "/images/logos/career-helper.png",
   },
   {
     company: "Yandex Practicum",
     role: "Reviewer and Author",
     period: "2023 — 2024",
-    logoBg: "#111111",
-    logoText: "П",
-    logoColor: "#ffffff",
+    logo: "/images/logos/career-yandex.png",
   },
   {
     company: "Pinkman",
     role: "Middle Designer → Lead Designer",
     period: "2020 — 2023 · Full Time",
     projects: ["RuStore", "Bioniq", "VTB"],
-    logoBg: "#F53B9E",
-    logoText: "p",
-    logoColor: "#0A0A0A",
+    logo: "/images/home/pinkman-logo.svg",
   },
 ];
 
