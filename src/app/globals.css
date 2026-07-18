@@ -32,6 +32,27 @@
 }
 
 @layer components {
+  .hero-heading {
+    background-image: linear-gradient(
+      180deg,
+      #9a9a9a 0%,
+      #2c2c2c 55%,
+      #4a4a4a 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  html.dark .hero-heading {
+    background-image: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #8a8a8a 100%
+    );
+  }
+
   .chrome-text {
     font-family: var(--font-blackletter), serif;
     font-size: clamp(64px, 13vw, 168px);
