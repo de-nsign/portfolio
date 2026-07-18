@@ -29,7 +29,7 @@ export default function TopNav() {
   }, [dark]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-bg">
       <nav className="relative mx-auto flex max-w-[1056px] items-center justify-between px-6 py-5 text-[13px] text-ink">
         <ul className="flex items-center gap-5">
           {navLinks.map((l) => (
