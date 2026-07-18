@@ -30,7 +30,7 @@ export default function TopNav() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      <nav className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-5 text-[13px] text-ink">
+      <nav className="relative mx-auto flex max-w-[1056px] items-center justify-between px-6 py-5 text-[13px] text-ink">
         <ul className="flex items-center gap-5">
           {navLinks.map((l) => (
             <li key={l}>
@@ -41,16 +41,16 @@ export default function TopNav() {
           ))}
         </ul>
 
-        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 text-[13px]">
+        <div className="pointer-events-none absolute left-1/2 hidden -translate-x-1/2 text-[13px] md:block">
           ヴラド
         </div>
 
         <div className="flex items-center gap-3 text-[13px] text-ink">
           <span className="tabular-nums">{time || "--:--:--"}</span>
-          <span className="text-neutral-300">|</span>
-          <span>Tbilisi, Georgia</span>
-          <span className="text-neutral-300">|</span>
-          <span>24.8°C</span>
+          <span className="hidden text-neutral-300 sm:inline">|</span>
+          <span className="hidden sm:inline">Tbilisi, Georgia</span>
+          <span className="hidden text-neutral-300 sm:inline">|</span>
+          <span className="hidden sm:inline">24.8°C</span>
           <span className="text-neutral-300">|</span>
           <button
             aria-label="Toggle theme"

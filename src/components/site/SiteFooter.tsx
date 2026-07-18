@@ -2,7 +2,7 @@ import { footerColumns } from "@/lib/site-data";
 
 export default function SiteFooter() {
   return (
-    <footer className="mx-auto max-w-[1200px] px-6 pb-20 pt-24">
+    <footer className="mx-auto max-w-[1056px] px-6 pb-20 pt-24">
       <div className="chrome-text select-none text-center leading-none">
         Let&apos;s Connect
       </div>

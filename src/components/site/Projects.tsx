@@ -16,7 +16,7 @@ export default function Projects({
   topPadding?: string;
 }) {
   return (
-    <section className={`mx-auto max-w-[1200px] px-6 ${topPadding}`}>
+    <section className={`mx-auto max-w-[1056px] px-6 ${topPadding}`}>
       <SectionHeader title={title} count={count ?? items.length} />
 
       <div className="mt-14 flex flex-col gap-28">

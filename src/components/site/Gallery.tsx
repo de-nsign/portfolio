@@ -8,7 +8,7 @@ export default function Gallery() {
   const [byProjects, setByProjects] = useState(false);
 
   return (
-    <section className="mx-auto max-w-[1200px] px-6 pt-24">
+    <section className="mx-auto max-w-[1056px] px-6 pt-24">
       <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
         <h2 className="text-[22px] font-medium text-ink">Images</h2>
         <button

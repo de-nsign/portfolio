@@ -13,7 +13,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 
 export default function Career() {
   return (
-    <section className="mx-auto max-w-[1200px] px-6 pt-32">
+    <section className="mx-auto max-w-[1056px] px-6 pt-32">
       <SectionHeader title="Career Path" count={5} />
 
       <div className="mt-6 divide-y divide-neutral-100">

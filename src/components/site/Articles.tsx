@@ -3,7 +3,7 @@ import SectionHeader from "./SectionHeader";
 
 export default function Articles() {
   return (
-    <section className="mx-auto max-w-[1200px] px-6 pt-32">
+    <section className="mx-auto max-w-[1056px] px-6 pt-32">
       <SectionHeader title="Articles" count={3} />
 
       <div className="mt-8 divide-y divide-neutral-100">
