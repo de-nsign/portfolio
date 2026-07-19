@@ -3,19 +3,20 @@
 import { useState } from "react";
 import { services, servicesIntro, servicesDeck } from "@/lib/site-data";
 
-// Card + fan geometry (px)
-const CARD_W = 132;
-const CARD_H = 158;
-const STEP_REST = 92; // wide splay by default
-const STEP_HOVER = 78; // pulls into a tidier row on hover
-const CTA_GAP = 22; // space between last card and the dashed CTA card
+// Card + row geometry (px)
+const CARD_W = 128;
+const CARD_H = 152;
+const TILT = 20; // uniform tilt on every card, same in both states
+const STEP_REST = 78; // spread apart by default
+const STEP_HOVER = 52; // slide closer together on hover
+const CTA_GAP = 20; // space between last card and the dashed CTA card
 
 export default function Services() {
   const n = servicesDeck.length;
   const [hover, setHover] = useState(false);
 
   const step = hover ? STEP_HOVER : STEP_REST;
-  // Left edge of the dashed CTA card, right after the settled deck
+  // Left edge of the dashed CTA card, right after the tightened row
   const ctaLeft = (n - 1) * STEP_HOVER + CARD_W + CTA_GAP;
 
   return (
@@ -28,18 +29,16 @@ export default function Services() {
         {servicesIntro}
       </p>
 
-      {/* Wide fan: splayed + tilted by default, straightens into a neat row on
-          hover and reveals a dashed CTA card at the end. */}
+      {/* Uniform slanted row: every card tilted the same angle, sitting on one
+          baseline; on hover the cards just slide closer together and a dashed
+          CTA card fades in at the end. */}
       <div
-        className="relative mt-14 flex h-[240px] items-end"
+        className="relative mt-14 flex h-[220px] items-end overflow-visible"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
         {servicesDeck.map((src, i) => {
-          const t = i / (n - 1) - 0.5; // -0.5 … 0.5
           const x = i * step;
-          const rotate = hover ? 0 : t * 18; // fanned tilt at rest, flat on hover
-          const y = hover ? 0 : t * t * 40; // gentle arch (ends dip), flat on hover
           return (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
@@ -50,7 +49,7 @@ export default function Services() {
               style={{
                 width: CARD_W,
                 height: CARD_H,
-                transform: `translate(${x}px, ${y}px) rotate(${rotate}deg)`,
+                transform: `translateX(${x}px) rotate(${TILT}deg)`,
                 zIndex: i,
               }}
             />
