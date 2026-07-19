@@ -4,6 +4,17 @@ import { latestProjects } from "@/lib/site-data";
 import SectionHeader from "./SectionHeader";
 import ProjectLogo from "./ProjectLogo";
 
+function MetaColumn({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="text-[12px] font-normal uppercase tracking-[0.04em] text-neutral-400">
+        {label}
+      </span>
+      <span className="text-[14px] text-ink">{value}</span>
+    </div>
+  );
+}
+
 export default function Projects({
   title = "Latest Projects",
   count,
@@ -22,17 +33,9 @@ export default function Projects({
       <div className="mt-14 flex flex-col gap-28">
         {items.map((p) => (
           <article key={p.slug} className="group">
-            <a href="#" className="block overflow-hidden rounded-2xl bg-neutral-50">
-              <Image
-                src={p.image}
-                alt={p.title}
-                width={1600}
-                height={900}
-                className="h-auto w-full object-cover"
-              />
-            </a>
-
-            <div className="mt-6 flex flex-col justify-between gap-6 md:flex-row">
+            {/* Text header — brand on the left, content on the right */}
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
+              {/* Left: brand */}
               <div className="flex gap-4">
                 <ProjectLogo
                   logo={p.logo}
@@ -41,12 +44,11 @@ export default function Projects({
                   title={p.title}
                 />
                 <div>
-                  <h3 className="text-[16px] font-semibold text-ink">{p.title}</h3>
+                  <h3 className="text-[24px] font-medium leading-tight text-ink">
+                    {p.title}
+                  </h3>
                   <p className="mt-1 text-[16px] text-neutral-500">
                     {p.role} · {p.period}
-                  </p>
-                  <p className="mt-1 text-[16px] text-neutral-400">
-                    {p.tags.join(" · ")}
                   </p>
 
                   {p.badges && (
@@ -64,13 +66,31 @@ export default function Projects({
                 </div>
               </div>
 
-              <div className="max-w-[496px] md:text-right">
+              {/* Right: description + meta columns */}
+              <div className="flex flex-col gap-8">
                 <p className="text-[18px] font-medium leading-[1.4] text-ink">
                   {p.description}
                 </p>
 
+                <div className="flex flex-wrap gap-x-10 gap-y-6 border-t border-neutral-100 pt-6">
+                  <MetaColumn label="Year" value={p.period} />
+                  <MetaColumn label="Role" value={p.role} />
+                  <MetaColumn label="Focus" value={p.tags.join(", ")} />
+                  <MetaColumn
+                    label="View"
+                    value={
+                      <a
+                        href="#"
+                        className="inline-flex items-center gap-1 text-neutral-500 transition-colors hover:text-ink"
+                      >
+                        See Details <span aria-hidden>↗</span>
+                      </a>
+                    }
+                  />
+                </div>
+
                 {p.metrics && (
-                  <div className="mt-4 flex flex-wrap gap-2 md:justify-end">
+                  <div className="flex flex-wrap gap-2">
                     {p.metrics.map((m) => (
                       <span
                         key={m}
@@ -84,11 +104,18 @@ export default function Projects({
               </div>
             </div>
 
+            {/* Image below the text */}
             <a
               href="#"
-              className="mt-4 inline-block text-[16px] text-neutral-500 transition-colors hover:text-ink"
+              className="mt-10 block overflow-hidden rounded-2xl bg-neutral-50"
             >
-              See Details
+              <Image
+                src={p.image}
+                alt={p.title}
+                width={1600}
+                height={900}
+                className="h-auto w-full object-cover"
+              />
             </a>
           </article>
         ))}
