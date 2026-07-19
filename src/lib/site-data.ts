@@ -270,74 +270,74 @@ export const behindThePixels: string[] = [
 
 export type Testimonial = { quote: string; name: string; role: string };
 
-export const testimonialsHeading = "Что скажут\nобо мне коллеги";
+export const testimonialsHeading = "What my colleagues\nsay about me";
 
 export const testimonials: Testimonial[] = [
   {
     quote:
-      "Никита очень инициативный и целеустремленный, он находится в постоянном поиске лучших решений, анализирует рынок, делится интересными находками/кейсами с командой дизайна. Также хочется отметить организаторские способности — четкое ведение статуса задач, хорошее планирование с командой, высокая степень самостоятельности и синхронизация со смежными командами/коллегами.",
-    name: "Алёна П",
-    role: "Руководитель группы продуктового дизайна",
+      "Denis is genuinely driven and proactive — always hunting for the best solution, studying the market, and sharing the cases and findings he digs up with the whole design team. On top of that he's remarkably organized: clear task status, solid planning, a lot of independence, and tight sync with neighboring teams.",
+    name: "Alyona P",
+    role: "Head of Product Design",
   },
   {
     quote:
-      "Оцениваю взаимодействие на 10 из 10 — по количеству идей, всегда есть инициативы по улучшениям, отличная скорость, умение работать в команде.",
-    name: "Илья М",
-    role: "Владелец продукта",
+      "I'd rate working with Denis a 10 out of 10 — for the sheer number of ideas, the steady stream of improvement proposals, the speed he moves at, and how easily he works inside a team.",
+    name: "Ilya M",
+    role: "Product Owner",
   },
   {
     quote:
-      "Никита проактивный дизайнер, который бережно собирает свои сценарии, вдумчиво реагирует на комментарии по дизайн-ревью.",
-    name: "Настя Я",
-    role: "Ведущий продуктовый дизайнер",
+      "Denis is a proactive designer who builds his flows with real care and responds to design-review comments thoughtfully rather than defensively.",
+    name: "Nastya Ya",
+    role: "Lead Product Designer",
   },
   {
     quote:
-      "Никита стремится разобраться в процессах до мельчайших деталей, всегда смотрит на банк глазами клиента и старается сделать действительно классный и современный продукт.",
-    name: "Серёжа В",
-    role: "Директор по развитию продукта и портфеля",
+      "Denis digs into every process down to the smallest detail, always looks at the product through the customer's eyes, and pushes to ship something genuinely modern and well-crafted.",
+    name: "Sergey V",
+    role: "Director of Product & Portfolio",
   },
   {
     quote:
-      "Никита — потрясающий профессионал в том плане, что он не успокоится, пока не донесет свою мысль и не сделает флоу/продукт/процесс чётче, интереснее и лучше.",
-    name: "Настя Б",
-    role: "Старший UX-редактор",
+      "Denis is a brilliant professional in the sense that he won't rest until he's made his point and made the flow, the product, and the process sharper, more interesting, and simply better.",
+    name: "Nastya B",
+    role: "Senior UX Writer",
   },
   {
     quote:
-      "Никита — дизайнер, который всегда держит руку на пульсе дизайн-трендов.",
-    name: "Света П",
-    role: "Ведущий продуктовый дизайнер",
+      "Denis is the kind of designer who always keeps a finger on the pulse of design trends.",
+    name: "Sveta P",
+    role: "Lead Product Designer",
   },
   {
     quote:
-      "С первого дня он меня поддерживал, помогал адаптироваться, знакомил с командой.",
-    name: "Даша Х",
-    role: "Младший продуктовый дизайнер",
+      "From my very first day he had my back — helping me settle in and introducing me to the whole team.",
+    name: "Dasha Kh",
+    role: "Junior Product Designer",
   },
   {
     quote:
-      "Никита хорош во всех планах: очень позитивно влияет на команду — вдохновляет своими идеями, и всегда можно обсудить свои идеи.",
-    name: "Даня К",
-    role: "Ведущий разработчик web",
+      "Denis is great on every front — a real energizer for the team. He inspires people with his ideas, and you can always bounce your own ideas off him.",
+    name: "Danya K",
+    role: "Lead Web Developer",
   },
   {
     quote:
-      "Никита зарекомендовал себя как вдумчивый и креативный специалист.",
-    name: "Саша Д",
-    role: "Ведущий продуктовый дизайнер",
+      "Denis has proven himself to be a thoughtful and genuinely creative specialist.",
+    name: "Sasha D",
+    role: "Lead Product Designer",
   },
   {
     quote:
-      "Никита делает отличную работу. Макеты всегда структурированы и продуманы до мелочей.",
-    name: "Саша Н",
-    role: "Руководитель центра дизайн-системы",
+      "Denis does outstanding work. His layouts are always well-structured and thought through down to the last detail.",
+    name: "Sasha N",
+    role: "Head of the Design System Team",
   },
   {
     quote:
-      "Никита демонстрирует вдохновляющую вовлеченность, желание сделать лучший продукт на рынке.",
-    name: "Настя К",
-    role: "Scrum master",
+      "Denis brings an inspiring level of commitment and a real hunger to build the best product on the market.",
+    name: "Nastya K",
+    role: "Scrum Master",
   },
 ];
 

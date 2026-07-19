@@ -76,8 +76,9 @@ export default function BehindThePixels() {
               className={`absolute ${HANG_STYLES[i]}`}
               style={{ zIndex: 10 + i }}
             >
-              {/* red clip */}
-              <span className="absolute left-1/2 top-[-6px] z-10 h-3 w-1.5 -translate-x-1/2 rounded-sm bg-[#e23b2e]" />
+              {/* clothespin: shaft + top spring dot */}
+              <span className="absolute left-1/2 top-[-11px] z-10 h-[14px] w-[7px] -translate-x-1/2 rounded-[2px] bg-[#e23b2e] shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
+              <span className="absolute left-1/2 top-[-8px] z-20 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-white/70" />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={src}
