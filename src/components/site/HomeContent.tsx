@@ -2,7 +2,6 @@ import Hero from "./Hero";
 import Projects from "./Projects";
 import Articles from "./Articles";
 import Career from "./Career";
-import Experience from "./Experience";
 import BottomCTA from "./BottomCTA";
 import { latestProjects, sideActivity } from "@/lib/site-data";
 
@@ -20,7 +19,6 @@ export default function HomeContent() {
       />
       <Articles />
       <Career />
-      <Experience />
 
       <BottomCTA />
     </main>

@@ -48,12 +48,40 @@ export default function Projects({
                   <p className="mt-1 text-[16px] text-neutral-400">
                     {p.tags.join(" · ")}
                   </p>
+
+                  {p.badges && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {p.badges.map((b) => (
+                        <span
+                          key={b}
+                          className="rounded-full bg-neutral-100 px-3 py-1 text-[13px] leading-none text-neutral-600"
+                        >
+                          {b}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 
-              <p className="max-w-[496px] text-[18px] font-medium leading-[1.4] text-ink md:text-right">
-                {p.description}
-              </p>
+              <div className="max-w-[496px] md:text-right">
+                <p className="text-[18px] font-medium leading-[1.4] text-ink">
+                  {p.description}
+                </p>
+
+                {p.metrics && (
+                  <div className="mt-4 flex flex-wrap gap-2 md:justify-end">
+                    {p.metrics.map((m) => (
+                      <span
+                        key={m}
+                        className="rounded-full border border-neutral-200 px-3 py-1 text-[13px] leading-none text-neutral-500"
+                      >
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             <a

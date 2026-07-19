@@ -9,6 +9,8 @@ export type Project = {
   logo?: string;
   logoBg?: string;
   logoText?: string;
+  badges?: string[];
+  metrics?: string[];
 };
 
 export const projects: Project[] = [
@@ -22,6 +24,8 @@ export const projects: Project[] = [
       "Fintech wealth-management platform with two connected products: a B2B workspace for analysts and advisors, and a client-facing iOS app for tracking portfolio performance, strategy updates, daily investment activity, and clearer communication around portfolio decisions",
     image: "/images/home/latest/re-luna-download.png",
     logo: "/images/home/re-luna-logo.png",
+    badges: ["B2B + iOS", "0 → 1 product"],
+    metrics: ["Onboarding CR +22%", "Advisor time −30%", "NPS +11"],
   },
   {
     slug: "mts",
@@ -33,6 +37,8 @@ export const projects: Project[] = [
       "Led accessibility work across the MTS design system: planned rollout, reviewed implementation, refined tokens and touch targets, and improved consistency across web and mobile surfaces",
     image: "/images/home/latest/mts-download.png",
     logo: "/images/home/mts-logo.png",
+    badges: ["Design System", "WCAG 2.1 AA"],
+    metrics: ["Contrast pass +40%", "120+ components audited"],
   },
   {
     slug: "rustore",
@@ -44,6 +50,8 @@ export const projects: Project[] = [
       "Worked on RuStore, VK's Android marketplace, with a focus on trust, paid-app conversion, and faster product delivery through a stronger design system, cleaner Figma workflows, tighter collaboration with development, and more reliable handoff patterns",
     image: "/images/home/latest/rustore-download.png",
     logo: "/images/logos/rustore.png",
+    badges: ["MAU 10m+", "Android"],
+    metrics: ["Paid-app CR +18%", "Handoff time −25%"],
   },
   {
     slug: "bioniq",
@@ -152,91 +160,6 @@ export const career: CareerEntry[] = [
     blurb:
       "Grew from product designer on VTB's website redesign into a lead managing a team of four, later moving into hands-on work across VK and RuStore.",
     logo: "/images/home/pinkman-logo.svg",
-  },
-];
-
-export type ExperienceEntry = {
-  slug: string;
-  title: string;
-  role: string;
-  period: string;
-  platforms: string[];
-  badges?: string[];
-  achievements?: string[];
-  metrics?: string[];
-  link?: string;
-};
-
-export const experience: ExperienceEntry[] = [
-  {
-    slug: "foliodeck",
-    title: "Курируемая галерея портфолио дизайнеров",
-    role: "Product Designer",
-    period: "2026",
-    platforms: ["Web"],
-    badges: ["MAU 1,5k"],
-    achievements: [
-      "Собственный проект — более 150 портфолио с комментариями куратора, объединяющий сильные работы в продуктовом и digital дизайне.",
-    ],
-    link: "foliodeck.pro",
-  },
-  {
-    slug: "instories-app",
-    title: "Instories App",
-    role: "Product Design Lead",
-    period: "2022 — 2024",
-    platforms: ["iOS", "Android"],
-    badges: ["MAU 1m+", "Top 50 Photo & Video App by Apple"],
-    achievements: [
-      "Внедрила дизайн-процессы: исследования, формирование бэклога гипотез, планирование, оценку, дизайн-ревью и работу с дизайн-долгом.",
-      "Разработала визуальную концепцию и новую ИА продукта, поставила на поток обновления платформы и валидацию дизайн-решений.",
-      "Провела более 100 A/B-тестов, включая запуск AI-инструментов.",
-    ],
-    metrics: [
-      "Speed +5%",
-      "File export +3,4%",
-      "CR to Export +7,5%",
-      "CSAT +4%",
-      "CR to Export +18%",
-    ],
-  },
-  {
-    slug: "vids-app",
-    title: "Vids App",
-    role: "Product Design Lead",
-    period: "2023",
-    platforms: ["iOS"],
-    badges: ["Top 100 Photo & Video App by Apple"],
-    achievements: [
-      "Запустила ключевые флоу, внедрила AI-инструменты и установила дизайн-процессы для новой команды.",
-    ],
-    metrics: ["CR to trim +100%", "CR to Save +6%", "CR to purchase 10%"],
-  },
-  {
-    slug: "citymobil",
-    title:
-      "Редизайн флоу аренды самокатов и новые функции приложения Ситимобил",
-    role: "Product Designer",
-    period: "2020 — 2022",
-    platforms: ["iOS", "Android"],
-    achievements: [
-      "Участвовала в 26 интервью с пользователями и разработала новые флоу: страховку, мультиаренду и подписку.",
-    ],
-  },
-  {
-    slug: "skillbox",
-    title:
-      "Разработка LMS-платформы для обучения и вебинарной платформы Live Skillbox",
-    role: "Product Designer",
-    period: "2019 — 2020",
-    platforms: ["Web"],
-  },
-  {
-    slug: "transiter",
-    title: "Создание логистической платформы Transiter",
-    role: "UI/UX дизайнер",
-    period: "2019",
-    platforms: ["iOS", "Web"],
   },
 ];
 
