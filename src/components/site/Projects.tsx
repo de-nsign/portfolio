@@ -3,6 +3,7 @@ import type { Project } from "@/lib/site-data";
 import { latestProjects } from "@/lib/site-data";
 import SectionHeader from "./SectionHeader";
 import ProjectLogo from "./ProjectLogo";
+import FigmaEmbed from "./FigmaEmbed";
 
 function MetaColumn({ label, value }: { label: string; value: React.ReactNode }) {
   return (
@@ -178,13 +179,17 @@ export default function Projects({
               </div>
             </div>
 
-            {/* Placeholder image grid below the text */}
+            {/* Showcase below the text: live Figma embed, real gallery, or placeholder grid */}
             <div className="mt-10">
-              <ProjectGallery
-                layout={galleryLayouts[i % galleryLayouts.length]}
-                images={p.gallery}
-                alt={p.title}
-              />
+              {p.figma ? (
+                <FigmaEmbed src={p.figma} title={`${p.title} — Figma`} />
+              ) : (
+                <ProjectGallery
+                  layout={galleryLayouts[i % galleryLayouts.length]}
+                  images={p.gallery}
+                  alt={p.title}
+                />
+              )}
             </div>
           </article>
         ))}

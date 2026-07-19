@@ -1,34 +1,30 @@
-import SectionHeader from "./SectionHeader";
-
 /**
- * Responsive Figma embed (variant 2).
- * The iframe fills a ratio-locked box, so it scales with the page width.
+ * Responsive Figma embed (variant 2) — a ratio-locked frame.
+ * The iframe fills the box, so it scales with the container width.
  * Inside the embed.figma.com player the user can pan and zoom the canvas.
+ * Rendered on its own (no heading) so it can drop into any section —
+ * e.g. as the showcase of a project in Latest Projects.
  */
 export default function FigmaEmbed({
-  title = "Design System",
   src,
-  ratio = 56.25, // 16:9 — set to (height / width * 100) for another aspect
+  title = "Figma file",
+  ratio = 62.5, // 16:10 — set to (height / width * 100) for another aspect
 }: {
-  title?: string;
   src: string;
+  title?: string;
   ratio?: number;
 }) {
   return (
-    <section className="mx-auto max-w-[1056px] px-6 pt-32">
-      <SectionHeader title={title} />
-
-      <div
-        className="relative mt-6 w-full overflow-hidden rounded-xl border border-neutral-200"
-        style={{ paddingTop: `${ratio}%` }}
-      >
-        <iframe
-          title={title}
-          src={src}
-          allowFullScreen
-          className="absolute inset-0 h-full w-full border-0"
-        />
-      </div>
-    </section>
+    <div
+      className="relative w-full overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50"
+      style={{ paddingTop: `${ratio}%` }}
+    >
+      <iframe
+        title={title}
+        src={src}
+        allowFullScreen
+        className="absolute inset-0 h-full w-full border-0"
+      />
+    </div>
   );
 }

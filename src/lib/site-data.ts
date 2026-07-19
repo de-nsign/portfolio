@@ -13,9 +13,27 @@ export type Project = {
   metrics?: string[];
   /** Real gallery imagery — when present, replaces the placeholder grid. */
   gallery?: string[];
+  /** Live Figma file — when present, an interactive pan/zoom embed replaces the gallery. */
+  figma?: string;
 };
 
 export const projects: Project[] = [
+  {
+    slug: "casino-library",
+    title: "Casino Library",
+    role: "Design System · Design Lead",
+    period: "2025 — Now",
+    tags: ["Design System", "iGaming", "Web"],
+    description:
+      "A dark-first design system for an online casino platform — a single Figma library scaling from tokens, fields, inputs and controls up through data display, feedback and navigation blocks. Built for fast, consistent lobby, game and cashier surfaces across the product, with an interactive component playground you can pan and zoom below",
+    image: "/images/home/latest/re-luna-download.png",
+    logoBg: "#0f0f10",
+    logoText: "C",
+    badges: ["Atoms → Blocks", "Dark-first", "Live Figma"],
+    metrics: ["200+ components", "5 component groups", "Token-driven"],
+    figma:
+      "https://embed.figma.com/design/hIEuNxuW2WPrUjve1kB7Pb/Library?node-id=0-1&embed-host=share",
+  },
   {
     slug: "re-luna",
     title: "Re:Luna",
@@ -187,8 +205,8 @@ export const articles: Article[] = [
   { title: "Mental Health in the Life of a Designer", meta: "Essay · Wellbeing" },
 ];
 
-export const latestProjects = projects.slice(0, 5);
-export const sideActivity = projects.slice(5);
+export const latestProjects = projects.slice(0, 6);
+export const sideActivity = projects.slice(6);
 
 export const aboutParagraphs: string[] = [
   'I first thought about becoming a designer in 2018 while studying law in Irkutsk. One day in class, I realized I couldn\'t see myself as a lawyer. I googled "digital professions" and found "UX/UI designer." I read the description and instantly knew that was it.',
