@@ -1,5 +1,6 @@
 import Hero from "./Hero";
 import Projects from "./Projects";
+import FigmaEmbed from "./FigmaEmbed";
 import Articles from "./Articles";
 import Career from "./Career";
 import BottomCTA from "./BottomCTA";
@@ -17,6 +18,11 @@ export default function HomeContent() {
         items={sideActivity}
         topPadding="pt-32"
       />
+      <FigmaEmbed
+        title="Design System"
+        src="https://embed.figma.com/design/hIEuNxuW2WPrUjve1kB7Pb/Library?node-id=0-1&embed-host=share"
+      />
+
       <Articles />
       <Career />
 
