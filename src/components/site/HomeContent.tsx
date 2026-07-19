@@ -1,5 +1,7 @@
 import Hero from "./Hero";
 import Projects from "./Projects";
+import Services from "./Services";
+import BehindThePixels from "./BehindThePixels";
 import Articles from "./Articles";
 import Career from "./Career";
 import BottomCTA from "./BottomCTA";
@@ -17,6 +19,8 @@ export default function HomeContent() {
         items={sideActivity}
         topPadding="pt-32"
       />
+      <Services />
+      <BehindThePixels />
       <Articles />
       <Career />
 

@@ -219,6 +219,27 @@ export const aboutParagraphs: string[] = [
   "If I had to sum it up - it all started with one lecture and a Google search. Since then, design has become more than a profession. It's a way of thinking, observing, solving, and improving things - both on screen and beyond.",
 ];
 
+export const servicesIntro =
+  "Digital aesthetics that engage and emotionally connect with your users";
+
+export const services: string[] = [
+  "Product Design",
+  "Websites / Apps",
+  "Design systems",
+  "Animation",
+  "Midjourney",
+  "Visual identity",
+  "Framer",
+  "Marketing",
+  "Iconography",
+];
+
+export const behindThePixels: string[] = [
+  "I was born in a small Bulgarian village in Ukraine, surrounded by different cultures, languages, and creativity. Now I live in Warsaw, carrying that love for diversity wherever I go.",
+  "I grew up speaking three languages, which sparked my passion for communication. Later I added a few more — English, Polish, and a bit of Spanish (still learning).",
+  "Creativity has always been my way to express myself. I draw, design, move through yoga, and explore new corners of the world whenever I can.",
+];
+
 export type GalleryImage = { src: string; span: 1 | 2 | 3; ratio: string };
 
 export const galleryImages: GalleryImage[] = [
