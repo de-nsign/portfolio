@@ -1,4 +1,3 @@
-import Image from "next/image";
 import type { Project } from "@/lib/site-data";
 import { latestProjects } from "@/lib/site-data";
 import SectionHeader from "./SectionHeader";
@@ -11,6 +10,53 @@ function MetaColumn({ label, value }: { label: string; value: React.ReactNode })
         {label}
       </span>
       <span className="text-[14px] text-ink">{value}</span>
+    </div>
+  );
+}
+
+const tile = "rounded-2xl bg-neutral-100";
+
+// Placeholder image grids that reuse the gallery vocabulary of the
+// mchubina.ru "Опыт и проекты" block. Imagery is temporary — only the grid
+// arrangement is being ported, so every tile is a neutral placeholder.
+//   duo  — two tall tiles side by side
+//   quad — a full-width band with four phone-shaped tiles in a row
+//   asym — two stacked tiles on the left, one tall tile on the right
+type GalleryLayout = "duo" | "quad" | "asym";
+
+const galleryLayouts: GalleryLayout[] = ["duo", "quad", "asym"];
+
+function ProjectGallery({ layout }: { layout: GalleryLayout }) {
+  if (layout === "quad") {
+    return (
+      <div className="rounded-2xl bg-neutral-50 p-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className={`${tile} aspect-[9/16]`} />
+          <div className={`${tile} aspect-[9/16]`} />
+          <div className={`${tile} aspect-[9/16]`} />
+          <div className={`${tile} aspect-[9/16]`} />
+        </div>
+      </div>
+    );
+  }
+
+  if (layout === "asym") {
+    return (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-4">
+          <div className={`${tile} aspect-[16/10]`} />
+          <div className={`${tile} aspect-[16/10]`} />
+        </div>
+        <div className={`${tile} aspect-auto min-h-[320px]`} />
+      </div>
+    );
+  }
+
+  // duo
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className={`${tile} aspect-[4/5]`} />
+      <div className={`${tile} aspect-[4/5]`} />
     </div>
   );
 }
@@ -31,7 +77,7 @@ export default function Projects({
       <SectionHeader title={title} count={count ?? items.length} />
 
       <div className="mt-14 flex flex-col gap-28">
-        {items.map((p) => (
+        {items.map((p, i) => (
           <article key={p.slug} className="group">
             {/* Text header — brand on the left, content on the right */}
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
@@ -104,19 +150,12 @@ export default function Projects({
               </div>
             </div>
 
-            {/* Image below the text */}
-            <a
-              href="#"
-              className="mt-10 block overflow-hidden rounded-2xl bg-neutral-50"
-            >
-              <Image
-                src={p.image}
-                alt={p.title}
-                width={1600}
-                height={900}
-                className="h-auto w-full object-cover"
+            {/* Placeholder image grid below the text */}
+            <div className="mt-10">
+              <ProjectGallery
+                layout={galleryLayouts[i % galleryLayouts.length]}
               />
-            </a>
+            </div>
           </article>
         ))}
       </div>
