@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Project } from "@/lib/site-data";
 import { latestProjects } from "@/lib/site-data";
 import SectionHeader from "./SectionHeader";
@@ -26,7 +27,34 @@ type GalleryLayout = "duo" | "quad" | "asym";
 
 const galleryLayouts: GalleryLayout[] = ["duo", "quad", "asym"];
 
-function ProjectGallery({ layout }: { layout: GalleryLayout }) {
+function ProjectGallery({
+  layout,
+  images,
+  alt,
+}: {
+  layout: GalleryLayout;
+  images?: string[];
+  alt: string;
+}) {
+  // Real imagery — render a two-column grid of full-bleed frames.
+  if (images && images.length > 0) {
+    return (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {images.map((src) => (
+          <div key={src} className={`overflow-hidden ${tile}`}>
+            <Image
+              src={src}
+              alt={alt}
+              width={1920}
+              height={1080}
+              className="h-auto w-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   if (layout === "quad") {
     return (
       <div className="rounded-2xl bg-neutral-50 p-4">
@@ -154,6 +182,8 @@ export default function Projects({
             <div className="mt-10">
               <ProjectGallery
                 layout={galleryLayouts[i % galleryLayouts.length]}
+                images={p.gallery}
+                alt={p.title}
               />
             </div>
           </article>

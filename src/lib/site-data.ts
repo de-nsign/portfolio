@@ -11,6 +11,8 @@ export type Project = {
   logoText?: string;
   badges?: string[];
   metrics?: string[];
+  /** Real gallery imagery — when present, replaces the placeholder grid. */
+  gallery?: string[];
 };
 
 export const projects: Project[] = [
@@ -67,13 +69,27 @@ export const projects: Project[] = [
   {
     slug: "vtb",
     title: "VTB",
-    role: "Middle to Lead Designer",
-    period: "2020 — 2022",
-    tags: ["B2C", "Fintech", "Website"],
+    role: "Design System · Design Lead",
+    period: "2019 — 2025",
+    tags: ["Design System", "Fintech", "Web"],
     description:
-      "Worked on the redesign of VTB's public web ecosystem, growing from middle designer to design lead while shaping major landing pages, coordinating a team of four designers, improving business-critical customer journeys, and aligning larger batches of product communication work",
+      "Built the design system behind VTB's public web — one of Russia's largest banks. An atomic approach scaled from fields, inputs, buttons and controls up to blocks and full marketing pages, unified into six color themes with a dark mode for low-vision users, plus 1000+ illustrations with technical guidelines that let the bank ship a faster, more consistent customer experience",
     image: "/images/home/latest/vtb-download.png",
     logo: "/images/logos/vtb.png",
+    badges: ["Atoms → Blocks", "6 color themes", "Dark theme"],
+    metrics: [
+      "Traffic ×2",
+      "Scroll depth ×3",
+      "Load speed ×2",
+      "Bounce −64%",
+      "16M visitors / 2021",
+    ],
+    gallery: [
+      "/images/home/vtb/ds-states.webp",
+      "/images/home/vtb/ds-dark.webp",
+      "/images/home/vtb/ds-atoms-blocks.webp",
+      "/images/home/vtb/ds-colors.webp",
+    ],
   },
   {
     slug: "spenlog",
