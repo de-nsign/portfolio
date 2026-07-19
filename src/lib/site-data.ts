@@ -222,6 +222,23 @@ export const aboutParagraphs: string[] = [
 export const servicesIntro =
   "Digital aesthetics that engage and emotionally connect with your users";
 
+export const servicesDeck: string[] = [
+  "/images/home/gallery/variants/gemx-grid.jpg",
+  "/images/home/gallery/variants/ios-widget-player.jpg",
+  "/images/home/gallery/variants/digital-watch-neon.jpg",
+  "/images/home/gallery/variants/focus-wide.jpg",
+  "/images/home/gallery/variants/smart-fridge-dashboard.jpg",
+  "/images/home/gallery/variants/dreamguard-poster.jpg",
+  "/images/home/gallery/variants/swipedish-green.jpg",
+  "/images/home/gallery/variants/lifewell-floating.jpg",
+];
+
+export const behindPixelsPhotos: string[] = [
+  "/images/profile/profile-portrait-gradient.png",
+  "/images/home/gallery/variants/focus-wide.jpg",
+  "/images/home/gallery/variants/lifewell-floating.jpg",
+];
+
 export const services: string[] = [
   "Product Design",
   "Websites / Apps",

@@ -1,4 +1,14 @@
-import { behindThePixels, behindPixelsIntro } from "@/lib/site-data";
+import {
+  behindThePixels,
+  behindPixelsIntro,
+  behindPixelsPhotos,
+} from "@/lib/site-data";
+
+const PHOTO_STYLES = [
+  "left-2 top-6 rotate-[-7deg] z-10",
+  "left-24 top-0 rotate-[3deg] z-20",
+  "left-44 top-10 rotate-[8deg] z-10",
+];
 
 export default function BehindThePixels() {
   return (
@@ -12,7 +22,19 @@ export default function BehindThePixels() {
       </p>
 
       <div className="mt-16 grid gap-12 md:grid-cols-2">
-        <div />
+        {/* Photo collage */}
+        <div className="relative h-[260px]">
+          {behindPixelsPhotos.map((src, i) => (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              key={src}
+              src={src}
+              alt=""
+              className={`absolute h-[190px] w-[150px] rounded-2xl border-4 border-white object-cover shadow-[0_14px_34px_rgba(0,0,0,0.16)] ${PHOTO_STYLES[i]}`}
+            />
+          ))}
+        </div>
+
         <div className="max-w-[440px] space-y-5">
           {behindThePixels.map((p, i) => (
             <p key={i} className="text-[16px] leading-[1.5] text-ink">
