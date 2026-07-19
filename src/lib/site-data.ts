@@ -233,10 +233,18 @@ export const servicesDeck: string[] = [
   "/images/home/gallery/variants/lifewell-floating.jpg",
 ];
 
+// First collage cluster (next to the opening paragraphs)
 export const behindPixelsPhotos: string[] = [
   "/images/profile/profile-portrait-gradient.png",
   "/images/home/gallery/variants/focus-wide.jpg",
   "/images/home/gallery/variants/lifewell-floating.jpg",
+];
+
+// Second collage cluster (the "hanging" strip beside the closing paragraph)
+export const behindPixelsPhotosB: string[] = [
+  "/images/home/gallery/variants/dreamguard-poster.jpg",
+  "/images/home/gallery/variants/smart-fridge-shelf.jpg",
+  "/images/home/gallery/variants/gemx-phones.jpg",
 ];
 
 export const services: string[] = [
