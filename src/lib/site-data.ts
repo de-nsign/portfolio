@@ -234,6 +234,9 @@ export const services: string[] = [
   "Iconography",
 ];
 
+export const behindPixelsIntro =
+  "Finally, meet the lady behind the pixels – a quick peek into my world.";
+
 export const behindThePixels: string[] = [
   "I was born in a small Bulgarian village in Ukraine, surrounded by different cultures, languages, and creativity. Now I live in Warsaw, carrying that love for diversity wherever I go.",
   "I grew up speaking three languages, which sparked my passion for communication. Later I added a few more — English, Polish, and a bit of Spanish (still learning).",
