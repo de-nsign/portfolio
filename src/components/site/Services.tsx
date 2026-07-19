@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { services, servicesIntro, servicesDeck } from "@/lib/site-data";
 
-// Card + row geometry (px)
-const CARD_W = 128;
-const CARD_H = 152;
-const TILT = 20; // uniform tilt on every card, same in both states
-const STEP_REST = 78; // spread apart by default
-const STEP_HOVER = 52; // slide closer together on hover
-const CTA_GAP = 20; // space between last card and the dashed CTA card
+// Card + row geometry (px) — measured off the hellodani reference recording
+const CARD_W = 96;
+const CARD_H = 114;
+const TILT = 13; // uniform tilt on every card, same in both states
+const STEP_REST = 62; // spread apart by default
+const STEP_HOVER = 42; // slide closer together on hover
+const CTA_GAP = 14; // space between last card and the dashed CTA card
 
 export default function Services() {
   const n = servicesDeck.length;
@@ -33,7 +33,7 @@ export default function Services() {
           baseline; on hover the cards just slide closer together and a dashed
           CTA card fades in at the end. */}
       <div
-        className="relative mt-14 flex h-[220px] items-end overflow-visible"
+        className="relative mt-14 flex h-[190px] items-end overflow-visible"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -45,7 +45,7 @@ export default function Services() {
               key={src}
               src={src}
               alt=""
-              className="absolute bottom-0 left-0 origin-bottom rounded-2xl border-[3px] border-white bg-neutral-100 object-cover shadow-[0_10px_26px_rgba(0,0,0,0.12)] transition-transform duration-500 ease-out"
+              className="absolute bottom-0 left-0 origin-bottom rounded-2xl border-4 border-white bg-neutral-100 object-cover shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-transform duration-300 ease-out"
               style={{
                 width: CARD_W,
                 height: CARD_H,
@@ -58,11 +58,11 @@ export default function Services() {
 
         {/* Dashed placeholder card revealed once the deck settles */}
         <div
-          className="pointer-events-none absolute bottom-0 left-0 flex items-center justify-center rounded-2xl border-2 border-dashed border-neutral-300 p-4 text-center text-[15px] font-medium leading-[1.3] text-[#e23b2e] transition-all duration-500 ease-out"
+          className="pointer-events-none absolute bottom-0 left-0 flex items-center justify-center rounded-2xl border-2 border-dashed border-neutral-300 p-3 text-center text-[13px] font-medium leading-[1.3] text-[#e23b2e] transition-all duration-300 ease-out"
           style={{
             width: CARD_W,
             height: CARD_H,
-            transform: `translateX(${hover ? ctaLeft : ctaLeft - 16}px) scale(${hover ? 1 : 0.96})`,
+            transform: `translateX(${hover ? ctaLeft : ctaLeft - 10}px) scale(${hover ? 1 : 0.97})`,
             opacity: hover ? 1 : 0,
             zIndex: n,
           }}
