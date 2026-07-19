@@ -17,26 +17,26 @@ export default function Services() {
         {servicesIntro}
       </p>
 
-      {/* Left-aligned deck: fanned by default, collapses on hover */}
+      {/* Left-aligned radial fan: splays by default, collapses on hover */}
       <div
-        className="relative mt-14 flex h-[190px] items-center"
+        className="relative mt-14 flex h-[230px] items-end"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
         {servicesDeck.map((src, i) => {
           const t = i / (n - 1) - 0.5; // -0.5 … 0.5
-          // fanned (default) vs collapsed (hover)
-          const step = hover ? 26 : 62; // px between card centers
+          // cards pivot around their bottom edge → real fan arc
+          const step = hover ? 24 : 50; // horizontal march of pivot points
           const x = i * step;
-          const rotate = hover ? 0 : t * 16; // deg
-          const y = hover ? 0 : Math.abs(t) * 20; // arc dip
+          const rotate = hover ? 0 : t * 44; // -22° … 22°
+          const y = hover ? 0 : Math.abs(t) * 26; // outer cards dip lower
           return (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
               key={src}
               src={src}
               alt=""
-              className="absolute left-0 h-[150px] w-[116px] rounded-xl border-[3px] border-white object-cover shadow-[0_10px_26px_rgba(0,0,0,0.12)] transition-transform duration-500 ease-out"
+              className="absolute bottom-0 left-0 h-[150px] w-[116px] origin-bottom rounded-xl border-[3px] border-white object-cover shadow-[0_10px_26px_rgba(0,0,0,0.12)] transition-transform duration-500 ease-out"
               style={{
                 transform: `translate(${x}px, ${y}px) rotate(${rotate}deg)`,
                 zIndex: i,
@@ -47,9 +47,9 @@ export default function Services() {
 
         {/* CTA revealed when the deck collapses */}
         <span
-          className="pointer-events-none absolute top-1/2 -translate-y-1/2 whitespace-nowrap text-[15px] font-medium text-[#e23b2e] transition-opacity duration-500"
+          className="pointer-events-none absolute bottom-[60px] whitespace-nowrap text-[15px] font-medium text-[#e23b2e] transition-opacity duration-500"
           style={{
-            left: `${(n - 1) * 26 + 150}px`,
+            left: `${(n - 1) * 24 + 140}px`,
             opacity: hover ? 1 : 0,
           }}
         >
