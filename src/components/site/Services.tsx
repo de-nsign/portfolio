@@ -25,11 +25,11 @@ export default function Services() {
       >
         {servicesDeck.map((src, i) => {
           const t = i / (n - 1) - 0.5; // -0.5 … 0.5
-          // cards pivot around their bottom edge → real fan arc
-          const step = hover ? 24 : 50; // horizontal march of pivot points
+          // tight fan: heavy overlap, bottoms on one line, gentle splay
+          const step = hover ? 22 : 44; // horizontal march → strong overlap
           const x = i * step;
-          const rotate = hover ? 0 : t * 44; // -22° … 22°
-          const y = hover ? 0 : Math.abs(t) * 26; // outer cards dip lower
+          const rotate = hover ? 0 : t * 26; // -13° … 13°
+          const y = hover ? 0 : Math.abs(t) * 4; // near-flat baseline
           return (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
@@ -49,7 +49,7 @@ export default function Services() {
         <span
           className="pointer-events-none absolute bottom-[60px] whitespace-nowrap text-[15px] font-medium text-[#e23b2e] transition-opacity duration-500"
           style={{
-            left: `${(n - 1) * 24 + 140}px`,
+            left: `${(n - 1) * 22 + 140}px`,
             opacity: hover ? 1 : 0,
           }}
         >
