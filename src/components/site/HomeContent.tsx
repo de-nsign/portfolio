@@ -5,7 +5,6 @@ import BehindThePixels from "./BehindThePixels";
 import Articles from "./Articles";
 import Career from "./Career";
 import Testimonials from "./Testimonials";
-import BottomCTA from "./BottomCTA";
 import { latestProjects, sideActivity } from "@/lib/site-data";
 
 export default function HomeContent() {
@@ -25,8 +24,6 @@ export default function HomeContent() {
       <Articles />
       <Career />
       <Testimonials />
-
-      <BottomCTA />
     </main>
   );
 }
