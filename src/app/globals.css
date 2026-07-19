@@ -153,9 +153,9 @@
   /* ── Testimonials marquee ──────────────────────────── */
   .testimonials-track {
     animation: testimonials-scroll 60s linear infinite;
-    /* extra headroom so the tilted / lifted cards never clip */
+    /* extra headroom so the tilted / lifted cards + their shadow never clip */
     padding-top: 8px;
-    padding-bottom: 56px;
+    padding-bottom: 96px;
     will-change: transform;
   }
   .testimonials-marquee:hover .testimonials-track {
