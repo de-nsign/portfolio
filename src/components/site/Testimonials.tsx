@@ -43,7 +43,7 @@ export default function Testimonials() {
             return (
               <figure
                 key={`${t.name}-${i}`}
-                className="flex w-[300px] shrink-0 flex-col items-center rounded-[26px] border border-neutral-200/80 bg-white px-8 py-10 text-center shadow-[0_24px_50px_-20px_rgba(0,0,0,0.28)]"
+                className="flex w-[300px] shrink-0 flex-col items-center rounded-[26px] bg-neutral-100 px-8 py-10 text-center"
                 style={{
                   transform: `translateY(${lift}px) rotate(${tilt}deg)`,
                 }}
