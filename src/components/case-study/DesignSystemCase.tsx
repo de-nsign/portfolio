@@ -85,28 +85,15 @@ const showcases = [
     contain: true,
   },
   {
-    label: "03 — themes",
-    title: "28 themes from two axes",
-    body: "Seven brands × light/dark × classic/VIP. One token resolves the right value for every combination — the wall of themes that broke Figma's native mode limit.",
-    image: "/images/design-system/ds-colors.webp",
-    alt: "Color schemes across many brand themes",
+    label: "03 — components",
+    title: "100+ components, every state",
+    body: "Buttons, inputs, modals, tables, tooltips, toasts — an atomic set from atoms to blocks, each with every state and variant. Dark and light are one component via a base / inverted pair, not two separate sets.",
+    image: "/images/design-system/ds-components.webp",
+    alt: "The Casino Library component gallery — modal, OTP, radio, tooltip and more with their states",
+    bleed: true,
   },
   {
-    label: "04 — base / inverted",
-    title: "contrast belongs to the surface",
-    body: "A component doesn't know its brand or background — only whether it sits on a base or an inverted surface. The tokens resolve the real color, so one component drops into any brand.",
-    image: "/images/design-system/ds-dark.webp",
-    alt: "Dark-surface components using the base / inverted pair",
-  },
-  {
-    label: "05 — states",
-    title: "every component, every state",
-    body: "Default, hover, focus, pressed, disabled — set once by the system, so picking the wrong one becomes impossible.",
-    image: "/images/design-system/ds-states.webp",
-    alt: "Component states: default, hover, active, disabled",
-  },
-  {
-    label: "06 — two files",
+    label: "04 — two files",
     title: "isolated brands, one shared library",
     body: "Each brand is two files: a shared, brand-free Library (form in bare hex) and a brand file that paints it with tokens. Brands never see each other — an error in one can't reach the rest. VIP is derived from classic, never rebuilt by hand.",
     image: "/images/design-system/article-two-files.webp",
@@ -114,12 +101,20 @@ const showcases = [
     contain: true,
   },
   {
-    label: "07 — tokens → code",
+    label: "05 — tokens → code",
     title: "one source for design and code",
     body: "Tokens live in JSON under version control. Token Studio reads/writes them and exports to Figma; the Library flows in and gets colored on the spot — two inputs into one brand file, each in one direction only.",
     image: "/images/design-system/article-two-inputs.webp",
     alt: "Pipeline: GitHub → Tokens Studio → Figma Variables → Design Layer, with the Library feeding in",
     contain: true,
+  },
+  {
+    label: "06 — documented & tooled",
+    title: "not just drawn — documented",
+    body: "Every component ships with usage docs. Two custom tools keep it honest: a Token Validator that checks references and cross-brand consistency before merge, and a Swap Library flow to reskin a brand in minutes.",
+    image: "/images/design-system/ds-docs.webp",
+    alt: "Design system documentation — components, the Token Validation Tool and the Swap Library flow",
+    bleed: true,
   },
 ];
 
@@ -379,25 +374,25 @@ export default function DesignSystemCase() {
               <p className="mt-3 max-w-[620px] text-[16px] leading-[1.5] text-neutral-500">
                 {s.body}
               </p>
-              <div
-                className={`mt-8 overflow-hidden rounded-2xl border border-neutral-200 ${
-                  s.contain
-                    ? "flex items-center justify-center bg-[#e7e8ea] p-6"
-                    : "bg-neutral-50 p-3"
-                }`}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+              {s.bleed ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={s.image}
                   alt={s.alt}
-                  className={
-                    s.contain
-                      ? "max-h-[420px] w-auto max-w-full"
-                      : "w-full rounded-xl"
-                  }
+                  className="mt-8 w-full rounded-2xl"
                   loading="lazy"
                 />
-              </div>
+              ) : (
+                <div className="mt-8 flex items-center justify-center overflow-hidden rounded-2xl bg-[#e7e8ea] p-6">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={s.image}
+                    alt={s.alt}
+                    className="max-h-[420px] w-auto max-w-full"
+                    loading="lazy"
+                  />
+                </div>
+              )}
             </Row>
           </section>
         ))}
