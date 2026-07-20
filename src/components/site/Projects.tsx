@@ -179,10 +179,10 @@ export default function Projects({
               </div>
             </div>
 
-            {/* Showcase below the text: a full-width cover, then the live
-                Figma embed, real gallery, or placeholder grid */}
-            <div className="mt-10 flex flex-col gap-4">
-              {p.image && (
+            {/* Showcase below the text: just the cover image. Falls back to the
+                live Figma embed / gallery / placeholder grid when there's no cover. */}
+            <div className="mt-10">
+              {p.image ? (
                 <div className={`overflow-hidden ${tile}`}>
                   <Image
                     src={p.image}
@@ -193,8 +193,7 @@ export default function Projects({
                     priority={i === 0}
                   />
                 </div>
-              )}
-              {p.figma ? (
+              ) : p.figma ? (
                 <FigmaEmbed src={p.figma} title={`${p.title} — Figma`} />
               ) : (
                 <ProjectGallery
