@@ -14,7 +14,7 @@ const blackletter = Pirata_One({
 });
 
 export const metadata: Metadata = {
-  title: "Vlad Kalashnikov — Senior Product Designer",
+  title: "Denis Artemenko — Senior Product Designer",
   description:
     "Senior Product Designer with expertise in digital products across B2C, B2B, Fintech and Web3.",
 };

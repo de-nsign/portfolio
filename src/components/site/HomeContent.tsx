@@ -5,20 +5,14 @@ import BehindThePixels from "./BehindThePixels";
 import Articles from "./Articles";
 import Career from "./Career";
 import Testimonials from "./Testimonials";
-import { latestProjects, sideActivity } from "@/lib/site-data";
+import { latestProjects } from "@/lib/site-data";
 
 export default function HomeContent() {
   return (
     <main>
       <Hero />
 
-      <Projects title="Latest Projects" count={6} items={latestProjects} />
-      <Projects
-        title="Side Activity"
-        count={3}
-        items={sideActivity}
-        topPadding="pt-32"
-      />
+      <Projects title="Latest Projects" items={latestProjects} />
       <Services />
       <BehindThePixels />
       <Articles />

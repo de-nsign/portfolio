@@ -35,56 +35,6 @@ export const projects: Project[] = [
       "https://embed.figma.com/design/hIEuNxuW2WPrUjve1kB7Pb/Library?node-id=0-1&embed-host=share",
   },
   {
-    slug: "re-luna",
-    title: "Re:Luna",
-    role: "Sr. Product Designer",
-    period: "2024 — Now",
-    tags: ["B2B", "Fintech", "SaaS"],
-    description:
-      "Fintech wealth-management platform with two connected products: a B2B workspace for analysts and advisors, and a client-facing iOS app for tracking portfolio performance, strategy updates, daily investment activity, and clearer communication around portfolio decisions",
-    image: "/images/home/latest/re-luna-download.png",
-    logo: "/images/home/re-luna-logo.png",
-    badges: ["B2B + iOS", "0 → 1 product"],
-    metrics: ["Onboarding CR +22%", "Advisor time −30%", "NPS +11"],
-  },
-  {
-    slug: "mts",
-    title: "MTS",
-    role: "Sr. Product Designer",
-    period: "2023 — 2024",
-    tags: ["Design System", "Accessibility"],
-    description:
-      "Led accessibility work across the MTS design system: planned rollout, reviewed implementation, refined tokens and touch targets, and improved consistency across web and mobile surfaces",
-    image: "/images/home/latest/mts-download.png",
-    logo: "/images/home/mts-logo.png",
-    badges: ["Design System", "WCAG 2.1 AA"],
-    metrics: ["Contrast pass +40%", "120+ components audited"],
-  },
-  {
-    slug: "rustore",
-    title: "RuStore",
-    role: "Sr. Product Designer",
-    period: "2022",
-    tags: ["B2C", "Mobile App"],
-    description:
-      "Worked on RuStore, VK's Android marketplace, with a focus on trust, paid-app conversion, and faster product delivery through a stronger design system, cleaner Figma workflows, tighter collaboration with development, and more reliable handoff patterns",
-    image: "/images/home/latest/rustore-download.png",
-    logo: "/images/logos/rustore.png",
-    badges: ["MAU 10m+", "Android"],
-    metrics: ["Paid-app CR +18%", "Handoff time −25%"],
-  },
-  {
-    slug: "bioniq",
-    title: "Bioniq",
-    role: "Sr. Product Designer",
-    period: "2022",
-    tags: ["B2C", "Mobile App", "HealthTech"],
-    description:
-      "Designed key subscription and tracking flows for Bioniq, a personalized healthcare product, helping users follow blood-test progress, manage nutrient plans, and move through a clearer mobile experience from onboarding to retention with less friction in core health journeys",
-    image: "/images/home/latest/bioniq-download.png",
-    logo: "/images/logos/bioniq.png",
-  },
-  {
     slug: "vtb",
     title: "VTB",
     role: "Design System · Design Lead",
@@ -108,39 +58,6 @@ export const projects: Project[] = [
       "/images/home/vtb/ds-atoms-blocks.webp",
       "/images/home/vtb/ds-colors.webp",
     ],
-  },
-  {
-    slug: "spenlog",
-    title: "SpenLog",
-    role: "Product Designer",
-    period: "2026",
-    tags: ["Personal Project", "Fintech"],
-    description:
-      "A personal project for personal finance: expense tracking, AI-assisted input, planned payments, debts, goals, and clearer budget insights in one app built to make everyday money management faster and easier",
-    image: "/images/home/latest/spenlog-download.png",
-    logo: "/images/home/spenlog-logo.png",
-  },
-  {
-    slug: "gemx",
-    title: "GemX",
-    role: "Sr. Product Designer",
-    period: "2024",
-    tags: ["Hackathons", "Crypto"],
-    description:
-      "A hackathon project: a Telegram Mini-App where users earn crypto cases by completing tasks, inviting friends, and keeping daily streaks, shaped as a lightweight reward loop inside the app",
-    image: "/images/home/latest/gemx-download.png",
-    logo: "/images/logos/gemx.png",
-  },
-  {
-    slug: "her",
-    title: "Her",
-    role: "Sr. Product Designer",
-    period: "2024",
-    tags: ["Hackathons", "HealthTech"],
-    description:
-      "A hackathon project: a Telegram Mini-App that helps women track their cycle, understand daily changes, and receive more useful advice based on their data through a simple and friendly UX",
-    image: "/images/home/latest/her-download.png",
-    logo: "/images/logos/her.png",
   },
 ];
 
@@ -366,5 +283,5 @@ export const footerColumns: { heading: string; links: string[] }[] = [
   { heading: "Channels", links: ["Design Mind", "Design Resources", "Daily Aestethics"] },
   { heading: "Articles", links: ["VC", "DSGNRS", "Medium"] },
   { heading: "Concepts", links: ["X (Twitter)", "Dribbble", "Behance"] },
-  { heading: "Vlad Kalashnikov", links: ["© 2019 — Now", "Privacy", "Licenses"] },
+  { heading: "Denis Artemenko", links: ["© 2019 — Now", "Privacy", "Licenses"] },
 ];
