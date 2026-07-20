@@ -180,7 +180,7 @@ function SpotlightCard({
   return (
     <div
       onMouseMove={handleMove}
-      className={`group relative overflow-hidden rounded-2xl bg-neutral-50 ${className}`}
+      className={`group relative overflow-hidden rounded-2xl bg-neutral-100 ${className}`}
     >
       <div
         aria-hidden
@@ -360,7 +360,7 @@ export default function DesignSystemCase() {
               {["4", "8", "12", "16", "20", "24", "32", "48", "64"].map((n) => (
                 <span
                   key={n}
-                  className="rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2 text-[15px] font-medium tabular-nums text-ink"
+                  className="rounded-xl bg-neutral-100 px-4 py-2 text-[15px] font-medium tabular-nums text-ink"
                 >
                   {n}
                 </span>
