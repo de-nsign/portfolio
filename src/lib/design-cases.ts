@@ -66,9 +66,9 @@ const casinoLibrary: DesignCaseData = {
   title: "a design system for seven brands, built out of chaos",
   subtitle:
     "From a disguised single template with no structure — to a token-driven system with 28 themes, a two-file architecture and one language for designers and engineers.",
-  coverImage: "/images/design-system/article-hero.webp",
+  coverImage: "/images/design-system/casino-hero.png",
   coverAlt:
-    "How one designer built a multi-brand design system for 7 brands and 28 themes",
+    "Casino Library design system — Figma × Tokens Studio, Auto Layout, tokens and 7 brands",
 
   problemLabel: "problem",
   problemHeading: "the product grew, the system didn't scale",
@@ -220,9 +220,9 @@ const vtb: DesignCaseData = {
   title: "the design system behind one of Russia's largest banks",
   subtitle:
     "Redesigning VTB's public website — from hand-drawn pages to an atomic system: an atoms-to-blocks library, every component documented to every state, and six color themes with a first-class dark mode.",
-  coverImage: "/images/projects/vtb/ds-hero.png",
+  coverImage: "/images/design-system/vtb-hero.webp",
   coverAlt:
-    "VTB small-business homepage in a laptop mockup — built at Pinkman Studio",
+    "VTB design system hero — components, fields and controls for VTB Designer and VTB Client",
 
   problemLabel: "problem",
   problemHeading: "a bank-sized site, drawn page by page",

@@ -26,7 +26,7 @@ export const projects: Project[] = [
     tags: ["Design System", "iGaming", "Web"],
     description:
       "A dark-first design system for an online casino platform — a single Figma library scaling from tokens, fields, inputs and controls up through data display, feedback and navigation blocks. Built for fast, consistent lobby, game and cashier surfaces across the product, with an interactive component playground you can pan and zoom below",
-    image: "/images/home/latest/re-luna-download.png",
+    image: "/images/design-system/casino-hero.png",
     logoBg: "#0f0f10",
     logoText: "C",
     badges: ["Atoms → Blocks", "Dark-first", "Live Figma"],
@@ -42,7 +42,7 @@ export const projects: Project[] = [
     tags: ["Design System", "Fintech", "Web"],
     description:
       "Built the design system behind VTB's public web — one of Russia's largest banks. An atomic approach scaled from fields, inputs, buttons and controls up to blocks and full marketing pages, unified into six color themes with a dark mode for low-vision users, plus 1000+ illustrations with technical guidelines that let the bank ship a faster, more consistent customer experience",
-    image: "/images/home/latest/vtb-download.png",
+    image: "/images/design-system/vtb-hero.webp",
     logo: "/images/logos/vtb.png",
     badges: ["Atoms → Blocks", "6 color themes", "Dark theme"],
     metrics: [
