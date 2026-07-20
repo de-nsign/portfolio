@@ -155,7 +155,7 @@ export default function Projects({
                     label="View"
                     value={
                       <a
-                        href="#"
+                        href={`/projects/${p.slug}`}
                         className="inline-flex items-center gap-1 text-neutral-500 transition-colors hover:text-ink"
                       >
                         See Details <span aria-hidden>↗</span>
