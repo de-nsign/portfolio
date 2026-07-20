@@ -59,6 +59,20 @@ export const projects: Project[] = [
       "/images/home/vtb/ds-colors.webp",
     ],
   },
+  {
+    slug: "mobile-design-system",
+    title: "Mobile Design System",
+    role: "Design System · Designer",
+    period: "2025",
+    tags: ["Design System", "Fintech", "Mobile"],
+    description:
+      "Placeholder case — a token-driven design system for a fintech mobile app: color, typography and spacing tokens, a full component library, dark theme and one shared language for designers and engineers. Replace with the real project.",
+    image: "/images/design-system/article-hero.webp",
+    logoBg: "#0f0f10",
+    logoText: "M",
+    badges: ["Design System", "Dark theme", "Mobile"],
+    metrics: ["Tokens", "Component library", "Dark theme"],
+  },
 ];
 
 export type CareerEntry = {

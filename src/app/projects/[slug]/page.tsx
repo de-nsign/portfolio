@@ -18,11 +18,12 @@ import CaseDeviceMockup from "@/components/case-study/CaseDeviceMockup";
 import CaseNextProject from "@/components/case-study/CaseNextProject";
 import CaseFooter from "@/components/case-study/CaseFooter";
 import DesignSystemCase from "@/components/case-study/DesignSystemCase";
+import { designCases } from "@/lib/design-cases";
 
 export default function CaseStudyPage() {
   const { slug } = useParams<{ slug: string }>();
-  const isDesignSystem = slug === "casino-library";
-  const study = isDesignSystem ? undefined : getCaseStudy(slug);
+  const designCase = designCases[slug];
+  const study = designCase ? undefined : getCaseStudy(slug);
 
   useEffect(() => {
     if (!study) return;
@@ -32,8 +33,8 @@ export default function CaseStudyPage() {
     return () => clearTimeout(timer);
   }, [study]);
 
-  if (isDesignSystem) {
-    return <DesignSystemCase />;
+  if (designCase) {
+    return <DesignSystemCase data={designCase} />;
   }
 
   if (!study) {
