@@ -61,17 +61,24 @@ export const projects: Project[] = [
   },
   {
     slug: "mobile-design-system",
-    title: "Mobile Design System",
+    title: "ECOS",
     role: "Design System · Designer",
     period: "2025",
     tags: ["Design System", "Fintech", "Mobile"],
     description:
-      "Placeholder case — a token-driven design system for a fintech mobile app: color, typography and spacing tokens, a full component library, dark theme and one shared language for designers and engineers. Replace with the real project.",
-    image: "/images/design-system/article-hero.webp",
+      "A design system for the ECOS fintech mobile app — from a scattered UI-kit to a living, token-driven system with color, typography and spacing tokens, 100+ components, a dark theme and one shared language for designers and engineers across iOS and Android.",
+    image: "/images/design-system/ecos-hero.png",
+    logo: "/images/design-system/ecos-app-icon.png",
     logoBg: "#0f0f10",
-    logoText: "M",
-    badges: ["Design System", "Dark theme", "Mobile"],
-    metrics: ["Tokens", "Component library", "Dark theme"],
+    logoText: "E",
+    badges: ["100+ components", "Dark theme", "Mobile"],
+    metrics: ["6 token tiers", "100+ components", "Token-driven"],
+    gallery: [
+      "/images/design-system/ecos-colors.png",
+      "/images/design-system/ecos-typography-scale.png",
+      "/images/design-system/ecos-icons.png",
+      "/images/design-system/ecos-spacing.png",
+    ],
   },
 ];
 

@@ -219,7 +219,7 @@ const vtb: DesignCaseData = {
   tags: ["fintech • design system", "web • public bank site", "2020 — 2022"],
   title: "the design system behind one of Russia's largest banks",
   subtitle:
-    "Redesigning VTB's public website — from hand-drawn pages to an atomic system: components documented to every state, six color themes with a dark mode, and 1000+ 3D illustrations under one set of guidelines.",
+    "Redesigning VTB's public website — from hand-drawn pages to an atomic system: an atoms-to-blocks library, every component documented to every state, and six color themes with a first-class dark mode.",
   coverImage: "/images/projects/vtb/ds-hero.png",
   coverAlt:
     "VTB small-business homepage in a laptop mockup — built at Pinkman Studio",
