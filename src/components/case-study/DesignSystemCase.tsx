@@ -69,32 +69,57 @@ const steps = [
 
 const showcases = [
   {
-    label: "01 — color & themes",
-    title: "tokens, three levels",
-    body: "Primitives → semantic → component. Naming a token \"Primary 500\" broke on the second brand; the fix was to name the role, not the shade — the palette can be anything.",
-    image: "/images/design-system/ds-colors.webp",
-    alt: "Color token scales across multiple brand themes",
+    label: "01 — token grammar",
+    title: "a token names a role, not a shade",
+    body: "Naming a token \"Primary 500\" broke on the second brand. The fix was a single grammar — property · tone · surface · step · state — so every token answers \"what role,\" not \"what color.\"",
+    image: "/images/design-system/article-grammar.webp",
+    alt: "The token naming grammar: prefix, property, tone, modificators, intensity, state",
+    contain: true,
   },
   {
-    label: "02 — base / inverted",
+    label: "02 — three levels",
+    title: "value → primitive → semantic",
+    body: "A raw value feeds a primitive, a primitive feeds a semantic role. The designer works in the semantic layer; component-level tokens appear only when there's no other way.",
+    image: "/images/design-system/article-three-levels.webp",
+    alt: "Reference chain: value #F55DAF → Pink-500 → Color/Background/Brand",
+    contain: true,
+  },
+  {
+    label: "03 — themes",
+    title: "28 themes from two axes",
+    body: "Seven brands × light/dark × classic/VIP. One token resolves the right value for every combination — the wall of themes that broke Figma's native mode limit.",
+    image: "/images/design-system/ds-colors.webp",
+    alt: "Color schemes across many brand themes",
+  },
+  {
+    label: "04 — base / inverted",
     title: "contrast belongs to the surface",
     body: "A component doesn't know its brand or background — only whether it sits on a base or an inverted surface. The tokens resolve the real color, so one component drops into any brand.",
     image: "/images/design-system/ds-dark.webp",
     alt: "Dark-surface components using the base / inverted pair",
   },
   {
-    label: "03 — states",
+    label: "05 — states",
     title: "every component, every state",
     body: "Default, hover, focus, pressed, disabled — set once by the system, so picking the wrong one becomes impossible.",
     image: "/images/design-system/ds-states.webp",
     alt: "Component states: default, hover, active, disabled",
   },
   {
-    label: "04 — atoms → blocks",
-    title: "form in the library, color in the brand",
-    body: "Shared components carry structure and states in bare hex; each brand file substitutes its own tokens on top. VIP styling is derived from classic — never rebuilt by hand.",
-    image: "/images/design-system/ds-atoms-blocks.webp",
-    alt: "Atoms and blocks organised in the shared library",
+    label: "06 — two files",
+    title: "isolated brands, one shared library",
+    body: "Each brand is two files: a shared, brand-free Library (form in bare hex) and a brand file that paints it with tokens. Brands never see each other — an error in one can't reach the rest. VIP is derived from classic, never rebuilt by hand.",
+    image: "/images/design-system/article-two-files.webp",
+    alt: "Shared Library feeding isolated Brand A, B and C files",
+    contain: true,
+  },
+  {
+    label: "07 — tokens → code",
+    title: "one source for design and code",
+    body: "Tokens live in JSON under version control. Token Studio reads/writes them and exports to Figma; the Library flows in and gets colored on the spot — two inputs into one brand file, each in one direction only.",
+    image: "/images/design-system/article-two-inputs.webp",
+    alt: "Pipeline: GitHub → Tokens Studio → Figma Variables → Design Layer, with the Library feeding in",
+    contain: true,
   },
 ];
 
@@ -229,13 +254,13 @@ export default function DesignSystemCase() {
           </div>
         </header>
 
-        {/* Hero overview image */}
-        <div className="mt-14 overflow-hidden rounded-3xl border border-neutral-200 bg-neutral-50 p-3 md:mt-20">
+        {/* Hero cover image */}
+        <div className="mt-14 overflow-hidden rounded-3xl md:mt-20">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/design-system/ds-hero.webp"
-            alt="Design system overview — theme palettes, atoms and blocks, component states, and the dark surface"
-            className="w-full rounded-2xl"
+            src="/images/design-system/article-hero.webp"
+            alt="How one designer built a multi-brand design system for 7 brands and 28 themes"
+            className="w-full"
           />
         </div>
 
@@ -318,12 +343,22 @@ export default function DesignSystemCase() {
               <p className="mt-3 max-w-[620px] text-[16px] leading-[1.5] text-neutral-500">
                 {s.body}
               </p>
-              <div className="mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 p-3">
+              <div
+                className={`mt-8 overflow-hidden rounded-2xl border border-neutral-200 ${
+                  s.contain
+                    ? "flex items-center justify-center bg-[#e7e8ea] p-6"
+                    : "bg-neutral-50 p-3"
+                }`}
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={s.image}
                   alt={s.alt}
-                  className="w-full rounded-xl"
+                  className={
+                    s.contain
+                      ? "max-h-[420px] w-auto max-w-full"
+                      : "w-full rounded-xl"
+                  }
                   loading="lazy"
                 />
               </div>
