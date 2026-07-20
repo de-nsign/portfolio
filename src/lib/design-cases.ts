@@ -206,114 +206,297 @@ const casinoLibrary: DesignCaseData = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Third case — TEMPLATE / PLACEHOLDER                                 */
-/*  Same layout, generic copy to replace with a real project.          */
+/*  VTB — the design system behind one of Russia's largest banks        */
+/*  Public web redesign at Pinkman Studio, 2020 — 2022                   */
+/* ------------------------------------------------------------------ */
+
+const vtb: DesignCaseData = {
+  brand: "VTB",
+  monogram: "В",
+  monogramBg: "#0a2896",
+  tags: ["fintech • design system", "web • public bank site", "2020 — 2022"],
+  title: "the design system behind one of Russia's largest banks",
+  subtitle:
+    "Redesigning VTB's public website — from hand-drawn pages to an atomic system: components documented to every state, six color themes with a dark mode, and 1000+ 3D illustrations under one set of guidelines.",
+  coverImage: "/images/projects/vtb/ds-hero.png",
+  coverAlt:
+    "VTB small-business homepage in a laptop mockup — built at Pinkman Studio",
+
+  problemLabel: "problem",
+  problemHeading: "a bank-sized site, drawn page by page",
+  problems: [
+    {
+      n: "01",
+      title: "Every page, from scratch",
+      body: "The public site spanned hundreds of product pages — cards, mortgage, auto loans, deposits, business — and each was laid out by hand. Nothing was reused, so nothing stayed consistent.",
+    },
+    {
+      n: "02",
+      title: "Four designers, four dialects",
+      body: "A team of four worked in parallel with no shared source of truth. The same button, field or calculator lived in slightly different versions across files.",
+    },
+    {
+      n: "03",
+      title: "Themes copied by hand",
+      body: "Segment sections needed their own accents, and a dark mode for low-vision users was on the roadmap. Without tokens, every theme meant re-coloring screens one layer at a time.",
+    },
+    {
+      n: "04",
+      title: "Illustrations with no rules",
+      body: "The site leaned on custom 3D visuals, but with no naming, sizing or export guidelines the library grew faster than anyone could keep it coherent.",
+    },
+  ],
+
+  doingLabel: "what i did",
+  doingHeading: "from hand-drawn pages to an atomic system",
+  doingDesc:
+    "Built bottom-up: fields, inputs, buttons and controls as atoms, up through blocks and full marketing pages — unified by tokens into six color themes and a dark mode, with a documented illustration library on top.",
+  doingMetrics: [
+    { value: "6 themes", label: "+ a dark mode" },
+    { value: "1000+", label: "3D illustrations" },
+    { value: "team of 4", label: "on one system" },
+  ],
+  steps: [
+    {
+      n: "01",
+      body: "Audited the redesign — mapped every product page and the duplicated buttons, fields and calculators scattered across the team's files.",
+    },
+    {
+      n: "02",
+      body: "Built the atoms first — fields, inputs, buttons and controls, each with every state, then composed them into reusable blocks.",
+    },
+    {
+      n: "03",
+      body: "Documented components to the edge — every size, mobile and desktop behavior, error states, light and dark, in one source of truth.",
+    },
+    {
+      n: "04",
+      body: "Tokenized color so six segment themes and a dark mode fell out of one system instead of being re-drawn by hand.",
+    },
+    {
+      n: "05",
+      body: "Wrote guidelines for the 1000+ 3D illustrations — naming, sizing and export — and onboarding docs so new designers could plug in fast.",
+    },
+  ],
+
+  showcases: [
+    {
+      label: "01 — a component, fully documented",
+      title: "one component, every size and state",
+      body: "The mortgage calculator is the system in miniature — documented across every breakpoint, its mobile and desktop behavior, error states, and both light and dark themes. A designer never guesses which variant is right.",
+      image: "/images/projects/vtb/ds-calculator.png",
+      alt: "The VTB mortgage Calculator component documented across sizes, states and light/dark themes",
+      bleed: true,
+    },
+    {
+      label: "02 — atoms to full pages",
+      title: "atoms compose into whole pages",
+      body: "Fields, inputs, buttons and controls roll up into blocks, and blocks assemble into complete product pages. A new landing is arranged from ready parts, not drawn from a blank canvas.",
+      image: "/images/projects/vtb/ds-pages.png",
+      alt: "A page map of VTB product pages assembled from shared blocks",
+      bleed: true,
+    },
+    {
+      label: "03 — illustration system",
+      title: "1000+ 3D illustrations, one language",
+      body: "The 3D visuals are the face of the site, so they became part of the system — a single library with technical guidelines for naming, sizing and export that kept a thousand-plus renders visually coherent.",
+      image: "/images/projects/vtb/ds-illustrations.png",
+      alt: "A grid of VTB pages using the shared 3D illustration library",
+      bleed: true,
+    },
+    {
+      label: "04 — one visual language",
+      title: "every scene, the same palette and light",
+      body: "Mortgage, construction, log-in, documents — each illustration is its own scene, but a shared palette, material and lighting rig keep them unmistakably one family.",
+      image: "/images/projects/vtb/ds-illo-scenes.png",
+      alt: "Four VTB 3D illustration scenes sharing one palette and lighting",
+      contain: true,
+    },
+    {
+      label: "05 — down to the icon",
+      title: "the same system at icon scale",
+      body: "The card micro-illustrations follow the same rules as the hero scenes — the same blue, the same rounded material — so a tiny icon and a full-bleed banner still read as one brand.",
+      image: "/images/projects/vtb/ds-illo-icons.png",
+      alt: "VTB card micro-illustrations for transfers, statements and online banking",
+      contain: true,
+    },
+    {
+      label: "06 — reviewed, not guessed",
+      title: "design review made the system honest",
+      body: "Every screen went through an AS IS → CORRECT review against the system. Research and product review, not taste, decided what shipped — which is what kept hundreds of pages consistent.",
+      image: "/images/projects/vtb/ds-review.png",
+      alt: "A product-review board comparing AS IS and CORRECT versions of VTB screens",
+      bleed: true,
+    },
+  ],
+
+  resultLabel: "result",
+  resultHeading: "hundreds of pages, one system",
+  resultLead:
+    "The redesign shipped on a shared foundation instead of hand-drawn one-offs — and the behavioral metrics moved with it. Several designers on the team grew to lead level on the same system.",
+  forEngineers: [
+    "One correct variant of every component, documented to every state.",
+    "Color driven by tokens — six themes and a dark mode from one source.",
+    "Illustration guidelines mean predictable naming, sizing and export.",
+  ],
+  forDesigners: [
+    "Pages assembled from ready blocks, not drawn from scratch.",
+    "Dark mode and segment themes handled by tokens, not by hand.",
+    "Onboarding docs got new designers productive in days.",
+  ],
+  resultMetrics: [
+    { value: "traffic ×2", label: "after the redesign" },
+    { value: "bounce −64%", label: "on key pages" },
+    { value: "16M", label: "visitors in 2021" },
+  ],
+  prev: { href: "/", label: "all projects" },
+};
+
+/* ------------------------------------------------------------------ */
+/*  ECOS — design system for a fintech mobile app                       */
+/*  Content ported from the earlier portfolio's design-system case.     */
 /* ------------------------------------------------------------------ */
 
 const mobileDesignSystem: DesignCaseData = {
-  brand: "Mobile DS",
-  monogram: "M",
+  brand: "ECOS",
+  monogram: "E",
   monogramBg: "#0f0f10",
   tags: ["fintech • design system", "ios, android • b2c, b2b", "2025"],
-  title: "a design system for a fintech mobile app",
+  title: "a design system for the ECOS mobile app",
   subtitle:
-    "Placeholder — from a scattered UI-kit to a living, token-driven system with a dark theme and one shared language for design and code. Replace with your project's story.",
+    "From a scattered UI-kit — to a living system with tokens, 100+ components, a dark theme and one shared language for designers and engineers.",
+  coverImage: "/images/design-system/ecos-hero.png",
+  coverAlt:
+    "The ECOS design system: components, tokens, charts and UI blocks on one screen",
 
   problemLabel: "problem",
-  problemHeading: "the product outgrew its UI-kit",
+  problemHeading: "the product grew, the system didn't scale",
   problems: [
     {
       n: "01",
       title: "Duplicates and contradictions",
-      body: "Placeholder — the same component lived in several versions across files, and no one knew which one was correct.",
+      body: "The same button existed in four versions across different files — engineers had no way to tell which one was correct.",
     },
     {
       n: "02",
-      title: "Everyone improvised",
-      body: "Placeholder — with no single source of truth, engineers reused old components or built new ones, and design and build drifted apart.",
+      title: "Everyone built their own way",
+      body: "With no single source of truth, engineers reused old components or made new ones — and design and build kept drifting apart.",
     },
     {
       n: "03",
       title: "Slow onboarding",
-      body: "Placeholder — a new designer spent weeks finding their way; there was no clear structure or documentation.",
+      body: "A new designer spent weeks finding their way through the files — there was no clear structure and no documentation.",
     },
     {
       n: "04",
       title: "Didn't scale to new features",
-      body: "Placeholder — every new screen meant redrawing components from scratch; the system didn't grow with the product.",
+      body: "Every new screen meant drawing components from scratch — the system didn't grow with the product.",
     },
   ],
 
   doingLabel: "what i did",
   doingHeading: "from a UI-kit to a living system",
   doingDesc:
-    "Placeholder — describe how the system was built bottom-up: foundation and tokens first, then components, then the migration and hand-off to the team.",
+    "The system was built bottom-up: the foundation first — tokens — then atoms, molecules and complex components.",
   doingMetrics: [
-    { value: "—", label: "components" },
-    { value: "—", label: "token tiers" },
-    { value: "—", label: "team adoption" },
+    { value: "100+", label: "components" },
+    { value: "6 tiers", label: "of tokens" },
+    { value: "whole team", label: "uses it" },
   ],
   steps: [
-    { n: "01", body: "Placeholder — audited the UI-kit and mapped duplicates, gaps and inconsistencies." },
-    { n: "02", body: "Placeholder — built the token system: color, typography, spacing, radii." },
-    { n: "03", body: "Placeholder — designed the components with all their states and variants." },
-    { n: "04", body: "Placeholder — wrote the docs and handed the system to designers and engineers." },
+    {
+      n: "01",
+      body: "Audited the UI-kit — surfaced the duplicates, contradictions and gaps.",
+    },
+    {
+      n: "02",
+      body: "Built the token system — color, typography, spacing and radii.",
+    },
+    {
+      n: "03",
+      body: "Designed 100+ components with all their states and variants.",
+    },
+    {
+      n: "04",
+      body: "Wrote the documentation and handed the system to designers and engineers.",
+    },
   ],
 
   showcases: [
     {
       label: "01 — color tokens",
-      title: "placeholder — color system",
-      body: "Placeholder — add a screenshot of the color token scales and describe the palette.",
-      image: "",
-      alt: "",
+      title: "a six-step scale for every color role",
+      body: "The core palette that makes up most of the design system — blue, accent, neutral, error, warning and success, each as a full tonal scale. Primitives feed semantic variables (text, bg, border, status, icon), so a color is chosen by role, not by hex.",
+      image: "/images/design-system/ecos-colors.png",
+      alt: "The ECOS color system: six tonal steps for every color token, feeding semantic variables",
+      bleed: true,
     },
     {
       label: "02 — typography",
-      title: "placeholder — type scale",
-      body: "Placeholder — add a screenshot of the type roles and describe the scale.",
-      image: "",
-      alt: "",
+      title: "SF Pro, driven by semantic text styles",
+      body: "A type system built on semantic text styles — Display, Heading, Body, Label and Caption — so text stays consistent across the whole UI. Family, weight, size, line-height and letter-spacing all live as tokens on SF Pro Display and SF Pro Text.",
+      image: "/images/design-system/ecos-typography-scale.png",
+      alt: "The ECOS type scale: Display, Heading, Body, Label and Caption with family / weight / size / letter-spacing tokens",
+      bleed: true,
     },
     {
-      label: "03 — components",
-      title: "placeholder — component library",
-      body: "Placeholder — add a screenshot of the component gallery and describe the coverage.",
-      image: "",
-      alt: "",
+      label: "03 — shadows",
+      title: "one elevation scale, xs to 3xl",
+      body: "Depth is a token too — a single elevation scale from xs to 3xl, so every surface lifts off the background by the same rules instead of one-off blur values.",
+      image: "/images/design-system/ecos-shadows.png",
+      alt: "The ECOS shadow scale: xs, sm, md, lg, xl, 2xl and 3xl elevation levels",
+      bleed: true,
     },
     {
-      label: "04 — dark theme",
-      title: "placeholder — dark theme",
-      body: "Placeholder — add a screenshot of the dark theme and describe how it's handled.",
-      image: "",
-      alt: "",
+      label: "04 — icons",
+      title: "one grid, one style",
+      body: "An icon library on a single grid and a single stroke style — including the crypto-asset set the app leans on — so icons read as one family everywhere they appear.",
+      image: "/images/design-system/ecos-icons.png",
+      alt: "The ECOS icon library: one consistent style and grid",
+      bleed: true,
+    },
+    {
+      label: "05 — spacing",
+      title: "a spacer guide, not by-eye numbers",
+      body: "Layout runs on one spacing scale with a spacer guide, so gaps and padding come from the system instead of being nudged pixel by pixel.",
+      image: "/images/design-system/ecos-spacing.png",
+      alt: "The ECOS spacing grid and scale: a spacer guide with sizes in pixels",
+      bleed: true,
+    },
+    {
+      label: "06 — design to code",
+      title: "components that survive the handoff",
+      body: "Tokens become variables and components carry their behavior into build — the crypto-asset icon set and its implementation in code are one and the same, so what's designed is what ships.",
+      image: "/images/design-system/ecos-concept.png",
+      alt: "ECOS design-system concept: the crypto-asset icon library and its implementation in code",
+      bleed: true,
     },
   ],
 
   resultLabel: "result",
-  resultHeading: "placeholder — the outcome",
+  resultHeading: "one system the whole team runs on",
   resultLead:
-    "Placeholder — summarise what changed for the team once the system shipped.",
+    "The UI-kit became a living system — one correct component for everyone, a dark theme that switches itself, and onboarding measured in days instead of weeks.",
   forEngineers: [
-    "Placeholder — one correct variant of every component.",
-    "Placeholder — tokens as variables, fewer questions about values.",
-    "Placeholder — docs explain behavior, fewer fixes after handoff.",
+    "One correct variant of every component.",
+    "Tokens exported as variables — fewer questions about colors.",
+    "Docs explain behavior — fewer fixes after handoff.",
   ],
   forDesigners: [
-    "Placeholder — new screens assembled from blocks, not from scratch.",
-    "Placeholder — theme switching handled automatically.",
-    "Placeholder — faster onboarding for new designers.",
+    "New screens are assembled from ready blocks, not drawn from scratch.",
+    "The dark theme switches automatically.",
+    "Designer onboarding dropped from weeks to days.",
   ],
   resultMetrics: [
-    { value: "—", label: "placeholder metric" },
-    { value: "—", label: "placeholder metric" },
-    { value: "—", label: "placeholder metric" },
+    { value: "100+", label: "components" },
+    { value: "2×", label: "faster designer onboarding" },
+    { value: "−38%", label: "fixes on review" },
   ],
   prev: { href: "/projects/vtb", label: "previous case · VTB" },
 };
 
 export const designCases: Record<string, DesignCaseData> = {
   "casino-library": casinoLibrary,
+  vtb,
   "mobile-design-system": mobileDesignSystem,
 };
