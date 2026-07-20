@@ -129,12 +129,21 @@ export default function DesignSystemCase({ data }: { data: DesignCaseData }) {
         <header className="grid grid-cols-1 gap-y-8 pt-14 md:grid-cols-[220px_1fr] md:gap-x-12 md:pt-24">
           <div>
             <div className="flex items-center gap-3">
-              <span
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-[18px] font-semibold text-white"
-                style={{ backgroundColor: data.monogramBg }}
-              >
-                {data.monogram}
-              </span>
+              {data.logo ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={data.logo}
+                  alt={`${data.brand} logo`}
+                  className="h-9 w-9 rounded-lg"
+                />
+              ) : (
+                <span
+                  className="flex h-9 w-9 items-center justify-center rounded-lg text-[18px] font-semibold text-white"
+                  style={{ backgroundColor: data.monogramBg }}
+                >
+                  {data.monogram}
+                </span>
+              )}
               <span className="text-[22px] font-semibold tracking-tight text-ink">
                 {data.brand}
               </span>

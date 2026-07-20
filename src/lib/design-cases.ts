@@ -20,6 +20,8 @@ export type DesignCaseData = {
   brand: string;
   monogram: string;
   monogramBg: string;
+  /** Optional brand logo; renders in place of the monogram when set. */
+  logo?: string;
   tags: string[];
   title: string;
   subtitle: string;
@@ -361,6 +363,7 @@ const mobileDesignSystem: DesignCaseData = {
   brand: "ECOS",
   monogram: "E",
   monogramBg: "#0f0f10",
+  logo: "/images/design-system/ecos-app-icon.png",
   tags: ["fintech • design system", "ios, android • b2c, b2b", "2025"],
   title: "a design system for the ECOS mobile app",
   subtitle:
