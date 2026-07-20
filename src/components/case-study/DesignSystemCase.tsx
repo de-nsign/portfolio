@@ -154,8 +154,43 @@ function Row({
 }) {
   return (
     <div className="grid grid-cols-1 gap-y-6 md:grid-cols-[220px_1fr] md:gap-x-12">
-      <p className="text-[20px] font-medium text-neutral-400">{label}</p>
+      {/* Sticky left label — pins near the top while its section scrolls past,
+          then releases as the next section arrives. */}
+      <p className="text-[20px] font-medium text-neutral-400 md:sticky md:top-28 md:self-start">
+        {label}
+      </p>
       <div>{children}</div>
+    </div>
+  );
+}
+
+/** Card that lightens and follows the cursor with a soft radial spotlight. */
+function SpotlightCard({
+  className = "",
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
+  return (
+    <div
+      onMouseMove={handleMove}
+      className={`group relative overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 transition-[box-shadow,border-color] duration-300 hover:border-neutral-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)] ${className}`}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background:
+            "radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.9), transparent 60%)",
+        }}
+      />
+      <div className="relative">{children}</div>
     </div>
   );
 }
@@ -188,10 +223,12 @@ function NumberedList({ items }: { items: { n: string; body: string }[] }) {
 
 function MetricCard({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
-      <p className="text-[22px] font-semibold text-ink">{value}</p>
-      <p className="mt-1 text-[15px] text-neutral-500">{label}</p>
-    </div>
+    <SpotlightCard>
+      <div className="p-6">
+        <p className="text-[22px] font-semibold text-ink">{value}</p>
+        <p className="mt-1 text-[15px] text-neutral-500">{label}</p>
+      </div>
+    </SpotlightCard>
   );
 }
 
@@ -270,18 +307,17 @@ export default function DesignSystemCase() {
             <Heading>the product grew, the system didn&apos;t scale</Heading>
             <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
               {problems.map((p) => (
-                <div
-                  key={p.n}
-                  className="rounded-2xl border border-neutral-200 bg-neutral-50 p-6"
-                >
-                  <p className="text-[15px] text-neutral-400">{p.n}</p>
-                  <h3 className="mt-3 text-[19px] font-medium text-ink">
-                    {p.title}
-                  </h3>
-                  <p className="mt-2 text-[15px] leading-[1.5] text-neutral-600">
-                    {p.body}
-                  </p>
-                </div>
+                <SpotlightCard key={p.n}>
+                  <div className="p-6">
+                    <p className="text-[15px] text-neutral-400">{p.n}</p>
+                    <h3 className="mt-3 text-[19px] font-medium text-ink">
+                      {p.title}
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-[1.5] text-neutral-600">
+                      {p.body}
+                    </p>
+                  </div>
+                </SpotlightCard>
               ))}
             </div>
           </Row>
