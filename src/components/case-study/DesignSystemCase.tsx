@@ -41,7 +41,7 @@ const problems = [
 const doingMetrics = [
   { value: "7 brands", label: "on one system" },
   { value: "28 themes", label: "from two axes" },
-  { value: "300k+ layers", label: "migrated" },
+  { value: "~300k layers", label: "migrated" },
 ];
 
 const steps = [
@@ -71,29 +71,29 @@ const showcases = [
   {
     label: "01 — color & themes",
     title: "tokens, three levels",
-    body: "Primitives → semantic → component. The palette can be named anything; the token names a role, not a shade.",
-    image: "/images/home/vtb/ds-colors.webp",
+    body: "Primitives → semantic → component. Naming a token \"Primary 500\" broke on the second brand; the fix was to name the role, not the shade — the palette can be anything.",
+    image: "/images/design-system/ds-colors.webp",
     alt: "Color token scales across multiple brand themes",
   },
   {
     label: "02 — base / inverted",
     title: "contrast belongs to the surface",
-    body: "A component doesn't know its brand or background — only whether it sits on a base or an inverted surface. The tokens resolve the real color.",
-    image: "/images/home/vtb/ds-dark.webp",
+    body: "A component doesn't know its brand or background — only whether it sits on a base or an inverted surface. The tokens resolve the real color, so one component drops into any brand.",
+    image: "/images/design-system/ds-dark.webp",
     alt: "Dark-surface components using the base / inverted pair",
   },
   {
     label: "03 — states",
     title: "every component, every state",
     body: "Default, hover, focus, pressed, disabled — set once by the system, so picking the wrong one becomes impossible.",
-    image: "/images/home/vtb/ds-states.webp",
+    image: "/images/design-system/ds-states.webp",
     alt: "Component states: default, hover, active, disabled",
   },
   {
     label: "04 — atoms → blocks",
     title: "form in the library, color in the brand",
-    body: "Shared components carry structure and states in bare hex; each brand file substitutes its own tokens on top.",
-    image: "/images/home/vtb/ds-atoms-blocks.webp",
+    body: "Shared components carry structure and states in bare hex; each brand file substitutes its own tokens on top. VIP styling is derived from classic — never rebuilt by hand.",
+    image: "/images/design-system/ds-atoms-blocks.webp",
     alt: "Atoms and blocks organised in the shared library",
   },
 ];
@@ -229,6 +229,16 @@ export default function DesignSystemCase() {
           </div>
         </header>
 
+        {/* Hero overview image */}
+        <div className="mt-14 overflow-hidden rounded-3xl border border-neutral-200 bg-neutral-50 p-3 md:mt-20">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/design-system/ds-hero.webp"
+            alt="Design system overview — theme palettes, atoms and blocks, component states, and the dark surface"
+            className="w-full rounded-2xl"
+          />
+        </div>
+
         {/* Problem */}
         <section className="mt-32">
           <Row label="problem">
@@ -274,6 +284,30 @@ export default function DesignSystemCase() {
           </Row>
         </section>
 
+        {/* Foundation — the spacing scale */}
+        <section className="mt-28">
+          <Row label="00 — foundation">
+            <h3 className="text-[24px] font-medium tracking-tight text-ink">
+              one spacing scale, no other numbers
+            </h3>
+            <p className="mt-3 max-w-[620px] text-[16px] leading-[1.5] text-neutral-500">
+              The flagship brand had hundreds of by-eye spacing values. I put a
+              single scale at the base — multiples of 4 up to 24, of 8 above. If
+              a value isn&apos;t on the scale, you can&apos;t use it.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {["4", "8", "12", "16", "20", "24", "32", "48", "64"].map((n) => (
+                <span
+                  key={n}
+                  className="rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2 text-[15px] font-medium tabular-nums text-ink"
+                >
+                  {n}
+                </span>
+              ))}
+            </div>
+          </Row>
+        </section>
+
         {/* Showcases */}
         {showcases.map((s) => (
           <section key={s.label} className="mt-28">
@@ -301,6 +335,11 @@ export default function DesignSystemCase() {
         <section className="mt-32">
           <Row label="result">
             <Heading>seven brands on one system</Heading>
+            <p className="mt-5 max-w-[620px] text-[17px] leading-[1.5] text-neutral-500">
+              A year on, review is about design again — not spotting each
+              other&apos;s typos. The base is set, and picking the wrong one is
+              impossible.
+            </p>
 
             <div className="mt-10 grid grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2">
               <div>
