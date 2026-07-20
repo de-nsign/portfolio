@@ -110,7 +110,7 @@ export default function Projects({
                   alt={`${p.title} — cover`}
                   width={1920}
                   height={1080}
-                  className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  className="h-auto w-full object-cover"
                   priority={i === 0}
                 />
               ) : p.figma ? (
