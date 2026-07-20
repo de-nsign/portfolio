@@ -102,8 +102,8 @@ export default function Projects({
             href={`/projects/${p.slug}`}
             className="group block"
           >
-            {/* Cover with the logo overlaid, then title, tags and description */}
-            <div className="relative overflow-hidden rounded-2xl bg-neutral-100">
+            {/* Clean cover on top — no overlay */}
+            <div className="overflow-hidden rounded-2xl bg-neutral-100">
               {p.image ? (
                 <Image
                   src={p.image}
@@ -122,33 +122,34 @@ export default function Projects({
                   alt={p.title}
                 />
               )}
-              <div className="absolute left-4 top-4">
+            </div>
+
+            {/* Below the cover: brand + meta on the left, description on the right */}
+            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-12">
+              <div className="flex gap-4">
                 <ProjectLogo
                   logo={p.logo}
                   logoBg={p.logoBg}
                   logoText={p.logoText}
                   title={p.title}
                 />
+                <div>
+                  <h3 className="text-[22px] font-medium leading-tight text-ink">
+                    {p.title}
+                  </h3>
+                  <p className="mt-1 text-[15px] text-neutral-500">
+                    {p.role} · {p.period}
+                  </p>
+                  <p className="mt-1 text-[15px] text-neutral-400">
+                    {p.tags.join(" · ")}
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-8">
-              <div>
-                <h3 className="text-[24px] font-medium leading-tight text-ink">
-                  {p.title}
-                </h3>
-                <p className="mt-1 text-[15px] text-neutral-400">
-                  {p.role} · {p.period} · {p.tags.join(" · ")}
-                </p>
-              </div>
-              <span className="inline-flex shrink-0 items-center gap-1 text-[15px] text-neutral-500 transition-colors group-hover:text-ink">
-                See Details <span aria-hidden>↗</span>
-              </span>
+              <p className="text-[17px] leading-[1.5] text-neutral-500">
+                {p.description}
+              </p>
             </div>
-
-            <p className="mt-4 max-w-[720px] text-[17px] leading-[1.5] text-neutral-500">
-              {p.description}
-            </p>
           </Link>
         ))}
       </div>
