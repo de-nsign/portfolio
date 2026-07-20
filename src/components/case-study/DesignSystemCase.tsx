@@ -180,7 +180,7 @@ function SpotlightCard({
   return (
     <div
       onMouseMove={handleMove}
-      className={`group relative overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 transition-[box-shadow,border-color] duration-300 hover:border-neutral-300 hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)] ${className}`}
+      className={`group relative overflow-hidden rounded-2xl bg-neutral-50 ${className}`}
     >
       <div
         aria-hidden
