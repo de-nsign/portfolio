@@ -1,20 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { Project } from "@/lib/site-data";
 import { latestProjects } from "@/lib/site-data";
 import SectionHeader from "./SectionHeader";
 import ProjectLogo from "./ProjectLogo";
 import FigmaEmbed from "./FigmaEmbed";
-
-function MetaColumn({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div className="flex flex-col gap-2">
-      <span className="text-[12px] font-normal uppercase tracking-[0.04em] text-neutral-400">
-        {label}
-      </span>
-      <span className="text-[14px] text-ink">{value}</span>
-    </div>
-  );
-}
 
 const tile = "rounded-2xl bg-neutral-100";
 
@@ -107,92 +97,22 @@ export default function Projects({
 
       <div className="mt-14 flex flex-col gap-28">
         {items.map((p, i) => (
-          <article key={p.slug} className="group">
-            {/* Text header — brand on the left, content on the right */}
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
-              {/* Left: brand */}
-              <div className="flex gap-4">
-                <ProjectLogo
-                  logo={p.logo}
-                  logoBg={p.logoBg}
-                  logoText={p.logoText}
-                  title={p.title}
-                />
-                <div>
-                  <h3 className="text-[24px] font-medium leading-tight text-ink">
-                    {p.title}
-                  </h3>
-                  <p className="mt-1 text-[16px] text-neutral-500">
-                    {p.role} · {p.period}
-                  </p>
-
-                  {p.badges && (
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {p.badges.map((b) => (
-                        <span
-                          key={b}
-                          className="rounded-full bg-neutral-100 px-3 py-1 text-[13px] leading-none text-neutral-600"
-                        >
-                          {b}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Right: description + meta columns */}
-              <div className="flex flex-col gap-8">
-                <p className="text-[18px] font-medium leading-[1.4] text-ink">
-                  {p.description}
-                </p>
-
-                <div className="flex flex-wrap gap-x-10 gap-y-6 border-t border-neutral-100 pt-6">
-                  <MetaColumn label="Year" value={p.period} />
-                  <MetaColumn label="Role" value={p.role} />
-                  <MetaColumn label="Focus" value={p.tags.join(", ")} />
-                  <MetaColumn
-                    label="View"
-                    value={
-                      <a
-                        href={`/projects/${p.slug}`}
-                        className="inline-flex items-center gap-1 text-neutral-500 transition-colors hover:text-ink"
-                      >
-                        See Details <span aria-hidden>↗</span>
-                      </a>
-                    }
-                  />
-                </div>
-
-                {p.metrics && (
-                  <div className="flex flex-wrap gap-2">
-                    {p.metrics.map((m) => (
-                      <span
-                        key={m}
-                        className="rounded-full border border-neutral-200 px-3 py-1 text-[13px] leading-none text-neutral-500"
-                      >
-                        {m}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Showcase below the text: just the cover image. Falls back to the
-                live Figma embed / gallery / placeholder grid when there's no cover. */}
-            <div className="mt-10">
+          <Link
+            key={p.slug}
+            href={`/projects/${p.slug}`}
+            className="group block"
+          >
+            {/* Cover with the logo overlaid, then title, tags and description */}
+            <div className="relative overflow-hidden rounded-2xl bg-neutral-100">
               {p.image ? (
-                <div className={`overflow-hidden ${tile}`}>
-                  <Image
-                    src={p.image}
-                    alt={`${p.title} — cover`}
-                    width={1920}
-                    height={1080}
-                    className="h-auto w-full object-cover"
-                    priority={i === 0}
-                  />
-                </div>
+                <Image
+                  src={p.image}
+                  alt={`${p.title} — cover`}
+                  width={1920}
+                  height={1080}
+                  className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  priority={i === 0}
+                />
               ) : p.figma ? (
                 <FigmaEmbed src={p.figma} title={`${p.title} — Figma`} />
               ) : (
@@ -202,8 +122,34 @@ export default function Projects({
                   alt={p.title}
                 />
               )}
+              <div className="absolute left-4 top-4">
+                <ProjectLogo
+                  logo={p.logo}
+                  logoBg={p.logoBg}
+                  logoText={p.logoText}
+                  title={p.title}
+                />
+              </div>
             </div>
-          </article>
+
+            <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-start md:justify-between md:gap-8">
+              <div>
+                <h3 className="text-[24px] font-medium leading-tight text-ink">
+                  {p.title}
+                </h3>
+                <p className="mt-1 text-[15px] text-neutral-400">
+                  {p.role} · {p.period} · {p.tags.join(" · ")}
+                </p>
+              </div>
+              <span className="inline-flex shrink-0 items-center gap-1 text-[15px] text-neutral-500 transition-colors group-hover:text-ink">
+                See Details <span aria-hidden>↗</span>
+              </span>
+            </div>
+
+            <p className="mt-4 max-w-[720px] text-[17px] leading-[1.5] text-neutral-500">
+              {p.description}
+            </p>
+          </Link>
         ))}
       </div>
     </section>
