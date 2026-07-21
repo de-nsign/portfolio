@@ -21,8 +21,8 @@ export const projects: Project[] = [
   {
     slug: "casino-library",
     title: "Casino Library",
-    role: "Design Lead",
-    period: "2025 — Now",
+    role: "System Designer",
+    period: "2024 — 2026",
     tags: ["Design System", "iGaming", "Web"],
     description:
       "A dark-first design system for an online casino platform — one Figma library powering 28 brand configurations from a three-tier token architecture (primitive → semantic → component). It scales from tokens, inputs and controls up through data display, feedback and navigation blocks, with a live component playground you can pan and zoom",

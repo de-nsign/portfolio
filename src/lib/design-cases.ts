@@ -64,7 +64,7 @@ const casinoLibrary: DesignCaseData = {
   brand: "Casino Library",
   monogram: "C",
   monogramBg: "#0f0f10",
-  tags: ["iGaming • design system", "web • seven brands", "2025 — Now"],
+  tags: ["iGaming • design system", "web • seven brands", "2024 — 2026"],
   title: "a design system for seven brands, built out of chaos",
   subtitle:
     "From a disguised single template with no structure — to a token-driven system with 28 themes, a two-file architecture and one language for designers and engineers.",
@@ -220,7 +220,7 @@ const vtb: DesignCaseData = {
   brand: "VTB",
   monogram: "В",
   monogramBg: "#0a2896",
-  tags: ["fintech • design system", "web • public bank site", "2020 — 2022"],
+  tags: ["fintech • design system", "web • public bank site", "2021 — 2022"],
   title: "the design system behind one of Russia's largest banks",
   subtitle:
     "Redesigning VTB's public website — from hand-drawn pages to an atomic system: an atoms-to-blocks library, every component documented to every state, and six color themes with a first-class dark mode.",
