@@ -30,11 +30,11 @@ export default function Hero() {
     <section className="flex flex-col items-center px-6 pt-24 text-center">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/images/hero/nikita-photo.png"
+        src="/images/hero/denis-portrait.webp"
         alt="Denis"
-        width={131}
-        height={167}
-        className="h-[167px] w-[131px] object-contain"
+        width={128}
+        height={128}
+        className="h-32 w-32 rounded-full object-cover"
       />
 
       <p className="mt-5 text-[17px] text-neutral-500">Hi, I&apos;m Denis!</p>
