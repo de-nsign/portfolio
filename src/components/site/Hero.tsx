@@ -32,9 +32,9 @@ export default function Hero() {
       <img
         src="/images/hero/denis-portrait.webp"
         alt="Denis"
-        width={128}
-        height={128}
-        className="h-32 w-32 rounded-full object-cover"
+        width={140}
+        height={168}
+        className="h-[168px] w-[140px] rounded-[36px] object-cover"
       />
 
       <p className="mt-5 text-[17px] text-neutral-500">Hi, I&apos;m Denis!</p>
