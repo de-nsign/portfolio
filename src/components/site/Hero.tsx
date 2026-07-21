@@ -1,7 +1,7 @@
 import MagneticLink from "./MagneticLink";
 
 const links = [
-  { label: "CV", href: "#" },
+  { label: "CV", href: "https://drive.google.com/drive/home?dmr=1&ec=wgc-drive-%5Bmodule%5D-goto" },
   { label: "Telegram", href: "https://t.me/de_nsign" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/denys-artemenko/" },
 ];
