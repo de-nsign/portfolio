@@ -368,7 +368,7 @@ const mobileDesignSystem: DesignCaseData = {
   monogram: "E",
   monogramBg: "#0f0f10",
   logo: "/images/design-system/ecos-app-icon.png",
-  tags: ["fintech • design system", "ios, android • b2c, b2b", "2025"],
+  tags: ["fintech • design system", "ios, android • b2c, b2b", "2024"],
   title: "a design system for the ECOS mobile app",
   subtitle:
     "From a scattered UI-kit — to a living system with tokens, 100+ components, a dark theme and one shared language for designers and engineers.",

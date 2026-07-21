@@ -63,7 +63,7 @@ export const projects: Project[] = [
     slug: "mobile-design-system",
     title: "ECOS",
     role: "Designer",
-    period: "2025",
+    period: "2024",
     tags: ["Design System", "Fintech", "Mobile"],
     description:
       "A design system for the ECOS fintech mobile app — from a scattered UI-kit to a living, token-driven system with color, typography and spacing tokens, 100+ components, a dark theme and one shared language for designers and engineers across iOS and Android.",
