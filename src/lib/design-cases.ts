@@ -27,6 +27,8 @@ export type DesignCaseData = {
   subtitle: string;
   coverImage?: string;
   coverAlt?: string;
+  /** Live Figma embed used as the cover; takes precedence over coverImage. */
+  coverFigma?: string;
 
   problemLabel: string;
   problemHeading: string;
@@ -69,6 +71,8 @@ const casinoLibrary: DesignCaseData = {
   coverImage: "/images/design-system/casino-hero.png",
   coverAlt:
     "Casino Library design system — Figma × Tokens Studio, Auto Layout, tokens and 7 brands",
+  coverFigma:
+    "https://embed.figma.com/design/hIEuNxuW2WPrUjve1kB7Pb/Library?node-id=0-1&embed-host=share",
 
   problemLabel: "problem",
   problemHeading: "the product grew, the system didn't scale",

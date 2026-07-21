@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { DesignCaseData } from "@/lib/design-cases";
+import FigmaEmbed from "@/components/site/FigmaEmbed";
 
 /* ------------------------------------------------------------------ */
 /*  Building blocks                                                     */
@@ -165,16 +166,22 @@ export default function DesignSystemCase({ data }: { data: DesignCaseData }) {
           </div>
         </header>
 
-        {/* Hero cover image */}
-        {data.coverImage && (
-          <div className="mt-14 overflow-hidden rounded-3xl md:mt-20">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={data.coverImage}
-              alt={data.coverAlt ?? ""}
-              className="w-full"
-            />
+        {/* Hero cover — a live Figma embed when set, otherwise the cover image */}
+        {data.coverFigma ? (
+          <div className="mt-14 md:mt-20">
+            <FigmaEmbed src={data.coverFigma} title={`${data.brand} — Figma`} />
           </div>
+        ) : (
+          data.coverImage && (
+            <div className="mt-14 overflow-hidden rounded-3xl md:mt-20">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={data.coverImage}
+                alt={data.coverAlt ?? ""}
+                className="w-full"
+              />
+            </div>
+          )
         )}
 
         {/* Problem */}
