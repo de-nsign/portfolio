@@ -44,9 +44,9 @@ export default function Hero() {
       </h1>
 
       <p className="mt-5 max-w-[420px] text-[17px] leading-[1.6] text-neutral-500">
-        I build digital products from idea to launch, grounded in strategy,
-        business goals, and user needs. Currently at Tochka Bank. In parallel, I
-        mentor designers at Duo Sapiens.
+        I build design systems that scale — multi-brand component libraries and
+        token architecture for iGaming and complex digital platforms. 7 years of
+        experience, based in Tbilisi, Georgia.
       </p>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">

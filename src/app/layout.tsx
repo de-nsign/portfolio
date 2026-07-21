@@ -14,9 +14,9 @@ const blackletter = Pirata_One({
 });
 
 export const metadata: Metadata = {
-  title: "Denis Artemenko — Senior Product Designer",
+  title: "Denis Artemenko — Design System Designer",
   description:
-    "Senior Product Designer with expertise in digital products across B2C, B2B, Fintech and Web3.",
+    "Design System Designer with 7 years of experience — multi-brand component libraries and token architecture for iGaming and complex digital platforms.",
 };
 
 export default function RootLayout({

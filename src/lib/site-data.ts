@@ -21,27 +21,27 @@ export const projects: Project[] = [
   {
     slug: "casino-library",
     title: "Casino Library",
-    role: "Design System · Design Lead",
+    role: "Design Lead",
     period: "2025 — Now",
     tags: ["Design System", "iGaming", "Web"],
     description:
-      "A dark-first design system for an online casino platform — a single Figma library scaling from tokens, fields, inputs and controls up through data display, feedback and navigation blocks. Built for fast, consistent lobby, game and cashier surfaces across the product, with an interactive component playground you can pan and zoom below",
+      "A dark-first design system for an online casino platform — one Figma library powering 28 brand configurations from a three-tier token architecture (primitive → semantic → component). It scales from tokens, inputs and controls up through data display, feedback and navigation blocks, with a live component playground you can pan and zoom",
     image: "/images/design-system/casino-hero.png",
     logoBg: "#0f0f10",
     logoText: "C",
     badges: ["Atoms → Blocks", "Dark-first", "Live Figma"],
-    metrics: ["200+ components", "5 component groups", "Token-driven"],
+    metrics: ["28 brand configs", "200+ components", "Handoff −40%"],
     figma:
       "https://embed.figma.com/design/hIEuNxuW2WPrUjve1kB7Pb/Library?node-id=0-1&embed-host=share",
   },
   {
     slug: "vtb",
     title: "VTB",
-    role: "Design System · Design Lead",
-    period: "2019 — 2025",
+    role: "System Designer",
+    period: "2021 — 2022",
     tags: ["Design System", "Fintech", "Web"],
     description:
-      "Built the design system behind VTB's public web — one of Russia's largest banks. An atomic approach scaled from fields, inputs, buttons and controls up to blocks and full marketing pages, unified into six color themes with a dark mode for low-vision users, plus 1000+ illustrations with technical guidelines that let the bank ship a faster, more consistent customer experience",
+      "The first design system for the public website of VTB — one of Russia's largest banks. An atomic library scaling from fields, inputs and controls up to blocks and full marketing pages, unified into six segment color themes plus a first-class dark mode from a single tokenized color set, and documented to every state and breakpoint as one source of truth for the team",
     image: "/images/design-system/vtb-hero.webp",
     logo: "/images/logos/vtb.png",
     badges: ["Atoms → Blocks", "6 color themes", "Dark theme"],
@@ -62,7 +62,7 @@ export const projects: Project[] = [
   {
     slug: "mobile-design-system",
     title: "ECOS",
-    role: "Design System · Designer",
+    role: "Designer",
     period: "2025",
     tags: ["Design System", "Fintech", "Mobile"],
     description:
@@ -88,50 +88,46 @@ export type CareerEntry = {
   period: string;
   projects?: string[];
   blurb?: string;
-  logo: string;
+  logo?: string;
 };
 
 export const career: CareerEntry[] = [
   {
-    company: "Re:Luna",
-    role: "Senior Product Designer",
-    period: "2024 — Now",
+    company: "NDA · iGaming",
+    role: "System Designer",
+    period: "2024 — 2026",
     blurb:
-      "Building a fintech wealth-management platform — a B2B analyst workspace and a client-facing iOS app for portfolio performance and clearer investment decisions.",
-    logo: "/images/logos/career-reluna.png",
+      "Built and owned a multi-brand design system that unified 5+ casino brands into a single platform — a three-tier token architecture in Figma Variables and Tokens Studio powering 28 brand configurations, cutting design-to-dev handoff time by ~40%.",
   },
   {
-    company: "MTS",
-    role: "Senior Product Designer",
-    period: "2023 — 2024",
+    company: "ValsyDev",
+    role: "Product Designer",
+    period: "2024",
     blurb:
-      "Led accessibility across the MTS design system — color contrast, touch targets, font scaling and component behavior, with internal guides so others could design for everyone.",
-    logo: "/images/logos/career-mts.png",
-  },
-  {
-    company: "Helper",
-    role: "Design Mentor",
-    period: "2023",
-    blurb:
-      "Mentored junior designers — building learning plans, reviewing work and talking through the craft one project at a time.",
-    logo: "/images/logos/career-helper.png",
-  },
-  {
-    company: "Yandex Practicum",
-    role: "Reviewer and Author",
-    period: "2023 — 2024",
-    blurb:
-      "Reviewed student projects and authored course material for one of the largest EdTech platforms in the region.",
-    logo: "/images/logos/career-yandex.png",
+      "Owned end-to-end UI/UX for web and mobile products and established the team's first shared component library and design guidelines.",
   },
   {
     company: "Pinkman",
-    role: "Middle Designer → Lead Designer",
-    period: "2020 — 2023 · Full Time",
-    projects: ["RuStore", "Bioniq", "VTB"],
+    role: "System Designer",
+    period: "2021 — 2022",
+    projects: ["VTB"],
     blurb:
-      "Grew from product designer on VTB's website redesign into a lead managing a team of four, later moving into hands-on work across VK and RuStore.",
+      "Built VTB's first design system for the bank's public website — six segment color themes plus dark mode from a single tokenized color set, documented to every state and breakpoint. The redesign shipped on the system: traffic roughly doubled and bounce on key pages dropped ~64%.",
     logo: "/images/home/pinkman-logo.svg",
+  },
+  {
+    company: "Sectigo",
+    role: "UI/UX Designer",
+    period: "2020 — 2021",
+    blurb:
+      "Designed UI/UX for enterprise digital platforms, improving usability of complex user flows in close collaboration with stakeholders and art directors.",
+  },
+  {
+    company: "Comodo",
+    role: "Junior Designer",
+    period: "2018 — 2020",
+    blurb:
+      "First design job — UI/UX for web platforms and marketing materials, building reusable UI components with marketing and development teams.",
   },
 ];
 
@@ -171,20 +167,6 @@ export const servicesDeck: string[] = [
   "/images/home/gallery/variants/lifewell-floating.jpg",
 ];
 
-// First collage cluster (next to the opening paragraphs)
-export const behindPixelsPhotos: string[] = [
-  "/images/profile/profile-portrait-gradient.png",
-  "/images/home/gallery/variants/focus-wide.jpg",
-  "/images/home/gallery/variants/lifewell-floating.jpg",
-];
-
-// Second collage cluster (the "hanging" strip beside the closing paragraph)
-export const behindPixelsPhotosB: string[] = [
-  "/images/home/gallery/variants/dreamguard-poster.jpg",
-  "/images/home/gallery/variants/smart-fridge-shelf.jpg",
-  "/images/home/gallery/variants/gemx-phones.jpg",
-];
-
 export const services: string[] = [
   "Product Design",
   "Websites / Apps",
@@ -195,15 +177,6 @@ export const services: string[] = [
   "Framer",
   "Marketing",
   "Iconography",
-];
-
-export const behindPixelsIntro =
-  "Finally, meet the lady behind the pixels – a quick peek into my world.";
-
-export const behindThePixels: string[] = [
-  "I was born in a small Bulgarian village in Ukraine, surrounded by different cultures, languages, and creativity. Now I live in Warsaw, carrying that love for diversity wherever I go.",
-  "I grew up speaking three languages, which sparked my passion for communication. Later I added a few more — English, Polish, and a bit of Spanish (still learning).",
-  "Creativity has always been my way to express myself. I draw, design, move through yoga, and explore new corners of the world whenever I can.",
 ];
 
 export type Testimonial = { quote: string; name: string; role: string };
