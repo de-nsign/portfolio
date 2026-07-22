@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import SectionHeader from "./SectionHeader";
 
 // useLayoutEffect warns during SSR; fall back to useEffect on the server.
@@ -60,7 +60,7 @@ const labels: [string, number, number, number][] = [
  *  board-local space) and a rising z so the grabbed sticker comes to top. */
 type DragCtx = { scaleRef: { current: number }; bumpZ: () => number };
 
-function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
+const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
   const [file, left, top, w, h, rot] = layer;
   const ref = useRef<HTMLDivElement>(null);
   // k0 = board scale frozen at drag start, so a mid-drag resize can't teleport
@@ -78,6 +78,7 @@ function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
 
   const onDown = (e: React.PointerEvent) => {
     const s = state.current;
+    if (s.dragging) return; // ignore a second finger on the same sticker
     cancelAnimationFrame(s.raf);
     s.dragging = true;
     // freeze the scale for this drag and record pointer origin in board-local
@@ -87,7 +88,11 @@ function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
     s.sy = e.clientY / s.k0 - s.dy;
     s.scale = 1.08;
     if (ref.current) ref.current.style.zIndex = String(ctx.bumpZ());
-    ref.current?.setPointerCapture(e.pointerId);
+    try {
+      ref.current?.setPointerCapture(e.pointerId);
+    } catch {
+      /* pointer already released — drag still works without capture */
+    }
     render();
   };
 
@@ -108,6 +113,7 @@ function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
       s.dx = s.dy = 0;
       s.scale = 1;
       render();
+      if (ref.current) ref.current.style.zIndex = ""; // restore DOM-order stacking
       return;
     }
     // underdamped spring back to origin — a slight overshoot that mirrors
@@ -132,6 +138,7 @@ function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
         s.dx = s.dy = 0;
         s.scale = 1;
         render();
+        if (ref.current) ref.current.style.zIndex = ""; // restore DOM-order stacking
       }
     };
     s.raf = requestAnimationFrame(step);
@@ -160,18 +167,20 @@ function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
       />
     </div>
   );
-}
+});
 
 export default function Toolkit() {
   const stageRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  const [ready, setReady] = useState(false);
   const scaleRef = useRef(1);
   const zRef = useRef(100);
-  const ctx: DragCtx = { scaleRef, bumpZ: () => ++zRef.current };
+  // stable across re-renders so memoized Stickers never re-render on resize
+  const ctx = useMemo<DragCtx>(() => ({ scaleRef, bumpZ: () => ++zRef.current }), []);
 
-  // Measure synchronously before paint so the board never flashes at its
-  // intrinsic 868px width on a narrow viewport. The board fills the column
-  // (scales up or down), matching the reference block.
+  // Measure and scale the board to fill the column (up or down), matching the
+  // reference block. The stage reserves height via CSS aspect-ratio, so this
+  // never causes layout shift; the board only becomes visible once measured.
   useIsoLayoutEffect(() => {
     const el = stageRef.current;
     if (!el) return;
@@ -179,6 +188,7 @@ export default function Toolkit() {
       const k = el.clientWidth / BOARD_W;
       scaleRef.current = k;
       setScale(k);
+      setReady(true);
     };
     apply();
     const ro = new ResizeObserver(apply);
@@ -190,14 +200,21 @@ export default function Toolkit() {
     <section className="mx-auto max-w-[1056px] overflow-x-clip px-6 pt-32">
       <SectionHeader title="My Design Toolkit" />
 
-      <div ref={stageRef} className="mt-10" style={{ height: BOARD_H * scale }}>
+      {/* aspect-ratio reserves the correct responsive height on the server and
+          the client alike — no CLS when the measured scale lands. */}
+      <div
+        ref={stageRef}
+        className="relative mt-10 w-full"
+        style={{ aspectRatio: `${BOARD_W} / ${BOARD_H}` }}
+      >
         <div
-          className="relative rounded-3xl"
+          className="absolute left-0 top-0 rounded-3xl transition-opacity duration-150"
           style={{
             width: BOARD_W,
             height: BOARD_H,
             transform: `scale(${scale})`,
             transformOrigin: "top left",
+            opacity: ready ? 1 : 0,
             background:
               "radial-gradient(120% 90% at 50% -10%, #ffffff 0%, #f1f1f4 55%, #e9e9ee 100%)",
             boxShadow: "inset 0 0 0 1px rgba(0,0,0,.05), 0 1px 2px rgba(0,0,0,.04)",
