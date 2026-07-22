@@ -53,38 +53,39 @@ type Folder = {
 const folders: Folder[] = [
   {
     key: "bds",
-    label: { text: "Building Design System", l: 78, t: 452, rot: -6 },
+    // label.l is the CENTER x — the chip grows symmetrically from it
+    label: { text: "Building Design System", l: 180, t: 452, rot: -6 },
     back: { l: 30, t: 214, w: 250, h: 180, rot: -2 },
     pocket: { l: 22, t: 258, w: 268, h: 152, rot: -2 },
-    hit: { l: 18, t: 108, w: 284, h: 320 },
+    hit: { l: 18, t: 108, w: 284, h: 360 },
     shots: [
-      { file: "QREInI4cFG7Sxb83aS477kJvL0.png", l: 52, t: 200, w: 196, h: 150, rot: -3, ox: -44, oy: -74, orot: -9 },
-      { file: "sUlcdg0ICNhA0HbsHln4wgEvfA.png", l: 66, t: 210, w: 186, h: 146, rot: 2, ox: 42, oy: -64, orot: 9 },
+      { file: "QREInI4cFG7Sxb83aS477kJvL0.png", l: 52, t: 200, w: 196, h: 150, rot: -3, ox: -58, oy: -92, orot: -12 },
+      { file: "sUlcdg0ICNhA0HbsHln4wgEvfA.png", l: 66, t: 210, w: 186, h: 146, rot: 2, ox: 54, oy: -80, orot: 12 },
     ],
   },
   {
     key: "scs",
-    label: { text: "Simplifying Complex SaaS", l: 300, t: 476, rot: 2 },
+    label: { text: "Simplifying Complex SaaS", l: 435, t: 476, rot: 2 },
     back: { l: 308, t: 300, w: 252, h: 168, rot: 0 },
     pocket: { l: 300, t: 336, w: 270, h: 150, rot: 0 },
-    hit: { l: 300, t: 196, w: 272, h: 296 },
+    hit: { l: 300, t: 190, w: 272, h: 302 },
     shots: [
-      { file: "10pCEtT0QjBALkwmpZdeGGupSk.jpg", l: 322, t: 292, w: 196, h: 118, rot: 5, ox: -52, oy: -70, orot: -8 },
-      { file: "XDZzxvEmC9OlBD1Vz8zslZiFb5Q.png", l: 330, t: 300, w: 176, h: 128, rot: 0, ox: 0, oy: -80, orot: 2 },
-      { file: "vA5Wzc8wqRZz4as95giX6sE7E.png", l: 344, t: 302, w: 174, h: 102, rot: -4, ox: 54, oy: -64, orot: 12 },
+      { file: "10pCEtT0QjBALkwmpZdeGGupSk.jpg", l: 322, t: 292, w: 196, h: 118, rot: 5, ox: -70, oy: -92, orot: -12 },
+      { file: "XDZzxvEmC9OlBD1Vz8zslZiFb5Q.png", l: 330, t: 300, w: 176, h: 128, rot: 0, ox: 4, oy: -104, orot: 1 },
+      { file: "vA5Wzc8wqRZz4as95giX6sE7E.png", l: 344, t: 302, w: 174, h: 102, rot: -4, ox: 74, oy: -86, orot: 14 },
     ],
   },
   {
     key: "cgu",
-    label: { text: "Crafting Graceful UI", l: 585, t: 452, rot: 9 },
+    label: { text: "Crafting Graceful UI", l: 690, t: 452, rot: 9 },
     back: { l: 596, t: 214, w: 250, h: 180, rot: 2 },
     pocket: { l: 590, t: 258, w: 266, h: 152, rot: 2 },
-    hit: { l: 586, t: 108, w: 284, h: 320 },
+    hit: { l: 586, t: 108, w: 284, h: 360 },
     shots: [
-      { file: "kI71JQxzBsVksptyfXRpek7BM.png", l: 600, t: 190, w: 106, h: 165, rot: 3, ox: -72, oy: -70, orot: -16 },
-      { file: "uBVmdxzllQCI9M7Ce5A9MJJI.png", l: 666, t: 196, w: 80, h: 158, rot: -4, ox: -24, oy: -86, orot: -5 },
-      { file: "YJ7qr86GzNLZJKBgqvXXysLCw8U.png", l: 716, t: 198, w: 90, h: 160, rot: -4, ox: 22, oy: -82, orot: 8 },
-      { file: "V1jZaKJbabaL9m4KLEB5Ps0XjEU.png", l: 760, t: 196, w: 86, h: 158, rot: -5, ox: 62, oy: -70, orot: 18 },
+      { file: "kI71JQxzBsVksptyfXRpek7BM.png", l: 600, t: 190, w: 106, h: 165, rot: 3, ox: -92, oy: -84, orot: -20 },
+      { file: "uBVmdxzllQCI9M7Ce5A9MJJI.png", l: 666, t: 196, w: 80, h: 158, rot: -4, ox: -34, oy: -104, orot: -7 },
+      { file: "YJ7qr86GzNLZJKBgqvXXysLCw8U.png", l: 716, t: 198, w: 90, h: 160, rot: -4, ox: 34, oy: -100, orot: 10 },
+      { file: "V1jZaKJbabaL9m4KLEB5Ps0XjEU.png", l: 760, t: 196, w: 86, h: 158, rot: -5, ox: 86, oy: -82, orot: 22 },
     ],
   },
 ];
@@ -130,6 +131,8 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
       sx: number; sy: number; dx: number; dy: number; scale: number; raf: number; k0: number;
     };
     onDown: (e: React.PointerEvent) => void;
+    onEnter: () => void;
+    onLeave: () => void;
     detach: () => void;
   } | null>(null);
 
@@ -158,7 +161,10 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
       s.sx = s.px0 / s.k0 - s.dx;
       s.sy = s.py0 / s.k0 - s.dy;
       s.scale = 1.08;
-      if (ref.current) ref.current.style.zIndex = String(ctx.bumpZ());
+      if (ref.current) {
+        ref.current.style.transition = "none"; // drag must track instantly
+        ref.current.style.zIndex = String(ctx.bumpZ());
+      }
       try {
         ref.current?.setPointerCapture(s.pid);
       } catch {
@@ -277,7 +283,23 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
       window.addEventListener("blur", onBlur);
     };
 
-    api.current = { s, onDown, detach };
+    // hover lift — the sticker scales up and rises to the top while pointed at,
+    // easing back on leave (matches the reference sticker hover). Disabled while
+    // dragging so it never fights the drag transform.
+    const onEnter = () => {
+      if (s.down || !ref.current) return;
+      ref.current.style.transition = "transform 200ms cubic-bezier(0.22,1,0.36,1)";
+      ref.current.style.transform = `rotate(${rot}deg) scale(1.12)`;
+      ref.current.style.zIndex = String(ctx.bumpZ());
+    };
+    const onLeave = () => {
+      if (s.down || !ref.current) return;
+      ref.current.style.transition = "transform 260ms cubic-bezier(0.22,1,0.36,1)";
+      ref.current.style.transform = `rotate(${rot}deg)`;
+      ref.current.style.zIndex = BASE_Z;
+    };
+
+    api.current = { s, onDown, onEnter, onLeave, detach };
   }
 
   // cancel any spring and drop window listeners if we unmount mid-interaction
@@ -293,6 +315,8 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
     <div
       ref={ref}
       onPointerDown={api.current.onDown}
+      onPointerEnter={api.current.onEnter}
+      onPointerLeave={api.current.onLeave}
       className="absolute cursor-grab touch-pan-y select-none active:cursor-grabbing"
       style={{ left, top, width: w, height: h, transform: `rotate(${rot}deg)`, zIndex: 10 }}
     >
@@ -411,18 +435,20 @@ const FolderView = memo(function FolderView({ folder }: { folder: Folder }) {
         </div>
       </div>
 
-      {/* caption — becomes a filled chip on hover */}
+      {/* caption — becomes a filled chip on hover. label.l is the CENTER x and
+          the element is centered on it (translateX(-50%)), so the chip grows
+          symmetrically from the middle, not from the left edge. */}
       <div
         className="absolute whitespace-nowrap text-[18px] font-medium"
         style={{
           left: folder.label.l,
           top: folder.label.t,
-          transform: `rotate(${folder.label.rot}deg)`,
-          transformOrigin: "left center",
+          transform: `translateX(-50%) rotate(${folder.label.rot}deg)`,
+          transformOrigin: "center",
           color: open ? "#fff" : "rgba(12,19,27,.6)",
           background: open ? "#2f6bff" : "transparent",
-          padding: open ? "4px 12px" : "4px 0",
-          borderRadius: 10,
+          padding: open ? "5px 14px" : "5px 0",
+          borderRadius: 999,
           transition: `background ${FOLDER_DUR}ms ${FOLDER_EASE}, color ${FOLDER_DUR}ms ${FOLDER_EASE}, padding ${FOLDER_DUR}ms ${FOLDER_EASE}`,
           zIndex: 4,
         }}
