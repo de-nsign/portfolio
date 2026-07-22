@@ -27,16 +27,66 @@ const BOARD_H = 500;
 // [file, left, top, w, h, rotate]
 type Layer = [string, number, number, number, number, number];
 
-const cards: Layer[] = [
-  ["QREInI4cFG7Sxb83aS477kJvL0.png", 60, 54, 194, 158, -4],
-  ["sUlcdg0ICNhA0HbsHln4wgEvfA.png", 64, 58, 188, 148, 0],
-  ["kI71JQxzBsVksptyfXRpek7BM.png", 575, 51, 105, 165, 3],
-  ["uBVmdxzllQCI9M7Ce5A9MJJI.png", 650, 71, 78, 155, -14],
-  ["YJ7qr86GzNLZJKBgqvXXysLCw8U.png", 693, 78, 88, 160, -4],
-  ["V1jZaKJbabaL9m4KLEB5Ps0XjEU.png", 740, 83, 85, 158, -5],
-  ["10pCEtT0QjBALkwmpZdeGGupSk.jpg", 322, 257, 193, 115, 6],
-  ["XDZzxvEmC9OlBD1Vz8zslZiFb5Q.png", 310, 266, 174, 126, -4],
-  ["vA5Wzc8wqRZz4as95giX6sE7E.png", 343, 271, 173, 100, 0],
+/* Folders — the core interaction. Each folder is a back panel + a stack of
+   project screenshots + a front pocket. At rest the pocket hides the lower
+   part of the screenshots (only their tops peek out). On hover the screenshots
+   rise up out of the pocket and fan out, and the caption becomes a blue chip.
+   All coordinates are in the 868×500 board space.
+
+   NOTE: the screenshots in /public/toolkit are the reference author's own
+   project work used here only as placeholders — replace them with your own
+   screenshots before shipping. */
+type Shot = {
+  file: string;
+  l: number; t: number; w: number; h: number; rot: number; // resting pose
+  ox: number; oy: number; orot: number; // hover delta (fan-out)
+};
+type Folder = {
+  key: string;
+  label: { text: string; l: number; t: number; rot: number };
+  back: { l: number; t: number; w: number; h: number; rot: number };
+  pocket: { l: number; t: number; w: number; h: number; rot: number };
+  hit: { l: number; t: number; w: number; h: number }; // hover zone
+  shots: Shot[];
+};
+
+const folders: Folder[] = [
+  {
+    key: "bds",
+    label: { text: "Building Design System", l: 78, t: 452, rot: -6 },
+    back: { l: 30, t: 214, w: 250, h: 180, rot: -2 },
+    pocket: { l: 22, t: 258, w: 268, h: 152, rot: -2 },
+    hit: { l: 18, t: 108, w: 284, h: 320 },
+    shots: [
+      { file: "QREInI4cFG7Sxb83aS477kJvL0.png", l: 52, t: 200, w: 196, h: 150, rot: -3, ox: -44, oy: -74, orot: -9 },
+      { file: "sUlcdg0ICNhA0HbsHln4wgEvfA.png", l: 66, t: 210, w: 186, h: 146, rot: 2, ox: 42, oy: -64, orot: 9 },
+    ],
+  },
+  {
+    key: "scs",
+    label: { text: "Simplifying Complex SaaS", l: 300, t: 476, rot: 2 },
+    back: { l: 308, t: 300, w: 252, h: 168, rot: 0 },
+    pocket: { l: 300, t: 336, w: 270, h: 150, rot: 0 },
+    hit: { l: 300, t: 196, w: 272, h: 296 },
+    shots: [
+      { file: "10pCEtT0QjBALkwmpZdeGGupSk.jpg", l: 322, t: 292, w: 196, h: 118, rot: 5, ox: -52, oy: -70, orot: -8 },
+      { file: "XDZzxvEmC9OlBD1Vz8zslZiFb5Q.png", l: 330, t: 300, w: 176, h: 128, rot: 0, ox: 0, oy: -80, orot: 2 },
+      { file: "vA5Wzc8wqRZz4as95giX6sE7E.png", l: 344, t: 302, w: 174, h: 102, rot: -4, ox: 54, oy: -64, orot: 12 },
+    ],
+  },
+  {
+    key: "cgu",
+    label: { text: "Crafting Graceful UI", l: 585, t: 452, rot: 9 },
+    back: { l: 596, t: 214, w: 250, h: 180, rot: 2 },
+    pocket: { l: 590, t: 258, w: 266, h: 152, rot: 2 },
+    hit: { l: 586, t: 108, w: 284, h: 320 },
+    shots: [
+      { file: "kI71JQxzBsVksptyfXRpek7BM.png", l: 600, t: 190, w: 106, h: 165, rot: 3, ox: -72, oy: -70, orot: -16 },
+      { file: "uBVmdxzllQCI9M7Ce5A9MJJI.png", l: 666, t: 196, w: 80, h: 158, rot: -4, ox: -24, oy: -86, orot: -5 },
+      { file: "YJ7qr86GzNLZJKBgqvXXysLCw8U.png", l: 716, t: 198, w: 90, h: 160, rot: -4, ox: 22, oy: -82, orot: 8 },
+      { file: "V1jZaKJbabaL9m4KLEB5Ps0XjEU.png", l: 760, t: 196, w: 86, h: 158, rot: -5, ox: 62, oy: -70, orot: 18 },
+    ],
+  },
 ];
 
 const stickers: Layer[] = [
@@ -47,13 +97,6 @@ const stickers: Layer[] = [
   ["11uTSPEyMSmvIjA5HXWrOzv3mHw.png", 656, 310, 179, 179, -19],
   ["CKx0X5X2nBOksjkOGkUnUkixNLM.png", 159, 291, 124, 128, -27],
   ["Qr0aNvXJwmxtF65J0slT0N3I92M.png", 14, 300, 172, 201, -17],
-];
-
-// [text, left, top, rotate]
-const labels: [string, number, number, number][] = [
-  ["Building Design System", 95, 245, -6],
-  ["Simplifying Complex SaaS", 280, 395, 2],
-  ["Crafting Graceful UI", 575, 235, 11],
 ];
 
 /** Shared drag context: the live board scale (so pointer deltas map into
@@ -266,6 +309,138 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
   );
 });
 
+const FOLDER_DUR = 340; // ms
+const FOLDER_EASE = "cubic-bezier(0.22, 1, 0.36, 1)"; // ease-out, gentle settle
+
+const FolderView = memo(function FolderView({ folder }: { folder: Folder }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      {/* back panel of the folder */}
+      <div
+        className="pointer-events-none absolute rounded-2xl"
+        style={{
+          left: folder.back.l,
+          top: folder.back.t,
+          width: folder.back.w,
+          height: folder.back.h,
+          transform: `rotate(${folder.back.rot}deg)`,
+          background: "linear-gradient(180deg,#fbfbfc,#ececed)",
+          boxShadow: "0 1px 2px rgba(0,0,0,.06)",
+          zIndex: 1,
+        }}
+      />
+
+      {/* screenshots tucked in the pocket — rise + fan on hover */}
+      {folder.shots.map((s, i) => (
+        <div
+          key={s.file}
+          className="pointer-events-none absolute overflow-hidden rounded-[8px]"
+          style={{
+            left: s.l,
+            top: s.t,
+            width: s.w,
+            height: s.h,
+            transform: open
+              ? `translate(${s.ox}px, ${s.oy}px) rotate(${s.rot + s.orot}deg)`
+              : `translate(0, 0) rotate(${s.rot}deg)`,
+            transitionProperty: "transform",
+            transitionDuration: `${FOLDER_DUR}ms`,
+            transitionTimingFunction: FOLDER_EASE,
+            transitionDelay: open ? `${i * 35}ms` : `${(folder.shots.length - 1 - i) * 20}ms`,
+            border: "3px solid #fff",
+            boxShadow: "0 2px 6px rgba(0,0,0,.12)",
+            zIndex: 2,
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={A + s.file}
+            alt=""
+            draggable={false}
+            width={s.w}
+            height={s.h}
+            className="pointer-events-none block h-full w-full object-cover"
+          />
+        </div>
+      ))}
+
+      {/* front pocket — stays put, hides the lower part of the screenshots */}
+      <div
+        className="pointer-events-none absolute"
+        style={{
+          left: folder.pocket.l,
+          top: folder.pocket.t,
+          width: folder.pocket.w,
+          height: folder.pocket.h,
+          transform: `rotate(${folder.pocket.rot}deg)`,
+          zIndex: 3,
+        }}
+      >
+        {/* folder tab */}
+        <div
+          className="absolute"
+          style={{
+            left: 0,
+            top: -13,
+            width: "42%",
+            height: 18,
+            borderTopLeftRadius: 12,
+            borderTopRightRadius: 16,
+            background: "linear-gradient(180deg,#fdfdfd,#f3f3f4)",
+          }}
+        />
+        {/* pocket body */}
+        <div
+          className="absolute inset-0 rounded-xl"
+          style={{
+            background: "linear-gradient(180deg,#fdfdfd,#eeeeef)",
+            boxShadow: "0 6px 14px rgba(0,0,0,.10), inset 0 1px 0 rgba(255,255,255,.9)",
+          }}
+        >
+          {/* neutral monogram — replace with your own mark */}
+          <svg
+            viewBox="0 0 100 100"
+            className="absolute left-1/2 top-1/2"
+            style={{ width: 54, height: 54, transform: "translate(-50%,-50%)", opacity: 0.1 }}
+            aria-hidden="true"
+          >
+            <circle cx="50" cy="50" r="34" fill="none" stroke="#0c131b" strokeWidth="6" />
+          </svg>
+        </div>
+      </div>
+
+      {/* caption — becomes a filled chip on hover */}
+      <div
+        className="absolute whitespace-nowrap text-[18px] font-medium"
+        style={{
+          left: folder.label.l,
+          top: folder.label.t,
+          transform: `rotate(${folder.label.rot}deg)`,
+          transformOrigin: "left center",
+          color: open ? "#fff" : "rgba(12,19,27,.6)",
+          background: open ? "#2f6bff" : "transparent",
+          padding: open ? "4px 12px" : "4px 0",
+          borderRadius: 10,
+          transition: `background ${FOLDER_DUR}ms ${FOLDER_EASE}, color ${FOLDER_DUR}ms ${FOLDER_EASE}, padding ${FOLDER_DUR}ms ${FOLDER_EASE}`,
+          zIndex: 4,
+        }}
+      >
+        {folder.label.text}
+      </div>
+
+      {/* transparent hover zone — above the decorative parts, below the stickers */}
+      <div
+        onPointerEnter={() => setOpen(true)}
+        onPointerLeave={() => setOpen(false)}
+        className="absolute"
+        style={{ left: folder.hit.l, top: folder.hit.t, width: folder.hit.w, height: folder.hit.h, zIndex: 5 }}
+      />
+    </>
+  );
+});
+
 export default function Toolkit() {
   const stageRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -337,55 +512,9 @@ export default function Toolkit() {
             boxShadow: "inset 0 0 0 1px rgba(0,0,0,.05), 0 1px 2px rgba(0,0,0,.04)",
           }}
         >
-          {/* background art — rounded on the image itself so the board can keep
-              overflow visible; stickers can be dragged up/out over the board
-              edge (the section only clips the horizontal axis). */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={A + "iCKG6aQoTYwjsfslKildDzDXjWQ.png"}
-            alt=""
-            width={BOARD_W}
-            height={BOARD_H}
-            className="pointer-events-none absolute left-0 top-0 rounded-3xl"
-            style={{ width: BOARD_W, height: BOARD_H }}
-          />
-
-          {/* static tilted cards */}
-          {cards.map(([file, left, top, w, h, rot]) => (
-            <div
-              key={file}
-              className="absolute overflow-hidden rounded-[10px]"
-              style={{
-                left,
-                top,
-                width: w,
-                height: h,
-                transform: `rotate(${rot}deg)`,
-                border: "3px solid #fff",
-                boxShadow: "rgba(120,120,120,.25) 0 -1px 2px 0",
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={A + file}
-                alt=""
-                draggable={false}
-                width={w}
-                height={h}
-                className="pointer-events-none block h-full w-full"
-              />
-            </div>
-          ))}
-
-          {/* caption labels */}
-          {labels.map(([text, left, top, rot]) => (
-            <div
-              key={text}
-              className="absolute whitespace-nowrap text-[18px] font-medium"
-              style={{ left, top, transform: `rotate(${rot}deg)`, color: "rgba(12,19,27,.6)" }}
-            >
-              {text}
-            </div>
+          {/* interactive folders — open on hover, screenshots fan out */}
+          {folders.map((f) => (
+            <FolderView key={f.key} folder={f} />
           ))}
 
           {/* draggable stickers */}
