@@ -1,7 +1,14 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import SectionHeader from "./SectionHeader";
+
+// useLayoutEffect warns during SSR; fall back to useEffect on the server.
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
 /* ──────────────────────────────────────────────────────────
    "My Design Toolkit" — a scattered board of tilted cards and
@@ -56,7 +63,12 @@ type DragCtx = { scaleRef: { current: number }; bumpZ: () => number };
 function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
   const [file, left, top, w, h, rot] = layer;
   const ref = useRef<HTMLDivElement>(null);
-  const state = useRef({ dragging: false, sx: 0, sy: 0, dx: 0, dy: 0, scale: 1, raf: 0 });
+  // k0 = board scale frozen at drag start, so a mid-drag resize can't teleport
+  // the sticker (pointer origin and deltas stay in the same coordinate space).
+  const state = useRef({ dragging: false, sx: 0, sy: 0, dx: 0, dy: 0, scale: 1, raf: 0, k0: 1 });
+
+  // stop any in-flight spring when the component unmounts (route change)
+  useEffect(() => () => cancelAnimationFrame(state.current.raf), []);
 
   const render = () => {
     const s = state.current;
@@ -68,10 +80,11 @@ function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
     const s = state.current;
     cancelAnimationFrame(s.raf);
     s.dragging = true;
-    // record pointer origin in board-local units (undo the parent scale)
-    const k = ctx.scaleRef.current || 1;
-    s.sx = e.clientX / k - s.dx;
-    s.sy = e.clientY / k - s.dy;
+    // freeze the scale for this drag and record pointer origin in board-local
+    // units (undo the parent scale)
+    s.k0 = ctx.scaleRef.current || 1;
+    s.sx = e.clientX / s.k0 - s.dx;
+    s.sy = e.clientY / s.k0 - s.dy;
     s.scale = 1.08;
     if (ref.current) ref.current.style.zIndex = String(ctx.bumpZ());
     ref.current?.setPointerCapture(e.pointerId);
@@ -81,9 +94,8 @@ function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
   const onMove = (e: React.PointerEvent) => {
     const s = state.current;
     if (!s.dragging) return;
-    const k = ctx.scaleRef.current || 1;
-    s.dx = e.clientX / k - s.sx;
-    s.dy = e.clientY / k - s.sy;
+    s.dx = e.clientX / s.k0 - s.sx;
+    s.dy = e.clientY / s.k0 - s.sy;
     render();
   };
 
@@ -91,6 +103,13 @@ function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
     const s = state.current;
     if (!s.dragging) return;
     s.dragging = false;
+    // respect reduced-motion: snap straight back, no spring
+    if (prefersReducedMotion()) {
+      s.dx = s.dy = 0;
+      s.scale = 1;
+      render();
+      return;
+    }
     // underdamped spring back to origin — a slight overshoot that mirrors
     // Framer Motion's default bouncy dragSnapToOrigin feel.
     const fx = s.dx, fy = s.dy, fs = s.scale;
@@ -125,7 +144,7 @@ function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
       onPointerMove={onMove}
       onPointerUp={onUp}
       onPointerCancel={onUp}
-      className="absolute cursor-grab touch-none select-none active:cursor-grabbing"
+      className="absolute cursor-grab touch-pan-y select-none active:cursor-grabbing"
       style={{ left, top, width: w, height: h, transform: `rotate(${rot}deg)`, zIndex: 10 }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -135,6 +154,8 @@ function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
         draggable={false}
         width={w}
         height={h}
+        loading="lazy"
+        decoding="async"
         className="pointer-events-none block h-full w-full"
       />
     </div>
@@ -151,7 +172,7 @@ export default function Toolkit() {
   // Measure synchronously before paint so the board never flashes at its
   // intrinsic 868px width on a narrow viewport. The board fills the column
   // (scales up or down), matching the reference block.
-  useLayoutEffect(() => {
+  useIsoLayoutEffect(() => {
     const el = stageRef.current;
     if (!el) return;
     const apply = () => {
@@ -183,13 +204,16 @@ export default function Toolkit() {
           }}
         >
           {/* background art — rounded on the image itself so the board can keep
-              overflow visible (stickers stay draggable past the edge). */}
+              overflow visible; stickers can be dragged up/out over the board
+              edge (the section only clips the horizontal axis). */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={A + "iCKG6aQoTYwjsfslKildDzDXjWQ.png"}
             alt=""
             width={BOARD_W}
             height={BOARD_H}
+            loading="lazy"
+            decoding="async"
             className="pointer-events-none absolute left-0 top-0 rounded-3xl"
             style={{ width: BOARD_W, height: BOARD_H }}
           />
@@ -210,7 +234,15 @@ export default function Toolkit() {
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={A + file} alt="" width={w} height={h} className="block h-full w-full" />
+              <img
+                src={A + file}
+                alt=""
+                width={w}
+                height={h}
+                loading="lazy"
+                decoding="async"
+                className="block h-full w-full"
+              />
             </div>
           ))}
 
