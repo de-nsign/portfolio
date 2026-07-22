@@ -57,15 +57,32 @@ const labels: [string, number, number, number][] = [
 ];
 
 /** Shared drag context: the live board scale (so pointer deltas map into
- *  board-local space) and a rising z so the grabbed sticker comes to top. */
-type DragCtx = { scaleRef: { current: number }; bumpZ: () => number };
+ *  board-local space), a rising z so the grabbed sticker comes to top, a flag
+ *  the board reads to freeze its scale while a drag is in flight, and a
+ *  re-measure hook the sticker calls when the drag ends. */
+type DragCtx = {
+  scaleRef: { current: number };
+  draggingRef: { current: boolean };
+  bumpZ: () => number;
+  remeasure: () => void;
+};
+
+const BASE_Z = "10"; // resting z-index for every sticker (matches the style prop)
+const DRAG_THRESHOLD = 4; // px of movement before a press becomes a drag
 
 const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
   const [file, left, top, w, h, rot] = layer;
   const ref = useRef<HTMLDivElement>(null);
-  // k0 = board scale frozen at drag start, so a mid-drag resize can't teleport
-  // the sticker (pointer origin and deltas stay in the same coordinate space).
-  const state = useRef({ dragging: false, sx: 0, sy: 0, dx: 0, dy: 0, scale: 1, raf: 0, k0: 1 });
+  // Coordinates are tracked in PAGE space (pageX/Y) so scrolling the page mid-
+  // drag keeps the sticker under the cursor. k0 = board scale frozen at drag
+  // start; the board also freezes its scale while dragging, so k0 stays valid.
+  const state = useRef({
+    down: false, // pointer is pressed (may still be a click/scroll, not a drag)
+    dragging: false, // movement passed the threshold — it's a real drag
+    pid: -1,
+    px0: 0, py0: 0, // page-space press origin (for the threshold check)
+    sx: 0, sy: 0, dx: 0, dy: 0, scale: 1, raf: 0, k0: 1,
+  });
 
   // stop any in-flight spring when the component unmounts (route change)
   useEffect(() => () => cancelAnimationFrame(state.current.raf), []);
@@ -78,14 +95,26 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
 
   const onDown = (e: React.PointerEvent) => {
     const s = state.current;
-    if (s.dragging) return; // ignore a second finger on the same sticker
+    if (s.down) return; // ignore a second finger on the same sticker
     cancelAnimationFrame(s.raf);
+    // record the press but DON'T lift/scale yet — wait to see if it's a drag,
+    // so a tap or a vertical scroll over the sticker doesn't make it pop.
+    s.down = true;
+    s.dragging = false;
+    s.pid = e.pointerId;
+    s.px0 = e.pageX;
+    s.py0 = e.pageY;
+  };
+
+  const beginDrag = (e: React.PointerEvent) => {
+    const s = state.current;
     s.dragging = true;
-    // freeze the scale for this drag and record pointer origin in board-local
-    // units (undo the parent scale)
+    ctx.draggingRef.current = true; // freeze board scale for the duration
     s.k0 = ctx.scaleRef.current || 1;
-    s.sx = e.clientX / s.k0 - s.dx;
-    s.sy = e.clientY / s.k0 - s.dy;
+    // anchor to the original press point so the movement already made before
+    // the threshold was crossed is not lost
+    s.sx = s.px0 / s.k0 - s.dx;
+    s.sy = s.py0 / s.k0 - s.dy;
     s.scale = 1.08;
     if (ref.current) ref.current.style.zIndex = String(ctx.bumpZ());
     try {
@@ -98,22 +127,30 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
 
   const onMove = (e: React.PointerEvent) => {
     const s = state.current;
-    if (!s.dragging) return;
-    s.dx = e.clientX / s.k0 - s.sx;
-    s.dy = e.clientY / s.k0 - s.sy;
+    if (!s.down) return;
+    if (!s.dragging) {
+      if (Math.hypot(e.pageX - s.px0, e.pageY - s.py0) < DRAG_THRESHOLD) return;
+      beginDrag(e);
+    }
+    s.dx = e.pageX / s.k0 - s.sx;
+    s.dy = e.pageY / s.k0 - s.sy;
     render();
   };
 
   const onUp = () => {
     const s = state.current;
-    if (!s.dragging) return;
+    if (!s.down) return;
+    s.down = false;
+    if (!s.dragging) return; // was a tap/scroll, nothing to spring back
     s.dragging = false;
+    ctx.draggingRef.current = false;
+    ctx.remeasure(); // apply any viewport resize that was deferred during drag
     // respect reduced-motion: snap straight back, no spring
     if (prefersReducedMotion()) {
       s.dx = s.dy = 0;
       s.scale = 1;
       render();
-      if (ref.current) ref.current.style.zIndex = ""; // restore DOM-order stacking
+      if (ref.current) ref.current.style.zIndex = BASE_Z;
       return;
     }
     // underdamped spring back to origin — a slight overshoot that mirrors
@@ -138,7 +175,7 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
         s.dx = s.dy = 0;
         s.scale = 1;
         render();
-        if (ref.current) ref.current.style.zIndex = ""; // restore DOM-order stacking
+        if (ref.current) ref.current.style.zIndex = BASE_Z; // restore resting layer
       }
     };
     s.raf = requestAnimationFrame(step);
@@ -175,26 +212,36 @@ export default function Toolkit() {
   const [ready, setReady] = useState(false);
   const scaleRef = useRef(1);
   const zRef = useRef(100);
-  // stable across re-renders so memoized Stickers never re-render on resize
-  const ctx = useMemo<DragCtx>(() => ({ scaleRef, bumpZ: () => ++zRef.current }), []);
+  const draggingRef = useRef(false);
 
   // Measure and scale the board to fill the column (up or down), matching the
   // reference block. The stage reserves height via CSS aspect-ratio, so this
   // never causes layout shift; the board only becomes visible once measured.
+  // While a sticker is being dragged the scale is frozen so the board can't
+  // rescale out from under the pointer.
+  const measure = useRef(() => {
+    const el = stageRef.current;
+    if (!el || draggingRef.current) return;
+    const k = el.clientWidth / BOARD_W;
+    scaleRef.current = k;
+    setScale(k);
+    setReady(true);
+  }).current;
+
+  // stable across re-renders so memoized Stickers never re-render on resize
+  const ctx = useMemo<DragCtx>(
+    () => ({ scaleRef, draggingRef, bumpZ: () => ++zRef.current, remeasure: measure }),
+    [measure],
+  );
+
   useIsoLayoutEffect(() => {
     const el = stageRef.current;
     if (!el) return;
-    const apply = () => {
-      const k = el.clientWidth / BOARD_W;
-      scaleRef.current = k;
-      setScale(k);
-      setReady(true);
-    };
-    apply();
-    const ro = new ResizeObserver(apply);
+    measure();
+    const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [measure]);
 
   return (
     <section className="mx-auto max-w-[1056px] overflow-x-clip px-6 pt-32">
