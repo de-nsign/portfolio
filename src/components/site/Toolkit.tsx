@@ -57,14 +57,14 @@ const labels: [string, number, number, number][] = [
 ];
 
 /** Shared drag context: the live board scale (so pointer deltas map into
- *  board-local space), a rising z so the grabbed sticker comes to top, a flag
- *  the board reads to freeze its scale while a drag is in flight, and a
- *  re-measure hook the sticker calls when the drag ends. */
+ *  board-local space), a rising z so the grabbed sticker comes to top, and a
+ *  ref-counted freeze — the board holds its scale while ANY sticker is being
+ *  dragged (multi-touch safe) and re-measures only when the last drag ends. */
 type DragCtx = {
   scaleRef: { current: number };
-  draggingRef: { current: boolean };
   bumpZ: () => number;
-  remeasure: () => void;
+  dragStart: () => void; // one sticker began dragging → freeze board scale
+  dragEnd: () => void; // one sticker released → unfreeze + re-measure at count 0
 };
 
 const BASE_Z = "10"; // resting z-index for every sticker (matches the style prop)
@@ -81,7 +81,8 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
   const api = useRef<{
     s: {
       down: boolean; dragging: boolean; pid: number;
-      px0: number; py0: number; // page-space press origin (threshold check)
+      px0: number; py0: number; // page-space press origin (drag anchor)
+      cx0: number; cy0: number; // viewport-space press origin (threshold check)
       cx: number; cy: number; // last viewport-space pointer (for scroll re-map)
       sx: number; sy: number; dx: number; dy: number; scale: number; raf: number; k0: number;
     };
@@ -90,12 +91,13 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
   } | null>(null);
 
   if (!api.current) {
-    // Coordinates are tracked in PAGE space (pageX/Y) so scrolling the page
-    // mid-drag keeps the sticker under the cursor. k0 = board scale frozen at
-    // drag start; the board also freezes its scale while dragging.
+    // Drag position is tracked in PAGE space (pageX/Y) so scrolling the page
+    // mid-drag keeps the sticker under the cursor; the drag-start THRESHOLD is
+    // measured in viewport space so a wheel-scroll (which moves pageY but not
+    // the cursor) can't trip it. k0 = board scale frozen at drag start.
     const s = {
       down: false, dragging: false, pid: -1,
-      px0: 0, py0: 0, cx: 0, cy: 0,
+      px0: 0, py0: 0, cx0: 0, cy0: 0, cx: 0, cy: 0,
       sx: 0, sy: 0, dx: 0, dy: 0, scale: 1, raf: 0, k0: 1,
     };
 
@@ -106,7 +108,7 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
 
     const beginDrag = () => {
       s.dragging = true;
-      ctx.draggingRef.current = true; // freeze board scale for the duration
+      ctx.dragStart(); // freeze board scale for the duration (ref-counted)
       s.k0 = ctx.scaleRef.current || 1;
       // anchor to the original press point so movement made before the
       // threshold was crossed is not lost
@@ -160,10 +162,14 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
 
     const winMove = (e: PointerEvent) => {
       if (!s.down || e.pointerId !== s.pid) return;
+      // the button was released outside the window (over the OS bar, another
+      // monitor, devtools) so we never saw pointerup — end the drag now instead
+      // of letting the sticker trail a button-less cursor.
+      if (e.buttons === 0) { endPress(); return; }
       s.cx = e.clientX;
       s.cy = e.clientY;
       if (!s.dragging) {
-        if (Math.hypot(e.pageX - s.px0, e.pageY - s.py0) < DRAG_THRESHOLD) return;
+        if (Math.hypot(e.clientX - s.cx0, e.clientY - s.cy0) < DRAG_THRESHOLD) return;
         beginDrag();
       }
       s.dx = e.pageX / s.k0 - s.sx;
@@ -180,26 +186,31 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
       render();
     };
 
-    const winUp = (e: PointerEvent) => {
-      if (e.pointerId !== s.pid) return;
+    const endPress = () => {
       detach();
       if (!s.down) return;
       s.down = false;
       const wasDragging = s.dragging;
       s.dragging = false;
-      ctx.draggingRef.current = false;
-      if (wasDragging) ctx.remeasure(); // apply any deferred resize
+      if (wasDragging) ctx.dragEnd(); // release the freeze; re-measure at count 0
       // settle home whenever displaced — covers a real drag AND a tap that
       // interrupted an in-flight spring (which would otherwise freeze it).
       if (s.dx !== 0 || s.dy !== 0 || s.scale !== 1) settleHome();
       else if (ref.current) ref.current.style.zIndex = BASE_Z;
     };
 
+    const winUp = (e: PointerEvent) => {
+      if (e.pointerId === s.pid) endPress();
+    };
+    // window losing focus (Alt+Tab, tab switch) also means we won't get pointerup
+    const onBlur = () => endPress();
+
     const detach = () => {
       window.removeEventListener("pointermove", winMove);
       window.removeEventListener("pointerup", winUp);
       window.removeEventListener("pointercancel", winUp);
       window.removeEventListener("scroll", winScroll);
+      window.removeEventListener("blur", onBlur);
     };
 
     const onDown = (e: React.PointerEvent) => {
@@ -210,12 +221,15 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
       s.pid = e.pointerId;
       s.px0 = e.pageX;
       s.py0 = e.pageY;
+      s.cx0 = e.clientX;
+      s.cy0 = e.clientY;
       s.cx = e.clientX;
       s.cy = e.clientY;
       window.addEventListener("pointermove", winMove);
       window.addEventListener("pointerup", winUp);
       window.addEventListener("pointercancel", winUp);
       window.addEventListener("scroll", winScroll, { passive: true });
+      window.addEventListener("blur", onBlur);
     };
 
     api.current = { s, onDown, detach };
@@ -256,16 +270,16 @@ export default function Toolkit() {
   const [ready, setReady] = useState(false);
   const scaleRef = useRef(1);
   const zRef = useRef(100);
-  const draggingRef = useRef(false);
+  const dragCountRef = useRef(0); // how many stickers are being dragged right now
 
   // Measure and scale the board to fill the column (up or down), matching the
   // reference block. The stage reserves height via CSS aspect-ratio, so this
   // never causes layout shift; the board only becomes visible once measured.
-  // While a sticker is being dragged the scale is frozen so the board can't
+  // While ANY sticker is being dragged the scale is frozen so the board can't
   // rescale out from under the pointer.
   const measure = useRef(() => {
     const el = stageRef.current;
-    if (!el || draggingRef.current) return;
+    if (!el || dragCountRef.current > 0) return;
     const k = el.clientWidth / BOARD_W;
     scaleRef.current = k;
     setScale(k);
@@ -274,7 +288,17 @@ export default function Toolkit() {
 
   // stable across re-renders so memoized Stickers never re-render on resize
   const ctx = useMemo<DragCtx>(
-    () => ({ scaleRef, draggingRef, bumpZ: () => ++zRef.current, remeasure: measure }),
+    () => ({
+      scaleRef,
+      bumpZ: () => ++zRef.current,
+      dragStart: () => {
+        dragCountRef.current += 1;
+      },
+      dragEnd: () => {
+        dragCountRef.current = Math.max(0, dragCountRef.current - 1);
+        if (dragCountRef.current === 0) measure(); // apply any deferred resize
+      },
+    }),
     [measure],
   );
 
