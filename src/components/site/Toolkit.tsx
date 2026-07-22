@@ -73,121 +73,167 @@ const DRAG_THRESHOLD = 4; // px of movement before a press becomes a drag
 const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
   const [file, left, top, w, h, rot] = layer;
   const ref = useRef<HTMLDivElement>(null);
-  // Coordinates are tracked in PAGE space (pageX/Y) so scrolling the page mid-
-  // drag keeps the sticker under the cursor. k0 = board scale frozen at drag
-  // start; the board also freezes its scale while dragging, so k0 stays valid.
-  const state = useRef({
-    down: false, // pointer is pressed (may still be a click/scroll, not a drag)
-    dragging: false, // movement passed the threshold — it's a real drag
-    pid: -1,
-    px0: 0, py0: 0, // page-space press origin (for the threshold check)
-    sx: 0, sy: 0, dx: 0, dy: 0, scale: 1, raf: 0, k0: 1,
-  });
 
-  // stop any in-flight spring when the component unmounts (route change)
-  useEffect(() => () => cancelAnimationFrame(state.current.raf), []);
+  // All drag state and the window-level handlers live in one persistent ref.
+  // Move/up/cancel are bound to WINDOW (not the element) so a release or a
+  // pointer that leaves the sticker is always caught — otherwise a mouse that
+  // lets go off-element would strand the sticker "stuck" to the cursor.
+  const api = useRef<{
+    s: {
+      down: boolean; dragging: boolean; pid: number;
+      px0: number; py0: number; // page-space press origin (threshold check)
+      cx: number; cy: number; // last viewport-space pointer (for scroll re-map)
+      sx: number; sy: number; dx: number; dy: number; scale: number; raf: number; k0: number;
+    };
+    onDown: (e: React.PointerEvent) => void;
+    detach: () => void;
+  } | null>(null);
 
-  const render = () => {
-    const s = state.current;
-    if (ref.current)
-      ref.current.style.transform = `translate(${s.dx}px, ${s.dy}px) rotate(${rot}deg) scale(${s.scale})`;
-  };
+  if (!api.current) {
+    // Coordinates are tracked in PAGE space (pageX/Y) so scrolling the page
+    // mid-drag keeps the sticker under the cursor. k0 = board scale frozen at
+    // drag start; the board also freezes its scale while dragging.
+    const s = {
+      down: false, dragging: false, pid: -1,
+      px0: 0, py0: 0, cx: 0, cy: 0,
+      sx: 0, sy: 0, dx: 0, dy: 0, scale: 1, raf: 0, k0: 1,
+    };
 
-  const onDown = (e: React.PointerEvent) => {
-    const s = state.current;
-    if (s.down) return; // ignore a second finger on the same sticker
-    cancelAnimationFrame(s.raf);
-    // record the press but DON'T lift/scale yet — wait to see if it's a drag,
-    // so a tap or a vertical scroll over the sticker doesn't make it pop.
-    s.down = true;
-    s.dragging = false;
-    s.pid = e.pointerId;
-    s.px0 = e.pageX;
-    s.py0 = e.pageY;
-  };
+    const render = () => {
+      if (ref.current)
+        ref.current.style.transform = `translate(${s.dx}px, ${s.dy}px) rotate(${rot}deg) scale(${s.scale})`;
+    };
 
-  const beginDrag = (e: React.PointerEvent) => {
-    const s = state.current;
-    s.dragging = true;
-    ctx.draggingRef.current = true; // freeze board scale for the duration
-    s.k0 = ctx.scaleRef.current || 1;
-    // anchor to the original press point so the movement already made before
-    // the threshold was crossed is not lost
-    s.sx = s.px0 / s.k0 - s.dx;
-    s.sy = s.py0 / s.k0 - s.dy;
-    s.scale = 1.08;
-    if (ref.current) ref.current.style.zIndex = String(ctx.bumpZ());
-    try {
-      ref.current?.setPointerCapture(e.pointerId);
-    } catch {
-      /* pointer already released — drag still works without capture */
-    }
-    render();
-  };
-
-  const onMove = (e: React.PointerEvent) => {
-    const s = state.current;
-    if (!s.down) return;
-    if (!s.dragging) {
-      if (Math.hypot(e.pageX - s.px0, e.pageY - s.py0) < DRAG_THRESHOLD) return;
-      beginDrag(e);
-    }
-    s.dx = e.pageX / s.k0 - s.sx;
-    s.dy = e.pageY / s.k0 - s.sy;
-    render();
-  };
-
-  const onUp = () => {
-    const s = state.current;
-    if (!s.down) return;
-    s.down = false;
-    if (!s.dragging) return; // was a tap/scroll, nothing to spring back
-    s.dragging = false;
-    ctx.draggingRef.current = false;
-    ctx.remeasure(); // apply any viewport resize that was deferred during drag
-    // respect reduced-motion: snap straight back, no spring
-    if (prefersReducedMotion()) {
-      s.dx = s.dy = 0;
-      s.scale = 1;
+    const beginDrag = () => {
+      s.dragging = true;
+      ctx.draggingRef.current = true; // freeze board scale for the duration
+      s.k0 = ctx.scaleRef.current || 1;
+      // anchor to the original press point so movement made before the
+      // threshold was crossed is not lost
+      s.sx = s.px0 / s.k0 - s.dx;
+      s.sy = s.py0 / s.k0 - s.dy;
+      s.scale = 1.08;
+      if (ref.current) ref.current.style.zIndex = String(ctx.bumpZ());
+      try {
+        ref.current?.setPointerCapture(s.pid);
+      } catch {
+        /* pointer already gone — window listeners still track it */
+      }
       render();
-      if (ref.current) ref.current.style.zIndex = BASE_Z;
-      return;
-    }
-    // underdamped spring back to origin — a slight overshoot that mirrors
-    // Framer Motion's default bouncy dragSnapToOrigin feel.
-    const fx = s.dx, fy = s.dy, fs = s.scale;
-    const stiffness = 350, damping = 22, mass = 1;
-    let x = 0, vx = 0;
-    let last = performance.now();
-    const step = (now: number) => {
-      const dt = Math.min((now - last) / 1000, 0.032);
-      last = now;
-      const acc = (-stiffness * (x - 1) - damping * vx) / mass;
-      vx += acc * dt;
-      x += vx * dt;
-      s.dx = fx * (1 - x);
-      s.dy = fy * (1 - x);
-      s.scale = fs + (1 - fs) * x;
-      render();
-      if (Math.abs(1 - x) > 0.001 || Math.abs(vx) > 0.001) {
-        s.raf = requestAnimationFrame(step);
-      } else {
+    };
+
+    const settleHome = () => {
+      if (prefersReducedMotion()) {
         s.dx = s.dy = 0;
         s.scale = 1;
         render();
-        if (ref.current) ref.current.style.zIndex = BASE_Z; // restore resting layer
+        if (ref.current) ref.current.style.zIndex = BASE_Z;
+        return;
       }
+      // underdamped spring back to origin — a slight overshoot mirroring
+      // Framer Motion's bouncy dragSnapToOrigin feel.
+      const fx = s.dx, fy = s.dy, fs = s.scale;
+      const stiffness = 350, damping = 22, mass = 1;
+      let x = 0, vx = 0;
+      let lastT = performance.now();
+      const step = (now: number) => {
+        const dt = Math.min((now - lastT) / 1000, 0.032);
+        lastT = now;
+        const acc = (-stiffness * (x - 1) - damping * vx) / mass;
+        vx += acc * dt;
+        x += vx * dt;
+        s.dx = fx * (1 - x);
+        s.dy = fy * (1 - x);
+        s.scale = fs + (1 - fs) * x;
+        render();
+        if (Math.abs(1 - x) > 0.001 || Math.abs(vx) > 0.001) {
+          s.raf = requestAnimationFrame(step);
+        } else {
+          s.dx = s.dy = 0;
+          s.scale = 1;
+          render();
+          if (ref.current) ref.current.style.zIndex = BASE_Z; // restore resting layer
+        }
+      };
+      s.raf = requestAnimationFrame(step);
     };
-    s.raf = requestAnimationFrame(step);
-  };
+
+    const winMove = (e: PointerEvent) => {
+      if (!s.down || e.pointerId !== s.pid) return;
+      s.cx = e.clientX;
+      s.cy = e.clientY;
+      if (!s.dragging) {
+        if (Math.hypot(e.pageX - s.px0, e.pageY - s.py0) < DRAG_THRESHOLD) return;
+        beginDrag();
+      }
+      s.dx = e.pageX / s.k0 - s.sx;
+      s.dy = e.pageY / s.k0 - s.sy;
+      render();
+    };
+
+    // wheel/keyboard scroll while dragging emits no pointermove — re-map the
+    // last known pointer into page space so the sticker keeps up with it.
+    const winScroll = () => {
+      if (!s.dragging) return;
+      s.dx = (s.cx + window.scrollX) / s.k0 - s.sx;
+      s.dy = (s.cy + window.scrollY) / s.k0 - s.sy;
+      render();
+    };
+
+    const winUp = (e: PointerEvent) => {
+      if (e.pointerId !== s.pid) return;
+      detach();
+      if (!s.down) return;
+      s.down = false;
+      const wasDragging = s.dragging;
+      s.dragging = false;
+      ctx.draggingRef.current = false;
+      if (wasDragging) ctx.remeasure(); // apply any deferred resize
+      // settle home whenever displaced — covers a real drag AND a tap that
+      // interrupted an in-flight spring (which would otherwise freeze it).
+      if (s.dx !== 0 || s.dy !== 0 || s.scale !== 1) settleHome();
+      else if (ref.current) ref.current.style.zIndex = BASE_Z;
+    };
+
+    const detach = () => {
+      window.removeEventListener("pointermove", winMove);
+      window.removeEventListener("pointerup", winUp);
+      window.removeEventListener("pointercancel", winUp);
+      window.removeEventListener("scroll", winScroll);
+    };
+
+    const onDown = (e: React.PointerEvent) => {
+      if (s.down) return; // ignore a second finger on the same sticker
+      cancelAnimationFrame(s.raf); // interrupt any running spring (may freeze it)
+      s.down = true;
+      s.dragging = false;
+      s.pid = e.pointerId;
+      s.px0 = e.pageX;
+      s.py0 = e.pageY;
+      s.cx = e.clientX;
+      s.cy = e.clientY;
+      window.addEventListener("pointermove", winMove);
+      window.addEventListener("pointerup", winUp);
+      window.addEventListener("pointercancel", winUp);
+      window.addEventListener("scroll", winScroll, { passive: true });
+    };
+
+    api.current = { s, onDown, detach };
+  }
+
+  // cancel any spring and drop window listeners if we unmount mid-interaction
+  useEffect(() => {
+    const a = api.current!;
+    return () => {
+      cancelAnimationFrame(a.s.raf);
+      a.detach();
+    };
+  }, []);
 
   return (
     <div
       ref={ref}
-      onPointerDown={onDown}
-      onPointerMove={onMove}
-      onPointerUp={onUp}
-      onPointerCancel={onUp}
+      onPointerDown={api.current.onDown}
       className="absolute cursor-grab touch-pan-y select-none active:cursor-grabbing"
       style={{ left, top, width: w, height: h, transform: `rotate(${rot}deg)`, zIndex: 10 }}
     >
@@ -198,8 +244,6 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
         draggable={false}
         width={w}
         height={h}
-        loading="lazy"
-        decoding="async"
         className="pointer-events-none block h-full w-full"
       />
     </div>
@@ -276,8 +320,6 @@ export default function Toolkit() {
             alt=""
             width={BOARD_W}
             height={BOARD_H}
-            loading="lazy"
-            decoding="async"
             className="pointer-events-none absolute left-0 top-0 rounded-3xl"
             style={{ width: BOARD_W, height: BOARD_H }}
           />
@@ -303,8 +345,6 @@ export default function Toolkit() {
                 alt=""
                 width={w}
                 height={h}
-                loading="lazy"
-                decoding="async"
                 className="block h-full w-full"
               />
             </div>
