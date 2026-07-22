@@ -162,10 +162,11 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
 
     const winMove = (e: PointerEvent) => {
       if (!s.down || e.pointerId !== s.pid) return;
-      // the button was released outside the window (over the OS bar, another
+      // mouse button released outside the window (over the OS bar, another
       // monitor, devtools) so we never saw pointerup — end the drag now instead
-      // of letting the sticker trail a button-less cursor.
-      if (e.buttons === 0) { endPress(); return; }
+      // of letting the sticker trail a button-less cursor. Scoped to mouse:
+      // some touch pointers legitimately report buttons === 0 while in contact.
+      if (e.pointerType === "mouse" && e.buttons === 0) { endPress(); return; }
       s.cx = e.clientX;
       s.cy = e.clientY;
       if (!s.dragging) {
@@ -214,6 +215,7 @@ const Sticker = memo(function Sticker({ layer, ctx }: { layer: Layer; ctx: DragC
     };
 
     const onDown = (e: React.PointerEvent) => {
+      if (!e.isPrimary || e.button !== 0) return; // primary button/touch only
       if (s.down) return; // ignore a second finger on the same sticker
       cancelAnimationFrame(s.raf); // interrupt any running spring (may freeze it)
       s.down = true;
@@ -323,7 +325,7 @@ export default function Toolkit() {
         style={{ aspectRatio: `${BOARD_W} / ${BOARD_H}` }}
       >
         <div
-          className="absolute left-0 top-0 rounded-3xl transition-opacity duration-150"
+          className="absolute left-0 top-0 select-none rounded-3xl transition-opacity duration-150 [-webkit-touch-callout:none]"
           style={{
             width: BOARD_W,
             height: BOARD_H,
@@ -367,9 +369,10 @@ export default function Toolkit() {
               <img
                 src={A + file}
                 alt=""
+                draggable={false}
                 width={w}
                 height={h}
-                className="block h-full w-full"
+                className="pointer-events-none block h-full w-full"
               />
             </div>
           ))}
