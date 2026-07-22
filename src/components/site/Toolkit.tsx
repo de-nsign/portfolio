@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion, useInView, useReducedMotion } from "motion/react";
 import SectionHeader from "./SectionHeader";
 
 // useLayoutEffect warns during SSR; fall back to useEffect on the server.
@@ -59,10 +59,12 @@ type Shot = { img: string; closed: Pose; open: Pose };
 type FolderCfg = {
   key: string;
   label: string;
-  // container placement in 868×500 design space (top-left, pre-rotation)
+  // container placement in 868×500 design space (top-left, pre-rotation).
+  // Solved from the live-DOM rotated bboxes in LIVE-GEOMETRY.md: unrotated
+  // column = 238 × 245 (190 folder + 26 gap + ~29 caption), bbox center =
+  // column center, left/top = center − half-size.
   left: number;
-  top?: number;
-  bottom?: number;
+  top: number;
   rot: number;
   // entrance slide-in offset (design px)
   from: { x: number; y: number };
@@ -83,15 +85,16 @@ const FOLDERS: FolderCfg[] = [
     rot: -10,
     from: { x: -200, y: 200 },
     shots: [
-      // framer-1buykyd  &  framer-mupmqd open poses
+      // framer-1buykyd  &  framer-mupmqd open poses. Closed: tucked behind the
+      // flap (flap covers y 43..190) with only the top edge peeking above it.
       {
         img: "QREInI4cFG7Sxb83aS477kJvL0.png",
-        closed: { l: 67.8, t: 30, w: 70, h: 152 },
+        closed: { l: 68, t: 30, w: 70, h: 152 },
         open: { l: -20, t: 79.8, w: 80, h: 172 },
       },
       {
         img: "sUlcdg0ICNhA0HbsHln4wgEvfA.png",
-        closed: { l: 152.3, t: 106.4, w: 70, h: 152 },
+        closed: { l: 152, t: 36, w: 70, h: 152 },
         open: { l: 190, t: 40, w: 85, h: 185 },
       },
     ],
@@ -99,61 +102,57 @@ const FOLDERS: FolderCfg[] = [
   {
     key: "crafting",
     label: "Crafting Graceful UI",
-    left: 369,
-    top: 106,
+    left: 582,
+    top: 45,
     rot: 11,
     from: { x: 200, y: 200 },
     shots: [
-      { img: "uBVmdxzllQCI9M7Ce5A9MJJI.png", closed: { l: 69, t: 45, w: 96, h: 150 }, open: { l: -46, t: -18, w: 96, h: 150 } },
-      { img: "kI71JQxzBsVksptyfXRpek7BM.png", closed: { l: 71, t: 45, w: 96, h: 150 }, open: { l: 2, t: -46, w: 96, h: 150 } },
-      { img: "YJ7qr86GzNLZJKBgqvXXysLCw8U.png", closed: { l: 71, t: 45, w: 96, h: 150 }, open: { l: 52, t: -62, w: 96, h: 150 } },
-      { img: "V1jZaKJbabaL9m4KLEB5Ps0XjEU.png", closed: { l: 73, t: 45, w: 96, h: 150 }, open: { l: 100, t: -60, w: 96, h: 150 } },
-      { img: "2rB3G2nB3JGkyF9qyinDvcOgM.png", closed: { l: 73, t: 45, w: 96, h: 150 }, open: { l: 146, t: -44, w: 96, h: 150 } },
-      { img: "zqaP11LIfaovJlvfquJktGRvjQ.png", closed: { l: 75, t: 45, w: 96, h: 150 }, open: { l: 192, t: -16, w: 96, h: 150 } },
+      { img: "uBVmdxzllQCI9M7Ce5A9MJJI.png", closed: { l: 26, t: 40, w: 96, h: 150 }, open: { l: -46, t: -18, w: 96, h: 150 } },
+      { img: "kI71JQxzBsVksptyfXRpek7BM.png", closed: { l: 44, t: 36, w: 96, h: 150 }, open: { l: 2, t: -46, w: 96, h: 150 } },
+      { img: "YJ7qr86GzNLZJKBgqvXXysLCw8U.png", closed: { l: 62, t: 33, w: 96, h: 150 }, open: { l: 52, t: -62, w: 96, h: 150 } },
+      { img: "V1jZaKJbabaL9m4KLEB5Ps0XjEU.png", closed: { l: 80, t: 33, w: 96, h: 150 }, open: { l: 100, t: -60, w: 96, h: 150 } },
+      { img: "2rB3G2nB3JGkyF9qyinDvcOgM.png", closed: { l: 98, t: 36, w: 96, h: 150 }, open: { l: 146, t: -44, w: 96, h: 150 } },
+      { img: "zqaP11LIfaovJlvfquJktGRvjQ.png", closed: { l: 116, t: 40, w: 96, h: 150 }, open: { l: 192, t: -16, w: 96, h: 150 } },
     ],
   },
   {
     key: "simplifying",
     label: "Simplifying Complex SaaS",
-    left: 179,
-    bottom: 28,
+    left: 298,
+    top: 236,
     rot: 2,
     from: { x: 0, y: 200 },
     shots: [
-      // framer-jcgsr0 "Image 1"
-      { img: "UKowGBCHvLU7S6yCgNhQrem07Rw.png", closed: { l: 130.9, t: 83.6, w: 170, h: 110 }, open: { l: 197.5, t: 9.5, w: 200, h: 128 } },
-      // framer-1yyq18z "Image 2"
+      // framer-jcgsr0 "Image 1" — fully behind the flap when closed
+      { img: "UKowGBCHvLU7S6yCgNhQrem07Rw.png", closed: { l: 55, t: 80, w: 170, h: 110 }, open: { l: 197.5, t: 9.5, w: 200, h: 128 } },
+      // framer-1yyq18z "Image 2" — top peeks above the flap
       { img: "XDZzxvEmC9OlBD1Vz8zslZiFb5Q.png", closed: { l: 13, t: 33, w: 170, h: 120 }, open: { l: 119, t: 40, w: 156, h: 110 } },
-      // framer-1ek70wv "Image 3"
-      { img: "10pCEtT0QjBALkwmpZdeGGupSk.jpg", closed: { l: 119, t: 77.9, w: 182, h: 110 }, open: { l: -49, t: 20.9, w: 120, h: 80 } },
+      // framer-1ek70wv "Image 3" — fully behind the flap when closed
+      { img: "10pCEtT0QjBALkwmpZdeGGupSk.jpg", closed: { l: 28, t: 78, w: 182, h: 110 }, open: { l: -49, t: 20.9, w: 120, h: 80 } },
       // framer-xazy22 side tile
-      { img: "vA5Wzc8wqRZz4as95giX6sE7E.png", closed: { l: -64.8, t: 28.75, w: 54, h: 142 }, open: { l: 240, t: 28.75, w: 54, h: 142 } },
+      { img: "vA5Wzc8wqRZz4as95giX6sE7E.png", closed: { l: 12, t: 36, w: 54, h: 142 }, open: { l: 240, t: 28.75, w: 54, h: 142 } },
     ],
   },
 ];
 
-// [img, left, top?, bottom?, width, rotate, centeredX?]
-type StickerCfg = {
-  img: string;
-  left?: number;
-  cx?: boolean; // centered horizontally (left 50%, translateX -50%)
-  top?: number;
-  bottom?: number;
-  w: number;
-  rot: number;
-};
+/* Sticker placement solved from the live-DOM rotated bboxes (LIVE-GEOMETRY.md):
+   height = w × imgH/imgW from the real image files, then left/top = bbox center
+   − half of unrotated size. Each rotatedAABB(w,h,rot) reproduces the measured
+   bbox to <1px (widths for wvOSVzl/iZjp2e9/11uTSPEy/Qr0aNvX were solved from
+   the bboxes too — the CSS-table widths did not match the live render). */
+type StickerCfg = { img: string; left: number; top: number; w: number; rot: number };
 const STICKERS: StickerCfg[] = [
-  { img: "Hc4JLMsg7E5n5Unk9Lu6LIF9UM.png", left: 481, top: 19, w: 171, rot: -2 },
-  { img: "Ow88kijPgLbHUvOTO888dkjs.png", left: 551, bottom: 157, w: 71, rot: 10 },
-  { img: "wvOSVzlKII6YSogETR7NCKCZqAo.png", left: 53, bottom: 165, w: 105, rot: 8 },
-  { img: "iZjp2e9ma3ldXL4DRyRBzmpiw.png", left: 435, bottom: 131, w: 105, rot: 12 },
-  { img: "11uTSPEyMSmvIjA5HXWrOzv3mHw.png", left: 514, bottom: 34, w: 121, rot: -19 },
-  { img: "CKx0X5X2nBOksjkOGkUnUkixNLM.png", cx: true, top: 78, w: 89, rot: -27 },
-  { img: "Qr0aNvXJwmxtF65J0slT0N3I92M.png", left: 23, bottom: 40, w: 103, rot: -17 },
+  { img: "Hc4JLMsg7E5n5Unk9Lu6LIF9UM.png", left: 399, top: 137, w: 171, rot: -2 },
+  { img: "Ow88kijPgLbHUvOTO888dkjs.png", left: 442, top: 65, w: 71, rot: 10 },
+  { img: "wvOSVzlKII6YSogETR7NCKCZqAo.png", left: 294, top: 39, w: 100, rot: 8 },
+  { img: "iZjp2e9ma3ldXL4DRyRBzmpiw.png", left: 562, top: 297, w: 120, rot: 14 },
+  { img: "11uTSPEyMSmvIjA5HXWrOzv3mHw.png", left: 679, top: 341, w: 141, rot: -19 },
+  { img: "CKx0X5X2nBOksjkOGkUnUkixNLM.png", left: 176, top: 314, w: 89, rot: -27 },
+  { img: "Qr0aNvXJwmxtF65J0slT0N3I92M.png", left: 36, top: 320, w: 127, rot: -17 },
 ];
 
 /* ── Folder ─────────────────────────────────────────────── */
-const Folder = memo(function Folder({ cfg }: { cfg: FolderCfg }) {
+const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered: boolean }) {
   const [open, setOpen] = useState(false);
   const state = open ? "open" : "closed";
 
@@ -163,14 +162,12 @@ const Folder = memo(function Folder({ cfg }: { cfg: FolderCfg }) {
       style={{
         left: cfg.left,
         top: cfg.top,
-        bottom: cfg.bottom,
         width: FW,
         rotate: cfg.rot,
         pointerEvents: "auto",
       }}
       initial={{ x: cfg.from.x, y: cfg.from.y, opacity: 0.001 }}
-      whileInView={{ x: 0, y: 0, opacity: 1 }}
-      viewport={{ once: true, amount: 0.4 }}
+      animate={entered ? { x: 0, y: 0, opacity: 1 } : { x: cfg.from.x, y: cfg.from.y, opacity: 0.001 }}
       transition={{ duration: 1.5, ease: APPEAR_EASE }}
     >
       <div
@@ -190,16 +187,17 @@ const Folder = memo(function Folder({ cfg }: { cfg: FolderCfg }) {
             perspective: "2500px",
           }}
         >
-          {/* back panel with monogram watermark */}
-          <div className="absolute inset-0 overflow-hidden rounded-[12px]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={A + "u6NHrizsQWk4u5sqIM2DGhO2EI.svg"}
-              alt=""
-              draggable={false}
-              className="pointer-events-none absolute left-1/2 top-1/2 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 object-contain opacity-[0.5]"
-            />
-          </div>
+          {/* back panel — the full 238×190 folder silhouette (tab notch at the
+              top-left, fill #E1E3E4). This IS the folder shape, not a watermark. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={A + "u6NHrizsQWk4u5sqIM2DGhO2EI.svg"}
+            alt=""
+            draggable={false}
+            width={FW}
+            height={FH}
+            className="pointer-events-none absolute inset-0 block h-full w-full"
+          />
 
           {/* screenshots — closed tucked behind flap → open fanned out */}
           {cfg.shots.map((s, i) => (
@@ -313,29 +311,31 @@ const Folder = memo(function Folder({ cfg }: { cfg: FolderCfg }) {
 });
 
 /* ── Sticker ────────────────────────────────────────────── */
-const Sticker = memo(function Sticker({ cfg, scale }: { cfg: StickerCfg; scale: number }) {
+const Sticker = memo(function Sticker({
+  cfg,
+  scale,
+  entered,
+}: {
+  cfg: StickerCfg;
+  scale: number;
+  entered: boolean;
+}) {
   const reduce = useReducedMotion();
   // Positioned in an UNSCALED overlay (so Framer Motion's drag maps 1:1 to the
   // cursor); design-space coords are pre-multiplied by the board scale here.
-  const style: React.CSSProperties = {
-    position: "absolute",
-    width: cfg.w * scale,
-    pointerEvents: "auto",
-  };
-  if (cfg.cx) {
-    style.left = "50%";
-  } else if (cfg.left != null) {
-    style.left = cfg.left * scale;
-  }
-  if (cfg.top != null) style.top = cfg.top * scale;
-  if (cfg.bottom != null) style.bottom = cfg.bottom * scale;
-
   return (
     <motion.div
-      style={{ ...style, rotate: cfg.rot, x: cfg.cx ? "-50%" : 0, cursor: "grab" }}
+      style={{
+        position: "absolute",
+        left: cfg.left * scale,
+        top: cfg.top * scale,
+        width: cfg.w * scale,
+        pointerEvents: "auto",
+        rotate: cfg.rot,
+        cursor: "grab",
+      }}
       initial={{ opacity: 0.001, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.4 }}
+      animate={entered ? { opacity: 1, y: 0 } : { opacity: 0.001, y: 20 }}
       transition={{ duration: 0.4, delay: 0.2, ease: APPEAR_EASE }}
       drag={!reduce}
       dragMomentum={false}
@@ -359,6 +359,9 @@ export default function Toolkit() {
   const stageRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [ready, setReady] = useState(false);
+  // One entrance trigger for the whole board — per-child whileInView would fire
+  // late/never for children whose initial +200y offset starts them off-screen.
+  const entered = useInView(stageRef, { once: true, amount: 0.3 });
 
   useIsoLayoutEffect(() => {
     const el = stageRef.current;
@@ -405,25 +408,33 @@ export default function Toolkit() {
             overlay so drag distance maps 1:1 to the pointer on a scaled board. */}
         <div className="absolute inset-0 overflow-clip rounded-[24px]" style={{ zIndex: 10, pointerEvents: "none" }}>
           {ready &&
-            STICKERS.map((s) => <Sticker key={s.img} cfg={s} scale={scale} />)}
+            STICKERS.map((s) => (
+              <Sticker key={s.img} cfg={s} scale={scale} entered={entered} />
+            ))}
         </div>
 
-        {/* folders — scaled to design space, painted over the stickers */}
+        {/* folders — scaled to design space, painted over the stickers. The
+            clipping wrapper matches the board silhouette so pre-entrance
+            offsets never paint outside the board (reference clips too). */}
         <div
-          className="absolute left-0 top-0"
-          style={{
-            width: BOARD_W,
-            height: BOARD_H,
-            transform: `scale(${scale})`,
-            transformOrigin: "top left",
-            zIndex: 20,
-            pointerEvents: "none",
-            opacity: ready ? 1 : 0,
-          }}
+          className="absolute inset-0 overflow-clip rounded-[24px]"
+          style={{ zIndex: 20, pointerEvents: "none" }}
         >
-          {FOLDERS.map((f) => (
-            <Folder key={f.key} cfg={f} />
-          ))}
+          <div
+            className="absolute left-0 top-0"
+            style={{
+              width: BOARD_W,
+              height: BOARD_H,
+              transform: `scale(${scale})`,
+              transformOrigin: "top left",
+              pointerEvents: "none",
+              opacity: ready ? 1 : 0,
+            }}
+          >
+            {FOLDERS.map((f) => (
+              <Folder key={f.key} cfg={f} entered={entered} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
