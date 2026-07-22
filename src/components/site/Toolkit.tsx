@@ -54,7 +54,7 @@ const FLAP_SHADOW_NONE =
 const MONOGRAM_PATH =
   "M 50 25 C 50 38.807 38.807 50 25 50 C 11.193 50 0 38.807 0 25 C 0 11.193 11.193 0 25 0 C 38.807 0 50 11.193 50 25 Z M 23.148 4.63 C 12.048 5.125 4.63 14.056 4.63 25 C 4.63 35.944 12.048 44.875 23.148 45.37 L 23.148 30.562 L 17.925 25 L 23.148 19.438 Z M 19.444 41.035 C 12.719 39.063 8.333 32.817 8.333 25 C 8.333 17.183 12.719 10.936 19.444 8.964 L 19.444 17.971 L 12.844 25 L 19.444 32.028 Z M 26.852 4.63 L 26.852 45.37 C 37.846 45.37 45.37 36.25 45.37 25 C 45.37 13.75 37.846 4.63 26.852 4.63 Z M 41.587 26.852 C 40.959 34.13 36.634 39.613 30.556 41.198 L 30.556 26.852 Z M 30.556 8.801 C 36.634 10.386 40.959 15.87 41.587 23.148 L 30.556 23.148 Z";
 
-type Pose = { l: number; t: number; w: number; h: number };
+type Pose = { l: number; t: number; w: number; h: number; rot: number };
 type Shot = { img: string; closed: Pose; open: Pose };
 type FolderCfg = {
   key: string;
@@ -71,11 +71,13 @@ type FolderCfg = {
   shots: Shot[];
 };
 
-/* Per-folder screenshot poses — closed (tucked behind the flap) → open (fanned).
-   Values are derived from each folder scope's variant CSS in the Framer bundle:
-   framer-bSwSo (Building), framer-h0afr (Crafting), framer-GH8u2 (Simplifying).
-   Crafting's bundle template exposes 2 image slots but ships 6 screenshots, so
-   its fan is spread by hand across those 6 files to match the reference visual. */
+/* Per-folder screenshot poses — the reference "reveal" model: opening is mostly
+   the FLAP's work. At rotateX −65° (perspective 2500) the flap's projected
+   height collapses from 147px to ~60px, uncovering what sits behind it.
+   Building and Crafting screenshots are therefore STATIC (closed == open);
+   only Simplifying's shots actually move. All poses below were converted from
+   live-measured rotated AABBs into unrotated local left/top/w/h + local rotate
+   (round-trip verified to <0.2px). */
 const FOLDERS: FolderCfg[] = [
   {
     key: "building",
@@ -85,17 +87,17 @@ const FOLDERS: FolderCfg[] = [
     rot: -10,
     from: { x: -200, y: 200 },
     shots: [
-      // framer-1buykyd  &  framer-mupmqd open poses. Closed: tucked behind the
-      // flap (flap covers y 43..190) with only the top edge peeking above it.
+      // Two large static shots, near-fully overlapping; the −4° vs 0° wedge is
+      // what reads as a "stack". Revealed by the flap only.
       {
         img: "QREInI4cFG7Sxb83aS477kJvL0.png",
-        closed: { l: 68, t: 30, w: 70, h: 152 },
-        open: { l: -20, t: 79.8, w: 80, h: 172 },
+        closed: { l: 33.2, t: 35.2, w: 169.9, h: 120.5, rot: -4 },
+        open: { l: 33.2, t: 35.2, w: 169.9, h: 120.5, rot: -4 },
       },
       {
         img: "sUlcdg0ICNhA0HbsHln4wgEvfA.png",
-        closed: { l: 152, t: 36, w: 70, h: 152 },
-        open: { l: 190, t: 40, w: 85, h: 185 },
+        closed: { l: 34.5, t: 34.5, w: 169.7, h: 120.4, rot: 0 },
+        open: { l: 34.5, t: 34.5, w: 169.7, h: 120.4, rot: 0 },
       },
     ],
   },
@@ -106,13 +108,12 @@ const FOLDERS: FolderCfg[] = [
     top: 45,
     rot: 11,
     from: { x: 200, y: 200 },
+    // Four static phone shots (slots B, A, C, D left→right), reveal-only.
     shots: [
-      { img: "uBVmdxzllQCI9M7Ce5A9MJJI.png", closed: { l: 26, t: 40, w: 96, h: 150 }, open: { l: -46, t: -18, w: 96, h: 150 } },
-      { img: "kI71JQxzBsVksptyfXRpek7BM.png", closed: { l: 44, t: 36, w: 96, h: 150 }, open: { l: 2, t: -46, w: 96, h: 150 } },
-      { img: "YJ7qr86GzNLZJKBgqvXXysLCw8U.png", closed: { l: 62, t: 33, w: 96, h: 150 }, open: { l: 52, t: -62, w: 96, h: 150 } },
-      { img: "V1jZaKJbabaL9m4KLEB5Ps0XjEU.png", closed: { l: 80, t: 33, w: 96, h: 150 }, open: { l: 100, t: -60, w: 96, h: 150 } },
-      { img: "2rB3G2nB3JGkyF9qyinDvcOgM.png", closed: { l: 98, t: 36, w: 96, h: 150 }, open: { l: 146, t: -44, w: 96, h: 150 } },
-      { img: "zqaP11LIfaovJlvfquJktGRvjQ.png", closed: { l: 116, t: 40, w: 96, h: 150 }, open: { l: 192, t: -16, w: 96, h: 150 } },
+      { img: "kI71JQxzBsVksptyfXRpek7BM.png", closed: { l: 6.1, t: 25.7, w: 70.2, h: 152.6, rot: 3 }, open: { l: 6.1, t: 25.7, w: 70.2, h: 152.6, rot: 3 } },
+      { img: "uBVmdxzllQCI9M7Ce5A9MJJI.png", closed: { l: 68.3, t: 29.4, w: 70.2, h: 151.5, rot: -14 }, open: { l: 68.3, t: 29.4, w: 70.2, h: 151.5, rot: -14 } },
+      { img: "YJ7qr86GzNLZJKBgqvXXysLCw8U.png", closed: { l: 117.6, t: 30, w: 69.9, h: 152.6, rot: -4 }, open: { l: 117.6, t: 30, w: 69.9, h: 152.6, rot: -4 } },
+      { img: "V1jZaKJbabaL9m4KLEB5Ps0XjEU.png", closed: { l: 163.2, t: 25.8, w: 69.5, h: 151.6, rot: -5 }, open: { l: 163.2, t: 25.8, w: 69.5, h: 151.6, rot: -5 } },
     ],
   },
   {
@@ -122,15 +123,16 @@ const FOLDERS: FolderCfg[] = [
     top: 236,
     rot: 2,
     from: { x: 0, y: 200 },
+    // The only folder whose shots MOVE between closed and open.
     shots: [
-      // framer-jcgsr0 "Image 1" — fully behind the flap when closed
-      { img: "UKowGBCHvLU7S6yCgNhQrem07Rw.png", closed: { l: 55, t: 80, w: 170, h: 110 }, open: { l: 197.5, t: 9.5, w: 200, h: 128 } },
-      // framer-1yyq18z "Image 2" — top peeks above the flap
-      { img: "XDZzxvEmC9OlBD1Vz8zslZiFb5Q.png", closed: { l: 13, t: 33, w: 170, h: 120 }, open: { l: 119, t: 40, w: 156, h: 110 } },
-      // framer-1ek70wv "Image 3" — fully behind the flap when closed
-      { img: "10pCEtT0QjBALkwmpZdeGGupSk.jpg", closed: { l: 28, t: 78, w: 182, h: 110 }, open: { l: -49, t: 20.9, w: 120, h: 80 } },
-      // framer-xazy22 side tile
-      { img: "vA5Wzc8wqRZz4as95giX6sE7E.png", closed: { l: 12, t: 36, w: 54, h: 142 }, open: { l: 240, t: 28.75, w: 54, h: 142 } },
+      // "Image 1" — fully behind the flap when closed, rises top-right
+      { img: "UKowGBCHvLU7S6yCgNhQrem07Rw.png", closed: { l: 55, t: 80, w: 170, h: 110, rot: 0 }, open: { l: 97.7, t: -46.4, w: 199.8, h: 111.1, rot: 14.4 } },
+      // "Image 2" — top peeks above the flap when closed
+      { img: "XDZzxvEmC9OlBD1Vz8zslZiFb5Q.png", closed: { l: 13, t: 33, w: 170, h: 120, rot: 0 }, open: { l: 33.9, t: 39.7, w: 170.3, h: 109.5, rot: 2.3 } },
+      // "Image 3" — fully behind the flap when closed, rises top-left
+      { img: "10pCEtT0QjBALkwmpZdeGGupSk.jpg", closed: { l: 28, t: 78, w: 182, h: 110, rot: 0 }, open: { l: -49.1, t: -19.6, w: 161, h: 80.2, rot: -16.5 } },
+      // side tile — not visible when open in the reference; stays fully tucked
+      { img: "vA5Wzc8wqRZz4as95giX6sE7E.png", closed: { l: 12, t: 48, w: 54, h: 142, rot: 0 }, open: { l: 12, t: 48, w: 54, h: 142, rot: 0 } },
     ],
   },
 ];
@@ -199,20 +201,22 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
             className="pointer-events-none absolute inset-0 block h-full w-full"
           />
 
-          {/* screenshots — closed tucked behind flap → open fanned out */}
+          {/* screenshots — white-framed prints, revealed (and for SaaS, risen)
+              when the flap opens. Above the folder back, behind the flap. */}
           {cfg.shots.map((s, i) => (
             <motion.div
               key={cfg.key + i}
-              className="absolute overflow-hidden rounded-[6px]"
+              className="absolute overflow-hidden rounded-[10px]"
               style={{
                 zIndex: 1,
-                boxShadow: "0 4px 10px rgba(0,0,0,.12)",
+                border: "4px solid #fff",
+                boxShadow: "0 1px 3px rgba(90,90,90,0.3), 0 4px 10px rgba(0,0,0,0.10)",
               }}
               initial={false}
               animate={state}
               variants={{
-                closed: { left: s.closed.l, top: s.closed.t, width: s.closed.w, height: s.closed.h },
-                open: { left: s.open.l, top: s.open.t, width: s.open.w, height: s.open.h },
+                closed: { left: s.closed.l, top: s.closed.t, width: s.closed.w, height: s.closed.h, rotate: s.closed.rot },
+                open: { left: s.open.l, top: s.open.t, width: s.open.w, height: s.open.h, rotate: s.open.rot },
               }}
               transition={SPRING}
             >
@@ -276,7 +280,7 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
                 backgroundImage: `url(${A}rR6HYXBrMmX4cRpXfXUOvpvpB0.png)`,
                 backgroundSize: "128px",
                 backgroundRepeat: "repeat",
-                opacity: 0.06,
+                opacity: 0.04,
               }}
             />
             {/* monogram logo */}
@@ -286,7 +290,7 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
               style={{ width: 50, height: 50, transform: "translate(-50%,-50%)" }}
               aria-hidden="true"
             >
-              <path d={MONOGRAM_PATH} fill="#D3D4D6" />
+              <path d={MONOGRAM_PATH} fill="#E0E1E3" />
             </svg>
           </motion.div>
         </div>
@@ -294,7 +298,7 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
         {/* caption — transparent text → white on a #0080FF chip, grows from center */}
         <motion.div
           className="whitespace-nowrap text-[18px] font-medium leading-none"
-          style={{ borderRadius: 4, padding: 4 }}
+          style={{ borderRadius: 4, padding: "4px 10px" }}
           initial={false}
           animate={state}
           variants={{
