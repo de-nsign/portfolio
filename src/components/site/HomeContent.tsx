@@ -1,5 +1,6 @@
 import Hero from "./Hero";
 import Projects from "./Projects";
+import Toolkit from "./Toolkit";
 import Career from "./Career";
 import Testimonials from "./Testimonials";
 import { latestProjects } from "@/lib/site-data";
@@ -10,6 +11,7 @@ export default function HomeContent() {
       <Hero />
 
       <Projects title="Latest Projects" items={latestProjects} />
+      <Toolkit />
       <Career />
       <Testimonials />
     </main>
