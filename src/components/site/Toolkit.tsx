@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import SectionHeader from "./SectionHeader";
 
 /* ──────────────────────────────────────────────────────────
@@ -49,9 +49,11 @@ const labels: [string, number, number, number][] = [
   ["Crafting Graceful UI", 575, 235, 11],
 ];
 
-let zTop = 100;
+/** Shared drag context: the live board scale (so pointer deltas map into
+ *  board-local space) and a rising z so the grabbed sticker comes to top. */
+type DragCtx = { scaleRef: { current: number }; bumpZ: () => number };
 
-function Sticker({ layer }: { layer: Layer }) {
+function Sticker({ layer, ctx }: { layer: Layer; ctx: DragCtx }) {
   const [file, left, top, w, h, rot] = layer;
   const ref = useRef<HTMLDivElement>(null);
   const state = useRef({ dragging: false, sx: 0, sy: 0, dx: 0, dy: 0, scale: 1, raf: 0 });
@@ -66,10 +68,12 @@ function Sticker({ layer }: { layer: Layer }) {
     const s = state.current;
     cancelAnimationFrame(s.raf);
     s.dragging = true;
-    s.sx = e.clientX - s.dx;
-    s.sy = e.clientY - s.dy;
+    // record pointer origin in board-local units (undo the parent scale)
+    const k = ctx.scaleRef.current || 1;
+    s.sx = e.clientX / k - s.dx;
+    s.sy = e.clientY / k - s.dy;
     s.scale = 1.08;
-    if (ref.current) ref.current.style.zIndex = String(++zTop);
+    if (ref.current) ref.current.style.zIndex = String(ctx.bumpZ());
     ref.current?.setPointerCapture(e.pointerId);
     render();
   };
@@ -77,8 +81,9 @@ function Sticker({ layer }: { layer: Layer }) {
   const onMove = (e: React.PointerEvent) => {
     const s = state.current;
     if (!s.dragging) return;
-    s.dx = e.clientX - s.sx;
-    s.dy = e.clientY - s.sy;
+    const k = ctx.scaleRef.current || 1;
+    s.dx = e.clientX / k - s.sx;
+    s.dy = e.clientY / k - s.sy;
     render();
   };
 
@@ -86,7 +91,8 @@ function Sticker({ layer }: { layer: Layer }) {
     const s = state.current;
     if (!s.dragging) return;
     s.dragging = false;
-    // critically-damped spring back to origin (dragSnapToOrigin feel)
+    // underdamped spring back to origin — a slight overshoot that mirrors
+    // Framer Motion's default bouncy dragSnapToOrigin feel.
     const fx = s.dx, fy = s.dy, fs = s.scale;
     const stiffness = 350, damping = 22, mass = 1;
     let x = 0, vx = 0;
@@ -123,7 +129,14 @@ function Sticker({ layer }: { layer: Layer }) {
       style={{ left, top, width: w, height: h, transform: `rotate(${rot}deg)`, zIndex: 10 }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={A + file} alt="" draggable={false} className="pointer-events-none block h-full w-full" />
+      <img
+        src={A + file}
+        alt=""
+        draggable={false}
+        width={w}
+        height={h}
+        className="pointer-events-none block h-full w-full"
+      />
     </div>
   );
 }
@@ -131,24 +144,34 @@ function Sticker({ layer }: { layer: Layer }) {
 export default function Toolkit() {
   const stageRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  const scaleRef = useRef(1);
+  const zRef = useRef(100);
+  const ctx: DragCtx = { scaleRef, bumpZ: () => ++zRef.current };
 
-  useEffect(() => {
+  // Measure synchronously before paint so the board never flashes at its
+  // intrinsic 868px width on a narrow viewport. The board fills the column
+  // (scales up or down), matching the reference block.
+  useLayoutEffect(() => {
     const el = stageRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => {
-      setScale(Math.min(1, el.clientWidth / BOARD_W));
-    });
+    const apply = () => {
+      const k = el.clientWidth / BOARD_W;
+      scaleRef.current = k;
+      setScale(k);
+    };
+    apply();
+    const ro = new ResizeObserver(apply);
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
 
   return (
-    <section className="mx-auto max-w-[1056px] px-6 pt-32">
+    <section className="mx-auto max-w-[1056px] overflow-x-clip px-6 pt-32">
       <SectionHeader title="My Design Toolkit" />
 
       <div ref={stageRef} className="mt-10" style={{ height: BOARD_H * scale }}>
         <div
-          className="relative overflow-hidden rounded-3xl"
+          className="relative rounded-3xl"
           style={{
             width: BOARD_W,
             height: BOARD_H,
@@ -159,12 +182,15 @@ export default function Toolkit() {
             boxShadow: "inset 0 0 0 1px rgba(0,0,0,.05), 0 1px 2px rgba(0,0,0,.04)",
           }}
         >
-          {/* background art */}
+          {/* background art — rounded on the image itself so the board can keep
+              overflow visible (stickers stay draggable past the edge). */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={A + "iCKG6aQoTYwjsfslKildDzDXjWQ.png"}
             alt=""
-            className="pointer-events-none absolute left-0 top-0"
+            width={BOARD_W}
+            height={BOARD_H}
+            className="pointer-events-none absolute left-0 top-0 rounded-3xl"
             style={{ width: BOARD_W, height: BOARD_H }}
           />
 
@@ -184,7 +210,7 @@ export default function Toolkit() {
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={A + file} alt="" className="block h-full w-full" />
+              <img src={A + file} alt="" width={w} height={h} className="block h-full w-full" />
             </div>
           ))}
 
@@ -201,7 +227,7 @@ export default function Toolkit() {
 
           {/* draggable stickers */}
           {stickers.map((s) => (
-            <Sticker key={s[0]} layer={s} />
+            <Sticker key={s[0]} layer={s} ctx={ctx} />
           ))}
         </div>
       </div>
