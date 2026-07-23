@@ -29,8 +29,14 @@ const BOARD_H = 500;
 
 // The one default Framer variant spring — flap, screenshots and chip all ride it.
 const SPRING = { type: "spring", stiffness: 500, damping: 50, restDelta: 1 } as const;
-// Entrance tween family lifted from the bundle's appear transitions.
-const APPEAR_EASE = [0.44, 0, 0.56, 1] as const;
+// Entrance springs (~5% overshoot — matches the measured y 25 → −4 → 0 flight).
+// The entrance re-triggers on EVERY viewport enter and resets on leave.
+const ENTER_SPRING = { type: "spring", stiffness: 120, damping: 22, mass: 1 } as const;
+const STICKER_ENTER_SPRING = { type: "spring", stiffness: 150, damping: 24, mass: 1 } as const;
+// Per-sticker out-pose y offsets + entrance delays (cycled by index) so the
+// up-down motion is visible while scrolling.
+const STICKER_OUT_Y = [25, 40, 56] as const;
+const STICKER_DELAY = [0, 0.06, 0.12] as const;
 
 // Folder reference box (the back panel), against which every layer % resolves.
 const FW = 238;
@@ -71,13 +77,13 @@ type FolderCfg = {
   shots: Shot[];
 };
 
-/* Per-folder screenshot poses — the reference "reveal" model: opening is mostly
-   the FLAP's work. At rotateX −65° (perspective 2500) the flap's projected
-   height collapses from 147px to ~60px, uncovering what sits behind it.
-   Building and Crafting screenshots are therefore STATIC (closed == open);
-   only Simplifying's shots actually move. All poses below were converted from
-   live-measured rotated AABBs into unrotated local left/top/w/h + local rotate
-   (round-trip verified to <0.2px). */
+/* Per-folder screenshot poses. Opening combines the FLAP's 3D reveal (at
+   rotateX −65° its projected height collapses 147 → ~60px) with the shots
+   rising up out of the folder. Closed poses (and Simplifying's measured open
+   poses) were converted from live-measured rotated AABBs into unrotated local
+   left/top/w/h + local rotate (round-trip verified to <0.2px); Building's and
+   Crafting's open poses are the closed poses translated up 45–80px with a few
+   degrees of extra outward tilt. */
 const FOLDERS: FolderCfg[] = [
   {
     key: "building",
@@ -87,17 +93,18 @@ const FOLDERS: FolderCfg[] = [
     rot: -10,
     from: { x: -200, y: 200 },
     shots: [
-      // Two large static shots, near-fully overlapping; the −4° vs 0° wedge is
-      // what reads as a "stack". Revealed by the flap only.
+      // Two large near-fully overlapping shots. On open they rise out of the
+      // folder (outer/back one higher) with a little extra outward tilt;
+      // bottoms stay behind the flap.
       {
         img: "QREInI4cFG7Sxb83aS477kJvL0.png",
         closed: { l: 33.2, t: 35.2, w: 169.9, h: 120.5, rot: -4 },
-        open: { l: 33.2, t: 35.2, w: 169.9, h: 120.5, rot: -4 },
+        open: { l: 33.2, t: -29.8, w: 169.9, h: 120.5, rot: -9 },
       },
       {
         img: "sUlcdg0ICNhA0HbsHln4wgEvfA.png",
         closed: { l: 34.5, t: 34.5, w: 169.7, h: 120.4, rot: 0 },
-        open: { l: 34.5, t: 34.5, w: 169.7, h: 120.4, rot: 0 },
+        open: { l: 34.5, t: -10.5, w: 169.7, h: 120.4, rot: 4 },
       },
     ],
   },
@@ -108,12 +115,14 @@ const FOLDERS: FolderCfg[] = [
     top: 45,
     rot: 11,
     from: { x: 200, y: 200 },
-    // Four static phone shots (slots B, A, C, D left→right), reveal-only.
+    // Four phone shots (slots B, A, C, D left→right). On open they rise out of
+    // the folder — outer slots higher (75–78px) than inner (55px) — with extra
+    // outward tilt (left negative, right positive). Bottoms stay behind the flap.
     shots: [
-      { img: "kI71JQxzBsVksptyfXRpek7BM.png", closed: { l: 6.1, t: 25.7, w: 70.2, h: 152.6, rot: 3 }, open: { l: 6.1, t: 25.7, w: 70.2, h: 152.6, rot: 3 } },
-      { img: "uBVmdxzllQCI9M7Ce5A9MJJI.png", closed: { l: 68.3, t: 29.4, w: 70.2, h: 151.5, rot: -14 }, open: { l: 68.3, t: 29.4, w: 70.2, h: 151.5, rot: -14 } },
-      { img: "YJ7qr86GzNLZJKBgqvXXysLCw8U.png", closed: { l: 117.6, t: 30, w: 69.9, h: 152.6, rot: -4 }, open: { l: 117.6, t: 30, w: 69.9, h: 152.6, rot: -4 } },
-      { img: "V1jZaKJbabaL9m4KLEB5Ps0XjEU.png", closed: { l: 163.2, t: 25.8, w: 69.5, h: 151.6, rot: -5 }, open: { l: 163.2, t: 25.8, w: 69.5, h: 151.6, rot: -5 } },
+      { img: "kI71JQxzBsVksptyfXRpek7BM.png", closed: { l: 6.1, t: 25.7, w: 70.2, h: 152.6, rot: 3 }, open: { l: 6.1, t: -49.3, w: 70.2, h: 152.6, rot: -3 } },
+      { img: "uBVmdxzllQCI9M7Ce5A9MJJI.png", closed: { l: 68.3, t: 29.4, w: 70.2, h: 151.5, rot: -14 }, open: { l: 68.3, t: -25.6, w: 70.2, h: 151.5, rot: -17 } },
+      { img: "YJ7qr86GzNLZJKBgqvXXysLCw8U.png", closed: { l: 117.6, t: 30, w: 69.9, h: 152.6, rot: -4 }, open: { l: 117.6, t: -25, w: 69.9, h: 152.6, rot: -1 } },
+      { img: "V1jZaKJbabaL9m4KLEB5Ps0XjEU.png", closed: { l: 163.2, t: 25.8, w: 69.5, h: 151.6, rot: -5 }, open: { l: 163.2, t: -52.2, w: 69.5, h: 151.6, rot: 1 } },
     ],
   },
   {
@@ -123,16 +132,17 @@ const FOLDERS: FolderCfg[] = [
     top: 236,
     rot: 2,
     from: { x: 0, y: 200 },
-    // The only folder whose shots MOVE between closed and open.
+    // All four shots MOVE between closed and open.
     shots: [
+      // side tile — fully hidden when closed; on open it rises to peek out on
+      // the left. First in DOM order → lowest z of the four shots.
+      { img: "vA5Wzc8wqRZz4as95giX6sE7E.png", closed: { l: 12, t: 48, w: 54, h: 142, rot: 0 }, open: { l: -15, t: 36, w: 54, h: 142, rot: -6 } },
       // "Image 1" — fully behind the flap when closed, rises top-right
       { img: "UKowGBCHvLU7S6yCgNhQrem07Rw.png", closed: { l: 55, t: 80, w: 170, h: 110, rot: 0 }, open: { l: 97.7, t: -46.4, w: 199.8, h: 111.1, rot: 14.4 } },
       // "Image 2" — top peeks above the flap when closed
       { img: "XDZzxvEmC9OlBD1Vz8zslZiFb5Q.png", closed: { l: 13, t: 33, w: 170, h: 120, rot: 0 }, open: { l: 33.9, t: 39.7, w: 170.3, h: 109.5, rot: 2.3 } },
       // "Image 3" — fully behind the flap when closed, rises top-left
       { img: "10pCEtT0QjBALkwmpZdeGGupSk.jpg", closed: { l: 28, t: 78, w: 182, h: 110, rot: 0 }, open: { l: -49.1, t: -19.6, w: 161, h: 80.2, rot: -16.5 } },
-      // side tile — not visible when open in the reference; stays fully tucked
-      { img: "vA5Wzc8wqRZz4as95giX6sE7E.png", closed: { l: 12, t: 48, w: 54, h: 142, rot: 0 }, open: { l: 12, t: 48, w: 54, h: 142, rot: 0 } },
     ],
   },
 ];
@@ -170,7 +180,7 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
       }}
       initial={{ x: cfg.from.x, y: cfg.from.y, opacity: 0.001 }}
       animate={entered ? { x: 0, y: 0, opacity: 1 } : { x: cfg.from.x, y: cfg.from.y, opacity: 0.001 }}
-      transition={{ duration: 1.5, ease: APPEAR_EASE }}
+      transition={ENTER_SPRING}
     >
       <div
         className="flex flex-col items-center"
@@ -317,14 +327,18 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
 /* ── Sticker ────────────────────────────────────────────── */
 const Sticker = memo(function Sticker({
   cfg,
+  index,
   scale,
   entered,
 }: {
   cfg: StickerCfg;
+  index: number;
   scale: number;
   entered: boolean;
 }) {
   const reduce = useReducedMotion();
+  const outY = STICKER_OUT_Y[index % STICKER_OUT_Y.length];
+  const delay = STICKER_DELAY[index % STICKER_DELAY.length];
   // Positioned in an UNSCALED overlay (so Framer Motion's drag maps 1:1 to the
   // cursor); design-space coords are pre-multiplied by the board scale here.
   return (
@@ -338,9 +352,9 @@ const Sticker = memo(function Sticker({
         rotate: cfg.rot,
         cursor: "grab",
       }}
-      initial={{ opacity: 0.001, y: 20 }}
-      animate={entered ? { opacity: 1, y: 0 } : { opacity: 0.001, y: 20 }}
-      transition={{ duration: 0.4, delay: 0.2, ease: APPEAR_EASE }}
+      initial={{ opacity: 0.001, y: outY }}
+      animate={entered ? { opacity: 1, y: 0 } : { opacity: 0.001, y: outY }}
+      transition={{ ...STICKER_ENTER_SPRING, delay }}
       drag={!reduce}
       dragMomentum={false}
       dragSnapToOrigin
@@ -363,9 +377,10 @@ export default function Toolkit() {
   const stageRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [ready, setReady] = useState(false);
-  // One entrance trigger for the whole board — per-child whileInView would fire
-  // late/never for children whose initial +200y offset starts them off-screen.
-  const entered = useInView(stageRef, { once: true, amount: 0.3 });
+  // One entrance trigger for the whole board. NOT once: the reference
+  // re-animates every time the section enters the viewport and resets when it
+  // leaves (children spring back to their out poses).
+  const entered = useInView(stageRef, { amount: 0.25 });
 
   useIsoLayoutEffect(() => {
     const el = stageRef.current;
@@ -412,8 +427,8 @@ export default function Toolkit() {
             overlay so drag distance maps 1:1 to the pointer on a scaled board. */}
         <div className="absolute inset-0 overflow-clip rounded-[24px]" style={{ zIndex: 10, pointerEvents: "none" }}>
           {ready &&
-            STICKERS.map((s) => (
-              <Sticker key={s.img} cfg={s} scale={scale} entered={entered} />
+            STICKERS.map((s, i) => (
+              <Sticker key={s.img} cfg={s} index={i} scale={scale} entered={entered} />
             ))}
         </div>
 
