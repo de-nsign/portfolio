@@ -15,7 +15,7 @@ import { useEffect, useRef } from "react";
 // Intersecting (min of both) means the tee dissolves well before its edge.
 const FEATHER = [
   "radial-gradient(closest-side at 50% 46%, #000 82%, transparent 100%)",
-  "linear-gradient(to bottom, #000 58%, transparent 84%)",
+  "linear-gradient(to bottom, #000 72%, transparent 94%)",
 ].join(", ");
 
 export default function HeroPortrait() {
