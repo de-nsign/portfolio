@@ -7,11 +7,16 @@ import { useEffect, useRef } from "react";
    very soft radial feather so every edge — hair, shoulders, the tee — dissolves
    into the background instead of ending on a hard rectangle. */
 
-// Opaque through the whole subject, feathering out only across the outer
-// margin (the video is padded with background so hair/shoulders never reach the
-// fade). Centre nudged up because the face sits in the upper half of frame.
-const FEATHER =
-  "radial-gradient(closest-side at 50% 46%, #000 68%, rgba(0,0,0,0.5) 86%, transparent 100%)";
+// Two intersected mask layers:
+//  1) a radial feather that softens the hair, sides and top into the page, and
+//  2) a dedicated vertical fade for the BOTTOM — the tee is cut off by a straight
+//     camera-frame edge that reaches ~86% down, far past where the symmetric
+//     radial fades, so without this the cut shows as a hard horizontal line.
+// Intersecting (min of both) means the tee dissolves well before its edge.
+const FEATHER = [
+  "radial-gradient(closest-side at 50% 46%, #000 66%, transparent 100%)",
+  "linear-gradient(to bottom, #000 58%, transparent 84%)",
+].join(", ");
 
 export default function HeroPortrait() {
   const ref = useRef<HTMLVideoElement>(null);
@@ -37,6 +42,8 @@ export default function HeroPortrait() {
       style={{
         maskImage: FEATHER,
         WebkitMaskImage: FEATHER,
+        maskComposite: "intersect",
+        WebkitMaskComposite: "source-in",
       }}
     />
   );
