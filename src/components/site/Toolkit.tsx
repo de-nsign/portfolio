@@ -1,13 +1,7 @@
 "use client";
 
 import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
-import {
-  motion,
-  useScroll,
-  useSpring,
-  useTransform,
-  type MotionValue,
-} from "motion/react";
+import { motion } from "motion/react";
 import SectionHeader from "./SectionHeader";
 
 // useLayoutEffect warns during SSR; fall back to useEffect on the server.
@@ -50,12 +44,13 @@ const shotTransition = (i: number) => ({
   rotate: { ...SPRING_SLOW, delay: i * 0.04 },
 });
 
-// Scroll-progress spring — every scroll tick nudges the target; children chase
-// it with slight lag + overshoot, so folders and stickers visibly bob while
-// scrolling (and get pulled back down when scrolling back up).
-const SCROLL_SPRING = { stiffness: 120, damping: 22 } as const;
-// Sticker out-pose y offsets, cycled by index.
-const STICKER_OUT_Y = [40, 56, 72] as const;
+// Sticker idle-float params, cycled by index — amplitude (px) + period (s).
+const STICKER_FLOAT = [
+  { amp: 10, dur: 3.2 },
+  { amp: 13, dur: 3.8 },
+  { amp: 8, dur: 2.8 },
+  { amp: 11, dur: 3.5 },
+] as const;
 
 // Folder reference box (the back panel), against which every layer resolves.
 const FW = 238;
@@ -97,8 +92,6 @@ type FolderCfg = {
   left: number;
   top: number;
   rot: number;
-  // scroll out-pose offset (design px)
-  from: { x: number; y: number };
   shots: Shot[];
 };
 
@@ -113,19 +106,18 @@ const FOLDERS: FolderCfg[] = [
     left: 42,
     top: 39,
     rot: -10,
-    from: { x: -200, y: 200 },
     shots: [
       {
         img: "QREInI4cFG7Sxb83aS477kJvL0.png",
-        box: { l: -62, t: -40, w: 190, h: 134 },
+        box: { l: -29, t: -32, w: 190, h: 134 },
         openRot: -14,
-        closed: { dx: 77, dy: 53, rot: -3 },
+        closed: { dx: 44, dy: 45, rot: -3 },
       },
       {
         img: "sUlcdg0ICNhA0HbsHln4wgEvfA.png",
-        box: { l: 10, t: -98, w: 190, h: 134 },
-        openRot: -4,
-        closed: { dx: 23, dy: 115, rot: 2 },
+        box: { l: 104, t: -48, w: 190, h: 108 },
+        openRot: 8,
+        closed: { dx: -71, dy: 74, rot: 2 },
       },
     ],
   },
@@ -135,7 +127,6 @@ const FOLDERS: FolderCfg[] = [
     left: 582,
     top: 45,
     rot: 11,
-    from: { x: 200, y: 200 },
     shots: [
       {
         img: "kI71JQxzBsVksptyfXRpek7BM.png",
@@ -169,7 +160,6 @@ const FOLDERS: FolderCfg[] = [
     left: 298,
     top: 236,
     rot: 2,
-    from: { x: 0, y: 200 },
     shots: [
       // side tile — lowest z; peeks out on the left when open
       {
@@ -219,21 +209,13 @@ const STICKERS: StickerCfg[] = [
 ];
 
 /* ── Folder ─────────────────────────────────────────────── */
-const Folder = memo(function Folder({
-  cfg,
-  progress,
-}: {
-  cfg: FolderCfg;
-  progress: MotionValue<number>;
-}) {
+const Folder = memo(function Folder({ cfg }: { cfg: FolderCfg }) {
   const [open, setOpen] = useState(false);
   const state = open ? "open" : "closed";
 
-  // Continuous scroll-linked slide-in (spring-chased progress).
-  const x = useTransform(progress, [0, 1], [cfg.from.x, 0]);
-  const y = useTransform(progress, [0, 1], [cfg.from.y, 0]);
-  const opacity = useTransform(progress, [0, 0.4], [0.001, 1]);
-
+  // Folders are static — they rest on the board and only open on hover. They
+  // deliberately do NOT ride scroll (matches the reference, which keeps the
+  // folders anchored while only the stickers float).
   return (
     <motion.div
       className="absolute"
@@ -243,12 +225,6 @@ const Folder = memo(function Folder({
         width: FW,
         rotate: cfg.rot,
         pointerEvents: "auto",
-        // scroll-driven motion is intentionally NOT gated behind
-        // prefers-reduced-motion — the reference site animates regardless,
-        // and the gate made the whole board read as static.
-        x,
-        y,
-        opacity,
       }}
     >
       <div
@@ -264,8 +240,11 @@ const Folder = memo(function Folder({
             width: FW,
             height: FH,
             overflow: "visible",
-            transformStyle: "preserve-3d",
-            perspective: "2500px",
+            // NOTE: no preserve-3d/perspective here on purpose. The flap does its
+            // own 3D hinge via its own transformPerspective; a shared 3D context on
+            // this container makes the coplanar flap + screenshots z-fight, so the
+            // shots ghost THROUGH the closed flap for ~1s as they settle. Keeping
+            // this container flat means children stack strictly by zIndex.
           }}
         >
           {/* back panel — the full 238×190 folder silhouette (tab notch at the
@@ -403,18 +382,17 @@ const Sticker = memo(function Sticker({
   cfg,
   index,
   scale,
-  progress,
 }: {
   cfg: StickerCfg;
   index: number;
   scale: number;
-  progress: MotionValue<number>;
 }) {
-  // Scroll-linked bob lives on a WRAPPER — motion drag and scroll-bound
-  // transforms must not share one element.
-  const outY = STICKER_OUT_Y[index % STICKER_OUT_Y.length];
-  const y = useTransform(progress, [0, 1], [outY, 0]);
-  const opacity = useTransform(progress, [0, 0.35], [0.001, 1]);
+  // Each sticker bobs up and down FOREVER (like the reference) — the float
+  // lives on its own wrapper so it never fights the drag transform. Amplitude,
+  // period and phase vary per index so the badges don't move in lockstep.
+  const amp = STICKER_FLOAT[index % STICKER_FLOAT.length].amp;
+  const dur = STICKER_FLOAT[index % STICKER_FLOAT.length].dur;
+  const delay = (index % STICKER_FLOAT.length) * 0.35;
 
   return (
     <motion.div
@@ -424,27 +402,32 @@ const Sticker = memo(function Sticker({
         top: cfg.top * scale,
         width: cfg.w * scale,
         pointerEvents: "auto",
-        y,
-        opacity,
       }}
     >
-      {/* draggable layer — pointer maps 1:1 (this overlay is unscaled) */}
+      {/* perpetual float layer */}
       <motion.div
-        style={{ rotate: cfg.rot, cursor: "grab" }}
-        drag
-        dragMomentum={false}
-        dragSnapToOrigin
-        dragTransition={{ bounceStiffness: 400, bounceDamping: 30 }}
-        whileTap={{ cursor: "grabbing" }}
-        onMouseDown={(e) => e.preventDefault()}
+        initial={{ y: 0 }}
+        animate={{ y: [0, -amp, 0] }}
+        transition={{ duration: dur, delay, repeat: Infinity, ease: "easeInOut" }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={A + cfg.img}
-          alt=""
-          draggable={false}
-          className="pointer-events-none block w-full select-none [-webkit-touch-callout:none] [-webkit-user-drag:none]"
-        />
+        {/* draggable layer — pointer maps 1:1 (this overlay is unscaled) */}
+        <motion.div
+          style={{ rotate: cfg.rot, cursor: "grab" }}
+          drag
+          dragMomentum={false}
+          dragSnapToOrigin
+          dragTransition={{ bounceStiffness: 400, bounceDamping: 30 }}
+          whileTap={{ cursor: "grabbing" }}
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={A + cfg.img}
+            alt=""
+            draggable={false}
+            className="pointer-events-none block w-full select-none [-webkit-touch-callout:none] [-webkit-user-drag:none]"
+          />
+        </motion.div>
       </motion.div>
     </motion.div>
   );
@@ -454,16 +437,6 @@ export default function Toolkit() {
   const stageRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [ready, setReady] = useState(false);
-
-  // Continuous scroll binding: progress 0 when the section top hits the
-  // viewport bottom, 1 when the section center reaches the viewport center.
-  // Above 1 everything rests at 0; scrolling back up pulls children back
-  // toward their out poses. Spring-smoothed → slight lag + overshoot.
-  const { scrollYProgress } = useScroll({
-    target: stageRef,
-    offset: ["start end", "center center"],
-  });
-  const progress = useSpring(scrollYProgress, SCROLL_SPRING);
 
   useIsoLayoutEffect(() => {
     const el = stageRef.current;
@@ -511,7 +484,7 @@ export default function Toolkit() {
         <div className="absolute inset-0 overflow-clip rounded-[24px]" style={{ zIndex: 10, pointerEvents: "none" }}>
           {ready &&
             STICKERS.map((s, i) => (
-              <Sticker key={s.img} cfg={s} index={i} scale={scale} progress={progress} />
+              <Sticker key={s.img} cfg={s} index={i} scale={scale} />
             ))}
         </div>
 
@@ -534,7 +507,7 @@ export default function Toolkit() {
             }}
           >
             {FOLDERS.map((f) => (
-              <Folder key={f.key} cfg={f} progress={progress} />
+              <Folder key={f.key} cfg={f} />
             ))}
           </div>
         </div>
