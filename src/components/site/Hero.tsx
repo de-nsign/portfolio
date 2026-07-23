@@ -1,4 +1,5 @@
 import MagneticLink from "./MagneticLink";
+import HeroPortrait from "./HeroPortrait";
 
 const links = [
   { label: "CV", href: "https://drive.google.com/file/d/1iBGz-mkw7Ws-YhkJ4aESE29iOreENcyk/view?usp=sharing" },
@@ -28,16 +29,9 @@ function ArrowUpRight() {
 export default function Hero() {
   return (
     <section className="flex flex-col items-center px-6 pt-24 text-center">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/images/hero/denis-portrait.webp"
-        alt="Denis"
-        width={140}
-        height={168}
-        className="h-[168px] w-[140px] rounded-[36px] object-cover"
-      />
+      <HeroPortrait />
 
-      <p className="mt-5 text-[17px] text-neutral-500">Hi, I&apos;m Denis!</p>
+      <p className="mt-1 text-[17px] text-neutral-500">Hi, I&apos;m Denis!</p>
 
       <h1 className="hero-heading mt-3 max-w-[460px] py-1 text-[40px] font-semibold leading-[1.2] tracking-[-0.04em]">
         Design System Designer
