@@ -1,7 +1,14 @@
 "use client";
 
 import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "motion/react";
 import SectionHeader from "./SectionHeader";
 
 // useLayoutEffect warns during SSR; fall back to useEffect on the server.
@@ -10,12 +17,15 @@ const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : use
 /* ──────────────────────────────────────────────────────────
    "My Design Toolkit" — 1:1 rebuild of the reference Framer
    block. A board (bg image) holds three tilted "folders" that
-   open on hover — a 3D front flap hinges down and the project
-   screenshots fan out — plus seven draggable sticker badges
-   that spring back to their slot.
+   open on hover — the 3D front flap hinges down while the
+   screenshots RISE out of the pocket and FAN outward on an
+   arc — plus seven draggable sticker badges that spring back
+   to their slot. Folder/sticker positions ride scroll
+   progress continuously (spring-chased), like the original.
 
-   Structure, geometry, springs and drag props were extracted
-   from the production Framer bundle (see .context/toolkit).
+   Geometry, springs and drag props were extracted from the
+   production Framer bundle and a frame-accurate video capture
+   of the original (see .context/toolkit + keyframes).
 
    NOTE: every screenshot and sticker image in /public/toolkit
    is the REFERENCE AUTHOR'S OWN artwork, used here purely as a
@@ -27,18 +37,28 @@ const A = "/toolkit/";
 const BOARD_W = 868;
 const BOARD_H = 500;
 
-// The one default Framer variant spring — flap, screenshots and chip all ride it.
-const SPRING = { type: "spring", stiffness: 500, damping: 50, restDelta: 1 } as const;
-// Entrance springs (~5% overshoot — matches the measured y 25 → −4 → 0 flight).
-// The entrance re-triggers on EVERY viewport enter and resets on leave.
-const ENTER_SPRING = { type: "spring", stiffness: 120, damping: 22, mass: 1 } as const;
-const STICKER_ENTER_SPRING = { type: "spring", stiffness: 150, damping: 24, mass: 1 } as const;
-// Per-sticker out-pose y offsets + entrance delays (cycled by index) so the
-// up-down motion is visible while scrolling.
-const STICKER_OUT_Y = [25, 40, 56] as const;
-const STICKER_DELAY = [0, 0.06, 0.12] as const;
+/* Folder-open motion, measured from the video (≈430–460ms total, no bounce):
+   the screens first rise STRAIGHT UP out of the pocket, then swing outward and
+   rotate into the fan. Achieved with per-property springs — y + scale ride the
+   fast spring (with the flap and chip), x + rotate ride a slower one, so every
+   shot traces an arc. Per-shot stagger 40ms, rear shot first. */
+const SPRING_FAST = { type: "spring", stiffness: 500, damping: 40 } as const;
+const SPRING_SLOW = { type: "spring", stiffness: 200, damping: 26 } as const;
+const shotTransition = (i: number) => ({
+  y: { ...SPRING_FAST, delay: i * 0.04 },
+  scale: { ...SPRING_FAST, delay: i * 0.04 },
+  x: { ...SPRING_SLOW, delay: i * 0.04 },
+  rotate: { ...SPRING_SLOW, delay: i * 0.04 },
+});
 
-// Folder reference box (the back panel), against which every layer % resolves.
+// Scroll-progress spring — every scroll tick nudges the target; children chase
+// it with slight lag + overshoot, so folders and stickers visibly bob while
+// scrolling (and get pulled back down when scrolling back up).
+const SCROLL_SPRING = { stiffness: 120, damping: 22 } as const;
+// Sticker out-pose y offsets, cycled by index.
+const STICKER_OUT_Y = [40, 56, 72] as const;
+
+// Folder reference box (the back panel), against which every layer resolves.
 const FW = 238;
 const FH = 190;
 
@@ -60,30 +80,33 @@ const FLAP_SHADOW_NONE =
 const MONOGRAM_PATH =
   "M 50 25 C 50 38.807 38.807 50 25 50 C 11.193 50 0 38.807 0 25 C 0 11.193 11.193 0 25 0 C 38.807 0 50 11.193 50 25 Z M 23.148 4.63 C 12.048 5.125 4.63 14.056 4.63 25 C 4.63 35.944 12.048 44.875 23.148 45.37 L 23.148 30.562 L 17.925 25 L 23.148 19.438 Z M 19.444 41.035 C 12.719 39.063 8.333 32.817 8.333 25 C 8.333 17.183 12.719 10.936 19.444 8.964 L 19.444 17.971 L 12.844 25 L 19.444 32.028 Z M 26.852 4.63 L 26.852 45.37 C 37.846 45.37 45.37 36.25 45.37 25 C 45.37 13.75 37.846 4.63 26.852 4.63 Z M 41.587 26.852 C 40.959 34.13 36.634 39.613 30.556 41.198 L 30.556 26.852 Z M 30.556 8.801 C 36.634 10.386 40.959 15.87 41.587 23.148 L 30.556 23.148 Z";
 
-type Pose = { l: number; t: number; w: number; h: number; rot: number };
-type Shot = { img: string; closed: Pose; open: Pose };
+/* A shot's layout box IS its OPEN pose (folder-local px, keyframes 04/05/06).
+   The closed pose is a transform: translate (dx,dy) back into the pocket,
+   closed rotation, scale 0.85 — only the top 15–25px peeks above the flap
+   (flap covers y 43..190). Because y rides the fast spring and x the slow one,
+   opening rises straight up first, then swings outward into the fan. */
+type Shot = {
+  img: string;
+  box: { l: number; t: number; w: number; h: number };
+  openRot: number;
+  closed: { dx: number; dy: number; rot: number };
+};
 type FolderCfg = {
   key: string;
   label: string;
-  // container placement in 868×500 design space (top-left, pre-rotation).
-  // Solved from the live-DOM rotated bboxes in LIVE-GEOMETRY.md: unrotated
-  // column = 238 × 245 (190 folder + 26 gap + ~29 caption), bbox center =
-  // column center, left/top = center − half-size.
+  // column placement in 868×500 design space (solved from live-DOM bboxes)
   left: number;
   top: number;
   rot: number;
-  // entrance slide-in offset (design px)
+  // scroll out-pose offset (design px)
   from: { x: number; y: number };
   shots: Shot[];
 };
 
-/* Per-folder screenshot poses. Opening combines the FLAP's 3D reveal (at
-   rotateX −65° its projected height collapses 147 → ~60px) with the shots
-   rising up out of the folder. Closed poses (and Simplifying's measured open
-   poses) were converted from live-measured rotated AABBs into unrotated local
-   left/top/w/h + local rotate (round-trip verified to <0.2px); Building's and
-   Crafting's open poses are the closed poses translated up 45–80px with a few
-   degrees of extra outward tilt. */
+/* Open poses matched to the video keyframes: Building's two big screens end
+   HIGH above the folder overlapping its top-left; Crafting fans four phones
+   up-right; SaaS clusters its screens above symmetrically. Shots are listed
+   rear-first (DOM order = paint order; all sit behind the flap, z 1 < 2). */
 const FOLDERS: FolderCfg[] = [
   {
     key: "building",
@@ -93,18 +116,17 @@ const FOLDERS: FolderCfg[] = [
     rot: -10,
     from: { x: -200, y: 200 },
     shots: [
-      // Two large near-fully overlapping shots. On open they rise out of the
-      // folder (outer/back one higher) with a little extra outward tilt;
-      // bottoms stay behind the flap.
       {
         img: "QREInI4cFG7Sxb83aS477kJvL0.png",
-        closed: { l: 33.2, t: 35.2, w: 169.9, h: 120.5, rot: -4 },
-        open: { l: 33.2, t: -29.8, w: 169.9, h: 120.5, rot: -9 },
+        box: { l: -62, t: -40, w: 190, h: 134 },
+        openRot: -14,
+        closed: { dx: 77, dy: 53, rot: -3 },
       },
       {
         img: "sUlcdg0ICNhA0HbsHln4wgEvfA.png",
-        closed: { l: 34.5, t: 34.5, w: 169.7, h: 120.4, rot: 0 },
-        open: { l: 34.5, t: -10.5, w: 169.7, h: 120.4, rot: 4 },
+        box: { l: 10, t: -98, w: 190, h: 134 },
+        openRot: -4,
+        closed: { dx: 23, dy: 115, rot: 2 },
       },
     ],
   },
@@ -115,14 +137,31 @@ const FOLDERS: FolderCfg[] = [
     top: 45,
     rot: 11,
     from: { x: 200, y: 200 },
-    // Four phone shots (slots B, A, C, D left→right). On open they rise out of
-    // the folder — outer slots higher (75–78px) than inner (55px) — with extra
-    // outward tilt (left negative, right positive). Bottoms stay behind the flap.
     shots: [
-      { img: "kI71JQxzBsVksptyfXRpek7BM.png", closed: { l: 6.1, t: 25.7, w: 70.2, h: 152.6, rot: 3 }, open: { l: 6.1, t: -49.3, w: 70.2, h: 152.6, rot: -3 } },
-      { img: "uBVmdxzllQCI9M7Ce5A9MJJI.png", closed: { l: 68.3, t: 29.4, w: 70.2, h: 151.5, rot: -14 }, open: { l: 68.3, t: -25.6, w: 70.2, h: 151.5, rot: -17 } },
-      { img: "YJ7qr86GzNLZJKBgqvXXysLCw8U.png", closed: { l: 117.6, t: 30, w: 69.9, h: 152.6, rot: -4 }, open: { l: 117.6, t: -25, w: 69.9, h: 152.6, rot: -1 } },
-      { img: "V1jZaKJbabaL9m4KLEB5Ps0XjEU.png", closed: { l: 163.2, t: 25.8, w: 69.5, h: 151.6, rot: -5 }, open: { l: 163.2, t: -52.2, w: 69.5, h: 151.6, rot: 1 } },
+      {
+        img: "kI71JQxzBsVksptyfXRpek7BM.png",
+        box: { l: -5, t: -40, w: 70.2, h: 152.6 },
+        openRot: -16,
+        closed: { dx: 11.1, dy: 54, rot: 3 },
+      },
+      {
+        img: "uBVmdxzllQCI9M7Ce5A9MJJI.png",
+        box: { l: 55, t: -58, w: 70.2, h: 151.5 },
+        openRot: -6,
+        closed: { dx: 13.3, dy: 76, rot: -14 },
+      },
+      {
+        img: "YJ7qr86GzNLZJKBgqvXXysLCw8U.png",
+        box: { l: 115, t: -58, w: 69.9, h: 152.6 },
+        openRot: 4,
+        closed: { dx: 2.6, dy: 76, rot: -4 },
+      },
+      {
+        img: "V1jZaKJbabaL9m4KLEB5Ps0XjEU.png",
+        box: { l: 175, t: -40, w: 69.5, h: 151.6 },
+        openRot: 12,
+        closed: { dx: -11.8, dy: 54, rot: -5 },
+      },
     ],
   },
   {
@@ -132,17 +171,35 @@ const FOLDERS: FolderCfg[] = [
     top: 236,
     rot: 2,
     from: { x: 0, y: 200 },
-    // All four shots MOVE between closed and open.
     shots: [
-      // side tile — fully hidden when closed; on open it rises to peek out on
-      // the left. First in DOM order → lowest z of the four shots.
-      { img: "vA5Wzc8wqRZz4as95giX6sE7E.png", closed: { l: 12, t: 48, w: 54, h: 142, rot: 0 }, open: { l: -15, t: 36, w: 54, h: 142, rot: -6 } },
-      // "Image 1" — fully behind the flap when closed, rises top-right
-      { img: "UKowGBCHvLU7S6yCgNhQrem07Rw.png", closed: { l: 55, t: 80, w: 170, h: 110, rot: 0 }, open: { l: 97.7, t: -46.4, w: 199.8, h: 111.1, rot: 14.4 } },
-      // "Image 2" — top peeks above the flap when closed
-      { img: "XDZzxvEmC9OlBD1Vz8zslZiFb5Q.png", closed: { l: 13, t: 33, w: 170, h: 120, rot: 0 }, open: { l: 33.9, t: 39.7, w: 170.3, h: 109.5, rot: 2.3 } },
-      // "Image 3" — fully behind the flap when closed, rises top-left
-      { img: "10pCEtT0QjBALkwmpZdeGGupSk.jpg", closed: { l: 28, t: 78, w: 182, h: 110, rot: 0 }, open: { l: -49.1, t: -19.6, w: 161, h: 80.2, rot: -16.5 } },
+      // side tile — lowest z; peeks out on the left when open
+      {
+        img: "vA5Wzc8wqRZz4as95giX6sE7E.png",
+        box: { l: -15, t: 36, w: 54, h: 142 },
+        openRot: -6,
+        closed: { dx: 27, dy: 12, rot: 0 },
+      },
+      // wide shot rising top-right
+      {
+        img: "UKowGBCHvLU7S6yCgNhQrem07Rw.png",
+        box: { l: 97.7, t: -46.4, w: 199.8, h: 111.1 },
+        openRot: 14.4,
+        closed: { dx: -57.6, dy: 112, rot: 0 },
+      },
+      // center shot — its top peeks above the flap when closed
+      {
+        img: "XDZzxvEmC9OlBD1Vz8zslZiFb5Q.png",
+        box: { l: 33.9, t: 39.7, w: 170.3, h: 109.5 },
+        openRot: 2.3,
+        closed: { dx: -21.1, dy: -20, rot: 0 },
+      },
+      // shot rising top-left — also peeks slightly when closed
+      {
+        img: "10pCEtT0QjBALkwmpZdeGGupSk.jpg",
+        box: { l: -49.1, t: -19.6, w: 161, h: 80.2 },
+        openRot: -16.5,
+        closed: { dx: 87.6, dy: 46.6, rot: 0 },
+      },
     ],
   },
 ];
@@ -150,8 +207,7 @@ const FOLDERS: FolderCfg[] = [
 /* Sticker placement solved from the live-DOM rotated bboxes (LIVE-GEOMETRY.md):
    height = w × imgH/imgW from the real image files, then left/top = bbox center
    − half of unrotated size. Each rotatedAABB(w,h,rot) reproduces the measured
-   bbox to <1px (widths for wvOSVzl/iZjp2e9/11uTSPEy/Qr0aNvX were solved from
-   the bboxes too — the CSS-table widths did not match the live render). */
+   bbox to <1px. */
 type StickerCfg = { img: string; left: number; top: number; w: number; rot: number };
 const STICKERS: StickerCfg[] = [
   { img: "Hc4JLMsg7E5n5Unk9Lu6LIF9UM.png", left: 399, top: 137, w: 171, rot: -2 },
@@ -164,9 +220,21 @@ const STICKERS: StickerCfg[] = [
 ];
 
 /* ── Folder ─────────────────────────────────────────────── */
-const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered: boolean }) {
+const Folder = memo(function Folder({
+  cfg,
+  progress,
+}: {
+  cfg: FolderCfg;
+  progress: MotionValue<number>;
+}) {
   const [open, setOpen] = useState(false);
+  const reduce = useReducedMotion();
   const state = open ? "open" : "closed";
+
+  // Continuous scroll-linked slide-in (spring-chased progress).
+  const x = useTransform(progress, [0, 1], [cfg.from.x, 0]);
+  const y = useTransform(progress, [0, 1], [cfg.from.y, 0]);
+  const opacity = useTransform(progress, [0, 0.4], [0.001, 1]);
 
   return (
     <motion.div
@@ -177,10 +245,9 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
         width: FW,
         rotate: cfg.rot,
         pointerEvents: "auto",
+        // prefers-reduced-motion: pin the scroll-driven transforms to rest
+        ...(reduce ? {} : { x, y, opacity }),
       }}
-      initial={{ x: cfg.from.x, y: cfg.from.y, opacity: 0.001 }}
-      animate={entered ? { x: 0, y: 0, opacity: 1 } : { x: cfg.from.x, y: cfg.from.y, opacity: 0.001 }}
-      transition={ENTER_SPRING}
     >
       <div
         className="flex flex-col items-center"
@@ -188,7 +255,7 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
-        {/* folder art — back panel + fanning screenshots + 3D flap */}
+        {/* folder art — back silhouette + rising screenshots + 3D flap */}
         <div
           className="relative"
           style={{
@@ -211,13 +278,18 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
             className="pointer-events-none absolute inset-0 block h-full w-full"
           />
 
-          {/* screenshots — white-framed prints, revealed (and for SaaS, risen)
-              when the flap opens. Above the folder back, behind the flap. */}
+          {/* screenshots — laid out at their OPEN pose; the closed variant
+              translates them down into the pocket at scale 0.85. y/scale ride
+              the fast spring, x/rotate the slow one → rise, then fan. */}
           {cfg.shots.map((s, i) => (
             <motion.div
               key={cfg.key + i}
               className="absolute overflow-hidden rounded-[10px]"
               style={{
+                left: s.box.l,
+                top: s.box.t,
+                width: s.box.w,
+                height: s.box.h,
                 zIndex: 1,
                 border: "4px solid #fff",
                 boxShadow: "0 1px 3px rgba(90,90,90,0.3), 0 4px 10px rgba(0,0,0,0.10)",
@@ -225,10 +297,10 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
               initial={false}
               animate={state}
               variants={{
-                closed: { left: s.closed.l, top: s.closed.t, width: s.closed.w, height: s.closed.h, rotate: s.closed.rot },
-                open: { left: s.open.l, top: s.open.t, width: s.open.w, height: s.open.h, rotate: s.open.rot },
+                closed: { x: s.closed.dx, y: s.closed.dy, rotate: s.closed.rot, scale: 0.85 },
+                open: { x: 0, y: 0, rotate: s.openRot, scale: 1 },
               }}
-              transition={SPRING}
+              transition={shotTransition(i)}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -263,7 +335,7 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
               closed: { rotateX: 0, boxShadow: FLAP_SHADOW },
               open: { rotateX: -65, boxShadow: FLAP_SHADOW_NONE },
             }}
-            transition={SPRING}
+            transition={SPRING_FAST}
           >
             {/* light streak that sweeps across the flap on open */}
             <motion.div
@@ -281,7 +353,7 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
               initial={false}
               animate={state}
               variants={{ closed: { x: -73 }, open: { x: 258 } }}
-              transition={SPRING}
+              transition={SPRING_FAST}
             />
             {/* grain / noise overlay */}
             <div
@@ -315,7 +387,7 @@ const Folder = memo(function Folder({ cfg, entered }: { cfg: FolderCfg; entered:
             closed: { backgroundColor: "rgba(0,128,255,0)", color: "rgba(12,19,27,0.6)" },
             open: { backgroundColor: "rgba(0,128,255,1)", color: "rgba(255,255,255,1)" },
           }}
-          transition={SPRING}
+          transition={SPRING_FAST}
         >
           {cfg.label}
         </motion.div>
@@ -329,18 +401,20 @@ const Sticker = memo(function Sticker({
   cfg,
   index,
   scale,
-  entered,
+  progress,
 }: {
   cfg: StickerCfg;
   index: number;
   scale: number;
-  entered: boolean;
+  progress: MotionValue<number>;
 }) {
   const reduce = useReducedMotion();
+  // Scroll-linked bob lives on a WRAPPER — motion drag and scroll-bound
+  // transforms must not share one element.
   const outY = STICKER_OUT_Y[index % STICKER_OUT_Y.length];
-  const delay = STICKER_DELAY[index % STICKER_DELAY.length];
-  // Positioned in an UNSCALED overlay (so Framer Motion's drag maps 1:1 to the
-  // cursor); design-space coords are pre-multiplied by the board scale here.
+  const y = useTransform(progress, [0, 1], [outY, 0]);
+  const opacity = useTransform(progress, [0, 0.35], [0.001, 1]);
+
   return (
     <motion.div
       style={{
@@ -349,26 +423,27 @@ const Sticker = memo(function Sticker({
         top: cfg.top * scale,
         width: cfg.w * scale,
         pointerEvents: "auto",
-        rotate: cfg.rot,
-        cursor: "grab",
+        ...(reduce ? {} : { y, opacity }),
       }}
-      initial={{ opacity: 0.001, y: outY }}
-      animate={entered ? { opacity: 1, y: 0 } : { opacity: 0.001, y: outY }}
-      transition={{ ...STICKER_ENTER_SPRING, delay }}
-      drag={!reduce}
-      dragMomentum={false}
-      dragSnapToOrigin
-      dragTransition={{ bounceStiffness: 400, bounceDamping: 30 }}
-      whileTap={{ cursor: "grabbing" }}
-      onMouseDown={(e) => e.preventDefault()}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={A + cfg.img}
-        alt=""
-        draggable={false}
-        className="pointer-events-none block w-full select-none [-webkit-touch-callout:none] [-webkit-user-drag:none]"
-      />
+      {/* draggable layer — pointer maps 1:1 (this overlay is unscaled) */}
+      <motion.div
+        style={{ rotate: cfg.rot, cursor: "grab" }}
+        drag={!reduce}
+        dragMomentum={false}
+        dragSnapToOrigin
+        dragTransition={{ bounceStiffness: 400, bounceDamping: 30 }}
+        whileTap={{ cursor: "grabbing" }}
+        onMouseDown={(e) => e.preventDefault()}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={A + cfg.img}
+          alt=""
+          draggable={false}
+          className="pointer-events-none block w-full select-none [-webkit-touch-callout:none] [-webkit-user-drag:none]"
+        />
+      </motion.div>
     </motion.div>
   );
 });
@@ -377,10 +452,16 @@ export default function Toolkit() {
   const stageRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [ready, setReady] = useState(false);
-  // One entrance trigger for the whole board. NOT once: the reference
-  // re-animates every time the section enters the viewport and resets when it
-  // leaves (children spring back to their out poses).
-  const entered = useInView(stageRef, { amount: 0.25 });
+
+  // Continuous scroll binding: progress 0 when the section top hits the
+  // viewport bottom, 1 when the section center reaches the viewport center.
+  // Above 1 everything rests at 0; scrolling back up pulls children back
+  // toward their out poses. Spring-smoothed → slight lag + overshoot.
+  const { scrollYProgress } = useScroll({
+    target: stageRef,
+    offset: ["start end", "center center"],
+  });
+  const progress = useSpring(scrollYProgress, SCROLL_SPRING);
 
   useIsoLayoutEffect(() => {
     const el = stageRef.current;
@@ -428,13 +509,13 @@ export default function Toolkit() {
         <div className="absolute inset-0 overflow-clip rounded-[24px]" style={{ zIndex: 10, pointerEvents: "none" }}>
           {ready &&
             STICKERS.map((s, i) => (
-              <Sticker key={s.img} cfg={s} index={i} scale={scale} entered={entered} />
+              <Sticker key={s.img} cfg={s} index={i} scale={scale} progress={progress} />
             ))}
         </div>
 
         {/* folders — scaled to design space, painted over the stickers. The
-            clipping wrapper matches the board silhouette so pre-entrance
-            offsets never paint outside the board (reference clips too). */}
+            clipping wrapper matches the board silhouette so out-pose offsets
+            never paint outside the board (reference clips too). */}
         <div
           className="absolute inset-0 overflow-clip rounded-[24px]"
           style={{ zIndex: 20, pointerEvents: "none" }}
@@ -451,7 +532,7 @@ export default function Toolkit() {
             }}
           >
             {FOLDERS.map((f) => (
-              <Folder key={f.key} cfg={f} entered={entered} />
+              <Folder key={f.key} cfg={f} progress={progress} />
             ))}
           </div>
         </div>
