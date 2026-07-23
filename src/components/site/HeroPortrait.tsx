@@ -7,10 +7,11 @@ import { useEffect, useRef } from "react";
    very soft radial feather so every edge — hair, shoulders, the tee — dissolves
    into the background instead of ending on a hard rectangle. */
 
-// Opaque through the centre (the face), feathering out toward every edge. The
-// centre is nudged up to 44% because the face sits in the upper half of frame.
+// Opaque through the whole subject, feathering out only across the outer
+// margin (the video is padded with background so hair/shoulders never reach the
+// fade). Centre nudged up because the face sits in the upper half of frame.
 const FEATHER =
-  "radial-gradient(closest-side at 50% 44%, #000 58%, rgba(0,0,0,0.55) 78%, transparent 100%)";
+  "radial-gradient(closest-side at 50% 46%, #000 68%, rgba(0,0,0,0.5) 86%, transparent 100%)";
 
 export default function HeroPortrait() {
   const ref = useRef<HTMLVideoElement>(null);
@@ -32,7 +33,7 @@ export default function HeroPortrait() {
       muted
       playsInline
       aria-label="Denis"
-      className="h-[280px] w-[280px] object-cover"
+      className="h-[320px] w-[320px] object-cover"
       style={{
         maskImage: FEATHER,
         WebkitMaskImage: FEATHER,
