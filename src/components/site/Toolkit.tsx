@@ -3,7 +3,6 @@
 import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   motion,
-  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
@@ -228,7 +227,6 @@ const Folder = memo(function Folder({
   progress: MotionValue<number>;
 }) {
   const [open, setOpen] = useState(false);
-  const reduce = useReducedMotion();
   const state = open ? "open" : "closed";
 
   // Continuous scroll-linked slide-in (spring-chased progress).
@@ -245,8 +243,12 @@ const Folder = memo(function Folder({
         width: FW,
         rotate: cfg.rot,
         pointerEvents: "auto",
-        // prefers-reduced-motion: pin the scroll-driven transforms to rest
-        ...(reduce ? {} : { x, y, opacity }),
+        // scroll-driven motion is intentionally NOT gated behind
+        // prefers-reduced-motion — the reference site animates regardless,
+        // and the gate made the whole board read as static.
+        x,
+        y,
+        opacity,
       }}
     >
       <div
@@ -408,7 +410,6 @@ const Sticker = memo(function Sticker({
   scale: number;
   progress: MotionValue<number>;
 }) {
-  const reduce = useReducedMotion();
   // Scroll-linked bob lives on a WRAPPER — motion drag and scroll-bound
   // transforms must not share one element.
   const outY = STICKER_OUT_Y[index % STICKER_OUT_Y.length];
@@ -423,13 +424,14 @@ const Sticker = memo(function Sticker({
         top: cfg.top * scale,
         width: cfg.w * scale,
         pointerEvents: "auto",
-        ...(reduce ? {} : { y, opacity }),
+        y,
+        opacity,
       }}
     >
       {/* draggable layer — pointer maps 1:1 (this overlay is unscaled) */}
       <motion.div
         style={{ rotate: cfg.rot, cursor: "grab" }}
-        drag={!reduce}
+        drag
         dragMomentum={false}
         dragSnapToOrigin
         dragTransition={{ bounceStiffness: 400, bounceDamping: 30 }}
