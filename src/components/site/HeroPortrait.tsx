@@ -14,7 +14,7 @@ import { useEffect, useRef } from "react";
 //     radial fades, so without this the cut shows as a hard horizontal line.
 // Intersecting (min of both) means the tee dissolves well before its edge.
 const FEATHER = [
-  "radial-gradient(closest-side at 50% 46%, #000 66%, transparent 100%)",
+  "radial-gradient(closest-side at 50% 46%, #000 82%, transparent 100%)",
   "linear-gradient(to bottom, #000 58%, transparent 84%)",
 ].join(", ");
 
@@ -38,7 +38,7 @@ export default function HeroPortrait() {
       muted
       playsInline
       aria-label="Denis"
-      className="h-[320px] w-[320px] object-cover"
+      className="h-[340px] w-[340px] object-cover"
       style={{
         maskImage: FEATHER,
         WebkitMaskImage: FEATHER,
