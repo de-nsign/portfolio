@@ -2,10 +2,14 @@
 
 import { useEffect, useRef } from "react";
 
-/* Hero portrait — a looping, muted, 1.5×-sped clip of the illustrated portrait
+/* Hero portrait — a muted, 1.5×-sped clip of the illustrated portrait
    (speed baked into /videos/hero-portrait.mp4). It sits on the white page with a
    very soft radial feather so every edge — hair, shoulders, the tee — dissolves
-   into the background instead of ending on a hard rectangle. */
+   into the background instead of ending on a hard rectangle.
+
+   Playback ping-pongs (boomerang): forward to the end, then reversed back to the
+   start, then forward again — so it never hard-cuts / "loops". Native <video> has
+   no reverse, so the reverse leg is driven by rAF scrubbing currentTime. */
 
 // Two intersected mask layers:
 //  1) a radial feather that softens the hair, sides and top into the page, and
@@ -26,7 +30,39 @@ export default function HeroPortrait() {
     if (!v) return;
     // React can drop the muted attribute, which blocks autoplay — force it.
     v.muted = true;
+    v.loop = false;
     v.play().catch(() => {});
+
+    let raf = 0;
+    let last = 0;
+
+    // Reverse leg: scrub currentTime backwards at 1× until we reach the start,
+    // then hand back to normal forward playback.
+    const reverseStep = (now: number) => {
+      const dt = (now - last) / 1000;
+      last = now;
+      const next = v.currentTime - dt;
+      if (next <= 0) {
+        v.currentTime = 0;
+        v.play().catch(() => {});
+        return;
+      }
+      v.currentTime = next;
+      raf = requestAnimationFrame(reverseStep);
+    };
+
+    // Forward leg finished → kick off the reverse leg.
+    const onEnded = () => {
+      v.pause();
+      last = performance.now();
+      raf = requestAnimationFrame(reverseStep);
+    };
+
+    v.addEventListener("ended", onEnded);
+    return () => {
+      v.removeEventListener("ended", onEnded);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   return (
@@ -34,7 +70,6 @@ export default function HeroPortrait() {
       ref={ref}
       src="/videos/hero-portrait.mp4"
       autoPlay
-      loop
       muted
       playsInline
       aria-label="Denis"
