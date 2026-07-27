@@ -20,7 +20,7 @@ export default function Services() {
   const ctaLeft = (n - 1) * STEP_HOVER + CARD_W + CTA_GAP;
 
   return (
-    <section className="mx-auto max-w-[1056px] px-6 pt-32">
+    <section className="mx-auto max-w-[900px] px-6 pt-32">
       <h2 className="text-[40px] font-medium leading-[1.05] tracking-tight text-ink">
         I&apos;ve got your back with…
       </h2>

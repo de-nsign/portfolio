@@ -453,7 +453,7 @@ export default function Toolkit() {
   }, []);
 
   return (
-    <section className="mx-auto max-w-[1056px] overflow-x-clip px-6 pt-32">
+    <section className="mx-auto max-w-[900px] overflow-x-clip px-6 pt-32">
       <SectionHeader title="My Design Toolkit" />
 
       {/* aspect-ratio reserves the responsive height with no layout shift */}
