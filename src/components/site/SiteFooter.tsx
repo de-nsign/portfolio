@@ -9,11 +9,7 @@ type FooterLink = {
 const leftLinks: FooterLink[] = [
   { label: "CV", href: "https://drive.google.com/file/d/1iBGz-mkw7Ws-YhkJ4aESE29iOreENcyk/view?usp=sharing", external: true },
   { label: "Telegram", href: "https://t.me/de_nsign", external: true },
-];
-
-const rightLinks: FooterLink[] = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/denys-artemenko/", external: true },
-  { label: "Email", href: "mailto:denis.artemmenko@gmail.com", external: true },
 ];
 
 // Subtle scattered "starfield" behind the pill, echoing colin.cv.
@@ -96,12 +92,9 @@ export default function SiteFooter() {
           ))}
         </nav>
 
-        <nav className="flex flex-wrap items-center gap-x-7 gap-y-3">
-          <span className="text-[16px] text-neutral-500">Tbilisi, Georgia</span>
-          {rightLinks.map((link) => (
-            <FooterLinkItem key={link.label} link={link} />
-          ))}
-        </nav>
+        <span className="text-[16px] text-neutral-400">
+          ©2026 Denis Artemenko
+        </span>
       </div>
     </footer>
   );
