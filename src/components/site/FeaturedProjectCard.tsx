@@ -8,17 +8,13 @@ import { useRef, useState } from "react";
 /* ──────────────────────────────────────────────────────────
    Featured-project card — the xiaoyanghu.com "Featured
    Projects" hover behaviour ported onto our "Latest Projects"
-   cases. Default: a clean light panel (title + subtitle +
-   chips + illustration). On hover:
-     · the background fades up into a purple gradient
+   cases. Default: a clean bordered panel (title + chips +
+   illustration). On hover:
+     · the background fades up into a brand gradient wash
      · the native cursor is replaced by a "View project" pill
        that trails the pointer
      · the illustration scales up
-     · corner stickers pop in, staggered, with a spring overshoot
-   Sticker artwork is borrowed from the "My Design Toolkit"
-   block as a placeholder — the real per-project illustrations
-   land later; only the reveal behaviour is final here.
-   Timing/springs measured from a 60fps capture (see
+   Timing/easing measured from a 60fps capture (see
    .context/attachments/oZ845Y keyframes).
    ────────────────────────────────────────────────────────── */
 
@@ -32,76 +28,13 @@ type CardProject = {
   image?: string;
 };
 
-// Placeholder stickers pulled from /public/toolkit. left/top OR right/bottom
-// pin it to a corner; w is rendered width, natural w×h keeps the aspect ratio.
-type StickerCfg = {
-  img: string;
-  w: number;
-  nat: [number, number];
-  rot: number;
-  className: string;
+// Hover gradient wash. Default is the reference purple; VTB reads blue to match
+// its brand. Keyed by slug so more per-project accents can be added later.
+const PURPLE_WASH =
+  "linear-gradient(to top, #a069d6 0%, #b98ce6 34%, #e7d6f6 66%, #ffffff 100%)";
+const WASH_BY_SLUG: Record<string, string> = {
+  vtb: "linear-gradient(to top, #2f62d6 0%, #7fa2ea 34%, #d8e2f7 66%, #ffffff 100%)",
 };
-const STICKERS: StickerCfg[] = [
-  {
-    img: "Hc4JLMsg7E5n5Unk9Lu6LIF9UM.png",
-    w: 148,
-    nat: [1046, 654],
-    rot: -9,
-    className: "left-[2%] top-[26%]",
-  },
-  {
-    img: "CKx0X5X2nBOksjkOGkUnUkixNLM.png",
-    w: 92,
-    nat: [1024, 1131],
-    rot: -16,
-    className: "left-[7%] bottom-[8%]",
-  },
-  {
-    img: "11uTSPEyMSmvIjA5HXWrOzv3mHw.png",
-    w: 116,
-    nat: [1024, 1024],
-    rot: 11,
-    className: "right-[3%] top-[15%]",
-  },
-  {
-    img: "iZjp2e9ma3ldXL4DRyRBzmpiw.png",
-    w: 96,
-    nat: [1024, 1160],
-    rot: 15,
-    className: "right-[6%] bottom-[11%]",
-  },
-];
-
-const STICKER_SPRING = { type: "spring", stiffness: 420, damping: 22 } as const;
-
-function Sticker({ cfg, index, on }: { cfg: StickerCfg; index: number; on: boolean }) {
-  const h = Math.round((cfg.w * cfg.nat[1]) / cfg.nat[0]);
-  return (
-    <motion.div
-      className={`pointer-events-none absolute z-10 ${cfg.className}`}
-      style={{ width: cfg.w, height: h }}
-      initial={false}
-      animate={
-        on
-          ? { opacity: 1, scale: 1, y: 0, rotate: cfg.rot }
-          : { opacity: 0, scale: 0.6, y: 14, rotate: cfg.rot * 0.4 }
-      }
-      transition={
-        on
-          ? { ...STICKER_SPRING, delay: 0.12 + index * 0.05 }
-          : { duration: 0.18, ease: "easeIn" }
-      }
-    >
-      <Image
-        src={`/toolkit/${cfg.img}`}
-        alt=""
-        width={cfg.nat[0]}
-        height={cfg.nat[1]}
-        className="h-full w-full object-contain drop-shadow-[0_10px_20px_rgba(80,40,120,0.18)]"
-      />
-    </motion.div>
-  );
-}
 
 export default function FeaturedProjectCard({
   project,
@@ -128,39 +61,28 @@ export default function FeaturedProjectCard({
     <Link
       ref={ref}
       href={`/projects/${project.slug}`}
-      className="group relative block overflow-hidden rounded-3xl bg-neutral-50 [--pill:0px]"
+      className="group relative block overflow-hidden rounded-3xl border border-[rgba(12,19,27,0.1)] bg-neutral-50"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onMouseMove={onMove}
       style={{ cursor: hovered ? "none" : undefined }}
     >
-      {/* Purple gradient wash — fades up from the bottom on hover */}
+      {/* Gradient wash — fades up from the bottom on hover */}
       <motion.div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to top, #a069d6 0%, #b98ce6 34%, #e7d6f6 66%, #ffffff 100%)",
-        }}
+        style={{ background: WASH_BY_SLUG[project.slug] ?? PURPLE_WASH }}
         initial={false}
         animate={{ opacity: hovered ? 1 : 0 }}
         transition={{ duration: 0.26, ease: "easeOut" }}
       />
-
-      {/* Stickers */}
-      {STICKERS.map((s, i) => (
-        <Sticker key={s.img} cfg={s} index={i} on={hovered} />
-      ))}
 
       {/* Content */}
       <div className="relative z-[5] flex min-h-[460px] flex-col px-6 pt-14 text-center">
         <h3 className="mx-auto max-w-[640px] text-[28px] font-semibold leading-tight tracking-[-0.02em] text-ink sm:text-[32px]">
           {project.title}
         </h3>
-        <p className="mx-auto mt-3 max-w-[520px] text-[16px] leading-relaxed text-neutral-500">
-          {project.role} · {project.period}
-        </p>
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
           {project.tags.map((t) => (
             <span
               key={t}
