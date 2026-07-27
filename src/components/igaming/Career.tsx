@@ -125,7 +125,7 @@ export default function Career() {
   }, []);
 
   return (
-    <section className="mx-auto max-w-[1056px] px-6 pt-32">
+    <section className="mx-auto max-w-[900px] px-6 pt-32">
       <SectionHeader title="Career Ladder" count={career.length} />
 
       <div className="mt-10 flex gap-6 sm:gap-10">
