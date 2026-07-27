@@ -3,6 +3,7 @@ import Projects from "./Projects";
 import Toolkit from "./Toolkit";
 import Career from "./Career";
 import Testimonials from "./Testimonials";
+import SiteFooter from "./SiteFooter";
 import { latestProjects } from "@/lib/site-data";
 
 export default function HomeContent() {
@@ -14,6 +15,7 @@ export default function HomeContent() {
       <Toolkit />
       <Career />
       <Testimonials />
+      <SiteFooter />
     </main>
   );
 }
