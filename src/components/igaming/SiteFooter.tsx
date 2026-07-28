@@ -7,7 +7,7 @@ type FooterLink = {
 };
 
 const leftLinks: FooterLink[] = [
-  { label: "CV", href: "https://drive.google.com/file/d/1iBGz-mkw7Ws-YhkJ4aESE29iOreENcyk/view?usp=sharing", external: true },
+  { label: "CV", href: "https://drive.google.com/file/d/1FoMLH8uK4HLy3WyisldGcYLAs_FRg97P/view?usp=sharing", external: true },
   { label: "Telegram", href: "https://t.me/de_nsign", external: true },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/denys-artemenko/", external: true },
 ];

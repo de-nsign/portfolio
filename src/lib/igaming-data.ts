@@ -18,21 +18,22 @@ export type Project = {
 };
 
 export const projects: Project[] = [
-  {
-    // Placeholder ("пустышка") — casino product-design case to be filled in.
-    slug: "casino-design",
-    title: "Casino Design",
-    role: "Product Designer",
-    period: "2024 — 2026",
-    tags: ["iGaming", "Product Design", "Web"],
-    description:
-      "Placeholder — the casino product-design case. End-to-end UI/UX for the online casino platform: content, screens and imagery coming soon.",
-    image: "/images/design-system/casino-hero.png",
-    logoBg: "#0f0f10",
-    logoText: "C",
-    badges: ["Coming soon"],
-    metrics: ["TBD", "TBD", "TBD"],
-  },
+  // Hidden for now — Casino Design placeholder ("пустышка"). Stub case still
+  // lives at /projects/casino-design; re-add this card to surface it.
+  // {
+  //   slug: "casino-design",
+  //   title: "Casino Design",
+  //   role: "Product Designer",
+  //   period: "2024 — 2026",
+  //   tags: ["iGaming", "Product Design", "Web"],
+  //   description:
+  //     "Placeholder — the casino product-design case. End-to-end UI/UX for the online casino platform: content, screens and imagery coming soon.",
+  //   image: "/images/design-system/casino-hero.png",
+  //   logoBg: "#0f0f10",
+  //   logoText: "C",
+  //   badges: ["Coming soon"],
+  //   metrics: ["TBD", "TBD", "TBD"],
+  // },
   {
     slug: "casino-library",
     title: "Casino Library",
