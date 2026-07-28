@@ -32,8 +32,11 @@ type CardProject = {
 // its brand. Keyed by slug so more per-project accents can be added later.
 const PURPLE_WASH =
   "linear-gradient(to top, #a069d6 0%, #b98ce6 34%, #e7d6f6 66%, #ffffff 100%)";
+const BLUE_WASH =
+  "linear-gradient(to top, #2f62d6 0%, #7fa2ea 34%, #d8e2f7 66%, #ffffff 100%)";
 const WASH_BY_SLUG: Record<string, string> = {
-  vtb: "linear-gradient(to top, #2f62d6 0%, #7fa2ea 34%, #d8e2f7 66%, #ffffff 100%)",
+  vtb: BLUE_WASH,
+  "vtb-design": BLUE_WASH,
 };
 
 export default function FeaturedProjectCard({

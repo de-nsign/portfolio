@@ -654,7 +654,68 @@ const mobileDesignSystem: DesignCaseData = {
   prev: { href: "/projects/vtb", label: "previous case · VTB" },
 };
 
+/* ------------------------------------------------------------------ */
+/*  Casino Design — placeholder ("пустышка"). A stub case so the card    */
+/*  routes somewhere; empty-string images render dashed "add image"      */
+/*  slots. Fill in copy and imagery later.                               */
+/* ------------------------------------------------------------------ */
+
+const casinoDesign: DesignCaseData = {
+  brand: "Casino",
+  monogram: "C",
+  monogramBg: "#0f0f10",
+  tags: ["iGaming", "product design", "web"],
+  title: "casino product design — case coming soon",
+  subtitle:
+    "Placeholder for the casino product-design case. End-to-end UI/UX for the online casino platform — the write-up, screens and imagery are on the way.",
+  coverImage: "/images/design-system/casino-hero.png",
+  coverAlt: "Casino design case — placeholder cover",
+
+  problemLabel: "problem",
+  problemHeading: "to be written",
+  problems: [
+    { n: "01", title: "Placeholder", body: "Problem framing to be added." },
+    { n: "02", title: "Placeholder", body: "Problem framing to be added." },
+  ],
+
+  doingLabel: "what i did",
+  doingHeading: "to be written",
+  doingDesc: "A short summary of the casino design work will go here.",
+  doingMetrics: [
+    { value: "TBD", label: "placeholder" },
+    { value: "TBD", label: "placeholder" },
+    { value: "TBD", label: "placeholder" },
+  ],
+  steps: [
+    { n: "01", body: "Step to be added." },
+    { n: "02", body: "Step to be added." },
+  ],
+
+  showcases: [
+    {
+      label: "01 — placeholder",
+      title: "showcase to be added",
+      body: "Add a screen or artifact here.",
+      image: "",
+      alt: "Placeholder",
+    },
+  ],
+
+  resultLabel: "result",
+  resultHeading: "to be written",
+  resultLead: "Outcomes and metrics for the casino design case will go here.",
+  forEngineers: ["Placeholder."],
+  forDesigners: ["Placeholder."],
+  resultMetrics: [
+    { value: "TBD", label: "placeholder" },
+    { value: "TBD", label: "placeholder" },
+    { value: "TBD", label: "placeholder" },
+  ],
+  prev: { href: "/igaming", label: "all projects" },
+};
+
 export const designCases: Record<string, DesignCaseData> = {
+  "casino-design": casinoDesign,
   "casino-library": casinoLibrary,
   vtb,
   "vtb-design": vtbDesign,

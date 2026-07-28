@@ -19,6 +19,21 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    // Placeholder ("пустышка") — casino product-design case to be filled in.
+    slug: "casino-design",
+    title: "Casino Design",
+    role: "Product Designer",
+    period: "2024 — 2026",
+    tags: ["iGaming", "Product Design", "Web"],
+    description:
+      "Placeholder — the casino product-design case. End-to-end UI/UX for the online casino platform: content, screens and imagery coming soon.",
+    image: "/images/design-system/casino-hero.png",
+    logoBg: "#0f0f10",
+    logoText: "C",
+    badges: ["Coming soon"],
+    metrics: ["TBD", "TBD", "TBD"],
+  },
+  {
     slug: "casino-library",
     title: "Casino Library",
     role: "System Designer",
@@ -57,27 +72,6 @@ export const projects: Project[] = [
       "/images/home/vtb/ds-dark.webp",
       "/images/home/vtb/ds-atoms-blocks.webp",
       "/images/home/vtb/ds-colors.webp",
-    ],
-  },
-  {
-    slug: "mobile-design-system",
-    title: "ECOS",
-    role: "Designer",
-    period: "2024",
-    tags: ["Design System", "Fintech", "Mobile"],
-    description:
-      "A design system for the ECOS fintech mobile app — from a scattered UI-kit to a living, token-driven system with color, typography and spacing tokens, 100+ components, a dark theme and one shared language for designers and engineers across iOS and Android.",
-    image: "/images/design-system/ecos-hero.png",
-    logo: "/images/design-system/ecos-app-icon.png",
-    logoBg: "#0f0f10",
-    logoText: "E",
-    badges: ["100+ components", "Dark theme", "Mobile"],
-    metrics: ["6 token tiers", "100+ components", "Token-driven"],
-    gallery: [
-      "/images/design-system/ecos-colors.png",
-      "/images/design-system/ecos-typography-scale.png",
-      "/images/design-system/ecos-icons.png",
-      "/images/design-system/ecos-spacing.png",
     ],
   },
 ];
