@@ -93,14 +93,14 @@ export const career: CareerEntry[] = [
     period: "2024 — 2026",
     projects: ["Casino Library"],
     blurb:
-      "Led end-to-end UX for 5 casino brands — registration, deposit and retention across web and mobile. Built a multi-brand design system (28 brand configs on a three-tier token architecture in Figma Variables + Tokens Studio) that cut new-brand launch from 3 weeks to 4 days, shipped a CMS for banners, bonuses and promos that dropped routine design requests ~40%, and redesigned the reg-to-deposit funnel for +18% conversion.",
+      "Design lead across five casino brands — I owned registration, deposit and retention on web and mobile, and built the multi-brand system underneath them: 28 brand configs on a three-tier token architecture that took new-brand launches from three weeks to four days. Shipped a CMS that lets marketing run bonus and promo campaigns without a designer, and rebuilt the reg-to-deposit funnel for +18% conversion.",
   },
   {
     company: "ValsyDev",
     role: "Product Designer",
     period: "2022 — 2024",
     blurb:
-      "Owned UI/UX for 6 web and mobile products from discovery to handoff. Turned business requirements into scalable interfaces (−30% dev rework) and established the team's first shared component library and handoff docs, cutting design-to-dev clarification cycles from 12 to 4 per sprint.",
+      "Ran UI/UX end to end on six web and mobile products, discovery through handoff. Turned fuzzy business requirements into interfaces that held up in build (−30% rework) and stood up the team's first shared component library and handoff docs — clarification loops with engineering fell from twelve a sprint to four.",
   },
   {
     company: "Pinkman",
@@ -108,7 +108,7 @@ export const career: CareerEntry[] = [
     period: "2021 — 2022",
     projects: ["VTB"],
     blurb:
-      "Redesigned VTB's public website end to end — 9 marketing products and landing pages within strict brand guidelines, an atoms-up interface and a language of 1000+ illustrations. Lead volume rose ~25%, traffic roughly doubled and bounce on key pages dropped ~64%.",
+      "Redesigned VTB's public website — nine marketing products and landing pages inside a strict brand system, an interface built atoms-up, and a library of 1000+ illustrations that set the bank apart. Leads up ~25%, traffic roughly doubled, bounce on key pages down 64%.",
     logo: "/images/home/pinkman-logo.svg",
   },
   {
@@ -116,14 +116,14 @@ export const career: CareerEntry[] = [
     role: "UI/UX Designer",
     period: "2020 — 2021",
     blurb:
-      "Designed UI/UX for enterprise digital platforms, improving the usability of complex user flows in close collaboration with stakeholders and art directors.",
+      "UI/UX for enterprise platforms — untangling dense, high-complexity user flows and making them usable, working directly with stakeholders and art directors.",
   },
   {
     company: "Comodo",
     role: "Junior System Designer",
     period: "2018 — 2020",
     blurb:
-      "First design role — UI/UX for web platforms and marketing materials, building reusable UI components with marketing and development teams.",
+      "Where I started — UI/UX for web platforms and marketing, and my first reusable UI components, built hand-in-hand with marketing and dev.",
   },
 ];
 

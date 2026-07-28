@@ -37,11 +37,12 @@ export default function Hero() {
         Design System Designer
       </h1>
 
-      <p className="mt-5 max-w-[440px] text-[17px] leading-[1.6] text-neutral-500">
-        I build design systems and product experiences that scale — multi-brand
-        component libraries, token architecture and CMS for iGaming, FinTech and
-        complex digital platforms. 7 years turning business goals into
-        conversion-focused UX, based in Tbilisi, Georgia.
+      <p className="mt-5 max-w-[460px] text-[17px] leading-[1.6] text-neutral-500">
+        Seven years designing for iGaming, FinTech and complex digital
+        platforms — casino UX across multiple brands, multi-brand design systems,
+        CMS tooling and conversion flows that move the numbers. I turn tangled,
+        multi-team product work into systems that scale, then ship them
+        shoulder-to-shoulder with engineering. Based in Tbilisi, Georgia.
       </p>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
