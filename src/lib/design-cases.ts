@@ -359,6 +359,158 @@ const vtb: DesignCaseData = {
 };
 
 /* ------------------------------------------------------------------ */
+/*  VTB — design-focused cut of the same engagement.                    */
+/*  Same work, reframed from "we built a design system" to "we designed  */
+/*  the site and its graphics". Lives at /projects/vtb-design and is      */
+/*  linked from the iGaming version of the home.                          */
+/* ------------------------------------------------------------------ */
+
+const vtbDesign: DesignCaseData = {
+  brand: "VTB",
+  monogram: "В",
+  monogramBg: "#0a2896",
+  tags: ["fintech • web redesign", "web • public bank site", "2021 — 2022"],
+  title: "redesigning the public site of one of Russia's largest banks",
+  subtitle:
+    "VTB set out to build the best banking site in the country and make the whole customer experience more effective. We redesigned the public website end to end — turning a remote, multi-team process into shared guidelines, designing the interface atoms-up, and building a graphics language of 1000+ illustrations that set the bank apart.",
+  coverImage: "/images/design-system/vtb-hero.webp",
+  coverAlt:
+    "VTB website redesign — interface and graphics for one of Russia's largest banks",
+
+  problemLabel: "brief",
+  problemHeading: "the best banking site — from scattered teams and a page-by-page site",
+  problems: [
+    {
+      n: "01",
+      title: "One brief: the best banking site",
+      body: "The bank came to us to build the best banking site in the country and make the customer experience measurably more effective. Everything downstream had to serve that goal.",
+    },
+    {
+      n: "02",
+      title: "Scattered teams, a remote process",
+      body: "Separate teams on both sides, hundreds of tasks in the backlog, a stack of technical constraints and a fully remote format — with no shared, transparent way of working.",
+    },
+    {
+      n: "03",
+      title: "A site drawn page by page",
+      body: "Hundreds of product pages — cards, mortgage, auto loans, deposits, business — laid out by hand, with nothing reused and nothing staying consistent.",
+    },
+    {
+      n: "04",
+      title: "A brand that blended in",
+      body: "In a sea of financial brands, VTB needed graphics and communications distinctive enough to pull attention and carry product and service promotion.",
+    },
+  ],
+
+  doingLabel: "what i did",
+  doingHeading: "an experience designed from atoms up to graphics",
+  doingDesc:
+    "Made the process transparent for both sides, designed the interface bottom-up from fields and controls to full marketing pages, and built a graphics language of 1000+ illustrations — all packaged as guidelines the bank's team could carry forward.",
+  doingMetrics: [
+    { value: "1000+", label: "illustrations + guidelines" },
+    { value: "atoms → pages", label: "designed bottom-up" },
+    { value: "remote · teams of 4", label: "one transparent process" },
+  ],
+  steps: [
+    {
+      n: "01",
+      body: "Made the process transparent — turned scattered teams, a deep backlog and a remote format into a shared, legible way of working for both the bank and pinkman.",
+    },
+    {
+      n: "02",
+      body: "Designed atoms-up — started with forms, fields, inputs, buttons and controls, watching how each scaled into the marketing parts of the site.",
+    },
+    {
+      n: "03",
+      body: "Scaled atoms into full pages — composed them into blocks and complete product pages across every segment, so hundreds of pages stayed consistent.",
+    },
+    {
+      n: "04",
+      body: "Built a graphics language — designed 1000+ illustrations and the communications that strengthened service and product promotion and set VTB apart from other banks.",
+    },
+    {
+      n: "05",
+      body: "Packaged everything as guidelines — systematized the material into guidelines and technical specs so the bank's team could keep building on it.",
+    },
+  ],
+
+  showcases: [
+    {
+      label: "01 — interface, atoms up",
+      title: "the interface, designed bottom-up",
+      body: "Fields, inputs, buttons and controls — the atoms — compose into blocks like steps, onboarding, menus, headers and footers. Every screen is designed from this catalog, not from a blank canvas.",
+      image: "/images/home/vtb/ds-atoms-blocks.webp",
+      alt: "VTB interface elements — an atoms-to-blocks catalog for the redesigned site",
+      bleed: true,
+    },
+    {
+      label: "02 — every state",
+      title: "each control, every state designed",
+      body: "Buttons, chips and toggles designed across default, hover, active and their combinations, on desktop and mobile — so the experience holds up in every edge case.",
+      image: "/images/home/vtb/ds-states.webp",
+      alt: "VTB buttons, chips and toggles designed across all their states",
+      bleed: true,
+    },
+    {
+      label: "03 — a screen in full",
+      title: "the mortgage calculator, top to bottom",
+      body: "One flow as the redesign in miniature — designed across every breakpoint, its mobile and desktop behavior, error states, and both light and dark. Nothing left to guesswork.",
+      image: "/images/projects/vtb/ds-calculator.png",
+      alt: "The VTB mortgage calculator designed across sizes, states and light/dark",
+      bleed: true,
+    },
+    {
+      label: "04 — segment themes",
+      title: "a look for every segment",
+      body: "Basic, ATM, Privilege, Private Banking — each segment gets its own visual treatment from one coherent color scheme, keeping the whole site on-brand.",
+      image: "/images/home/vtb/ds-colors.webp",
+      alt: "The VTB color treatments across Basic, ATM, Privilege and Private Banking",
+      bleed: true,
+    },
+    {
+      label: "05 — dark for accessibility",
+      title: "a dark theme for low-vision users",
+      body: "A full dark theme — designed for clients with vision difficulties — raising the site's accessibility, not a filter dropped over the light one.",
+      image: "/images/home/vtb/ds-dark.webp",
+      alt: "VTB site components rendered in a dark theme built for accessibility",
+      bleed: true,
+    },
+    {
+      label: "06 — pages, assembled",
+      title: "designed parts into whole pages",
+      body: "Blocks compose into complete product pages across every segment — a new landing arranged from ready parts, which is what keeps hundreds of pages consistent.",
+      image: "/images/projects/vtb/ds-pages.png",
+      alt: "A map of VTB product pages assembled from shared, designed blocks",
+      bleed: true,
+    },
+  ],
+
+  resultLabel: "result",
+  resultHeading: "more valuable to customers, by the numbers",
+  resultLead:
+    "The redesign helped the bank grow its value to customers — reflected in a doubling of traffic, triple the scroll depth and more. It shipped as a working experience, not a deck.",
+  forEngineers: [
+    "Load speed on the top-10 pages cut in half — through the design system and graphics optimization.",
+    "Every state and breakpoint designed and specced, so less was left to interpretation at build.",
+    "A dark theme built as a real, full experience — accessibility for low-vision users, not a filter.",
+  ],
+  forDesigners: [
+    "Pages designed from ready blocks instead of drawn from scratch — consistency across hundreds of them.",
+    "A graphics language of 1000+ illustrations that set VTB apart among financial brands.",
+    "Guidelines and specs the bank's team could keep building on after handoff.",
+  ],
+  resultMetrics: [
+    { value: "traffic ×2", label: "after the redesign" },
+    { value: "depth ×3", label: "pages per visit" },
+    { value: "conversion +30%", label: "visits to product application" },
+    { value: "load ×2 faster", label: "top-10 pages" },
+    { value: "bounce −64%", label: "navigation & architecture" },
+    { value: "16M", label: "visitors in 2021" },
+  ],
+  prev: { href: "/igaming", label: "all projects" },
+};
+
+/* ------------------------------------------------------------------ */
 /*  ECOS — design system for a fintech mobile app                       */
 /*  Content ported from the earlier portfolio's design-system case.     */
 /* ------------------------------------------------------------------ */
@@ -505,5 +657,6 @@ const mobileDesignSystem: DesignCaseData = {
 export const designCases: Record<string, DesignCaseData> = {
   "casino-library": casinoLibrary,
   vtb,
+  "vtb-design": vtbDesign,
   "mobile-design-system": mobileDesignSystem,
 };

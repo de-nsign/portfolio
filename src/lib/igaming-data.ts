@@ -35,16 +35,16 @@ export const projects: Project[] = [
       "https://embed.figma.com/design/hIEuNxuW2WPrUjve1kB7Pb/Library?node-id=0-1&embed-host=share",
   },
   {
-    slug: "vtb",
+    slug: "vtb-design",
     title: "VTB",
-    role: "System Designer",
+    role: "Product Designer",
     period: "2021 — 2022",
-    tags: ["Design System", "Fintech", "Web"],
+    tags: ["Web Redesign", "Fintech", "Graphics"],
     description:
-      "The first design system for the public website of VTB — one of Russia's largest banks. An atomic library scaling from fields, inputs and controls up to blocks and full marketing pages, unified into six segment color themes plus a first-class dark mode from a single tokenized color set, and documented to every state and breakpoint as one source of truth for the team",
+      "The full redesign of the public website of VTB — one of Russia's largest banks — built to make the best banking site in the country and a more effective customer experience. A remote, multi-team process turned into shared guidelines, an interface designed atoms-up from fields and controls to full marketing pages, and a graphics language of 1000+ illustrations that set the bank apart among financial brands",
     image: "/images/design-system/vtb-hero.webp",
     logo: "/images/logos/vtb.png",
-    badges: ["Atoms → Blocks", "6 color themes", "Dark theme"],
+    badges: ["Atoms → Pages", "1000+ illustrations", "Dark theme"],
     metrics: [
       "Traffic ×2",
       "Scroll depth ×3",
@@ -108,11 +108,11 @@ export const career: CareerEntry[] = [
   },
   {
     company: "Pinkman",
-    role: "System Designer",
+    role: "Product Designer",
     period: "2021 — 2022",
     projects: ["VTB"],
     blurb:
-      "Built VTB's first design system for the bank's public website — six segment color themes plus dark mode from a single tokenized color set, documented to every state and breakpoint. The redesign shipped on the system: traffic roughly doubled and bounce on key pages dropped ~64%.",
+      "Redesigned the public website of VTB end to end — interface designed atoms-up from fields and controls to full marketing pages, plus a graphics language of 1000+ illustrations that set the bank apart. Traffic roughly doubled, scroll depth tripled and bounce on key pages dropped ~64%.",
     logo: "/images/home/pinkman-logo.svg",
   },
   {
