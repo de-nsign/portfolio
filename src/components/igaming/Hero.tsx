@@ -42,7 +42,7 @@ export default function Hero() {
         platforms — casino UX across multiple brands, multi-brand design systems,
         CMS tooling and conversion flows that move the numbers. I turn tangled,
         multi-team product work into systems that scale, then ship them
-        shoulder-to-shoulder with engineering. Based in Tbilisi, Georgia.
+        shoulder-to-shoulder with engineering.
       </p>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
