@@ -42,7 +42,7 @@ export const projects: Project[] = [
     tags: ["Web Redesign", "Fintech", "Graphics"],
     description:
       "The full redesign of the public website of VTB — one of Russia's largest banks — built to make the best banking site in the country and a more effective customer experience. A remote, multi-team process turned into shared guidelines, an interface designed atoms-up from fields and controls to full marketing pages, and a graphics language of 1000+ illustrations that set the bank apart among financial brands",
-    image: "/images/design-system/vtb-hero.webp",
+    image: "/images/projects/vtb/vtb-site-hero.png",
     logo: "/images/logos/vtb.png",
     badges: ["Atoms → Pages", "1000+ illustrations", "Dark theme"],
     metrics: [

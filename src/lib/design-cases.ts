@@ -373,9 +373,9 @@ const vtbDesign: DesignCaseData = {
   title: "redesigning the public site of one of Russia's largest banks",
   subtitle:
     "VTB set out to build the best banking site in the country and make the whole customer experience more effective. We redesigned the public website end to end — turning a remote, multi-team process into shared guidelines, designing the interface atoms-up, and building a graphics language of 1000+ illustrations that set the bank apart.",
-  coverImage: "/images/design-system/vtb-hero.webp",
+  coverImage: "/images/projects/vtb/vtb-site-hero.png",
   coverAlt:
-    "VTB website redesign — interface and graphics for one of Russia's largest banks",
+    "The redesigned VTB homepage — hero graphics, product cards and full navigation",
 
   problemLabel: "brief",
   problemHeading: "the best banking site — from scattered teams and a page-by-page site",
