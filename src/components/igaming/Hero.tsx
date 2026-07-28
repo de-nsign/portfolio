@@ -34,7 +34,7 @@ export default function Hero() {
       <p className="mt-1 text-[17px] text-neutral-500">Hi, I&apos;m Denis!</p>
 
       <h1 className="hero-heading mt-3 max-w-[460px] py-1 text-[40px] font-semibold leading-[1.2] tracking-[-0.04em]">
-        Design System Designer
+        Product Designer
       </h1>
 
       <p className="mt-5 max-w-[460px] text-[17px] leading-[1.6] text-neutral-500">
