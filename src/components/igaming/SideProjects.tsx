@@ -35,23 +35,19 @@ export default function SideProjects() {
           return (
             <article key={p.slug} className="group">
               <div
-                className="flex items-center justify-center rounded-[28px] py-12"
+                className="relative flex justify-center px-6 pt-12 pb-16"
                 style={{ backgroundColor: PANEL_TINTS[i % PANEL_TINTS.length] }}
               >
                 <PhoneMock src={p.image} alt={`${p.title} — concept`} />
-              </div>
 
-              <p className="mt-5 flex items-center gap-2 font-mono text-[13px] tracking-wide text-neutral-400">
-                {kinds.map((k, j) => (
-                  <span key={k} className="flex items-center gap-2">
-                    {j > 0 && <span aria-hidden>·</span>}
-                    {k}
-                  </span>
-                ))}
-              </p>
-              <h3 className="mt-1.5 text-[18px] font-medium tracking-tight text-ink">
-                {p.title}
-              </h3>
+                {/* Caption tucked into the bottom corners of the card */}
+                <p className="absolute bottom-5 left-6 font-mono text-[13px] tracking-wide text-neutral-500">
+                  {kinds.join(" · ")}
+                </p>
+                <h3 className="absolute bottom-5 right-6 text-[18px] font-medium tracking-tight text-ink">
+                  {p.title}
+                </h3>
+              </div>
             </article>
           );
         })}
