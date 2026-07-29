@@ -35,18 +35,20 @@ export default function SideProjects() {
           return (
             <article key={p.slug} className="group">
               <div
-                className="relative flex justify-center px-6 pt-12 pb-16"
+                className="relative flex justify-center px-6 pt-12 pb-20"
                 style={{ backgroundColor: PANEL_TINTS[i % PANEL_TINTS.length] }}
               >
                 <PhoneMock src={p.image} alt={`${p.title} — concept`} />
 
-                {/* Caption tucked into the bottom corners of the card */}
-                <p className="absolute bottom-5 left-6 font-mono text-[13px] tracking-wide text-neutral-500">
-                  {kinds.join(" · ")}
-                </p>
-                <h3 className="absolute bottom-5 right-6 text-[18px] font-medium tracking-tight text-ink">
-                  {p.title}
-                </h3>
+                {/* Caption tucked into the bottom corner — title first, tags below */}
+                <div className="absolute bottom-6 left-6">
+                  <h3 className="text-[17px] font-medium leading-none tracking-tight text-ink">
+                    {p.title}
+                  </h3>
+                  <p className="mt-2 font-mono text-[13px] tracking-wide text-neutral-500">
+                    {kinds.join(" · ")}
+                  </p>
+                </div>
               </div>
             </article>
           );
