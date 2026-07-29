@@ -157,14 +157,14 @@ export const sideActivity = projects.slice(6);
    pages, so the cards are static). Swap in real titles/copy as needed. */
 export const sideProjects: Project[] = [
   {
-    slug: "gem-x",
-    title: "GEM X",
+    slug: "tanemi",
+    title: "Tanemi",
     role: "Concept · UI",
     period: "2024",
-    tags: ["Concept", "Mobile", "Rewards"],
+    tags: ["Concept", "Coaching", "Mobile"],
     description:
-      "A concept rewards app — collectible gem cases, a points balance and a clean, glassy mobile UI explored end to end.",
-    image: "/images/home/gallery/variants/gemx-grid.jpg",
+      "The everything coach app — a client-roster concept for fitness coaches, keeping athletes and their check-ins connected in one clean mobile UI.",
+    image: "/images/projects/tanemi/tanemi-screen.png",
   },
   {
     slug: "swipedish",
@@ -175,16 +175,6 @@ export const sideProjects: Project[] = [
     description:
       "A swipe-to-choose food concept — a playful card interface for picking what to eat, with bold color and motion.",
     image: "/images/home/gallery/variants/swipedish-green.jpg",
-  },
-  {
-    slug: "dreamguard",
-    title: "DreamGuard",
-    role: "Concept · Visual",
-    period: "2024",
-    tags: ["Concept", "Branding", "Poster"],
-    description:
-      "A sleep-tech visual exploration — poster and identity direction for a fictional dream-tracking product.",
-    image: "/images/home/gallery/variants/dreamguard-poster.jpg",
   },
 ];
 
