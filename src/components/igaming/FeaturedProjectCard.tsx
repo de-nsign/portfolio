@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useMotionValue } from "motion/react";
 import { useRef, useState } from "react";
@@ -41,12 +40,6 @@ const WASH_BY_SLUG: Record<string, string> = {
   vtb: BLUE_WASH,
   "vtb-design": BLUE_WASH,
   stroika: ORANGE_WASH,
-};
-
-// Per-slug crop for the illustration. Defaults to object-top; Stroika's hero is
-// a wide fleet shot, so centre the crop to keep the machines in frame.
-const IMAGE_POS_BY_SLUG: Record<string, string> = {
-  stroika: "object-center",
 };
 
 // Decorative "stickers" that pop in around the illustration on hover. Cut-out
@@ -96,7 +89,6 @@ export default function FeaturedProjectCard({
 }) {
   const [hovered, setHovered] = useState(false);
   const stickers = STICKERS_BY_SLUG[project.slug];
-  const imagePos = IMAGE_POS_BY_SLUG[project.slug] ?? "object-top";
   const ref = useRef<HTMLAnchorElement>(null);
   // Pointer position, kept in motion values so the pill can follow without
   // re-rendering the whole card on every mouse move.
@@ -168,18 +160,17 @@ export default function FeaturedProjectCard({
           transition={{ duration: 0.32, ease: [0.22, 0.61, 0.36, 1] }}
         >
           {project.image ? (
-            <div className="mx-auto aspect-[16/10] w-[86%] self-center overflow-hidden rounded-[24px] border-[7px] border-black bg-black shadow-[0_24px_60px_-20px_rgba(40,20,70,0.35)]">
-              <Image
+            <div className="mx-auto w-[80%] self-center overflow-hidden rounded-[24px] border-[7px] border-black bg-black shadow-[0_24px_60px_-20px_rgba(40,20,70,0.35)]">
+              {/* Natural aspect ratio — the frame hugs the whole screenshot, no crop */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={project.image}
                 alt={`${project.title} — illustration`}
-                width={1920}
-                height={1080}
-                className={`h-full w-full rounded-[16px] object-cover ${imagePos}`}
-                priority={priority}
+                className="block w-full rounded-[16px]"
               />
             </div>
           ) : (
-            <div className="mx-auto aspect-[16/10] w-[86%] self-center rounded-[24px] border-[7px] border-black bg-neutral-200" />
+            <div className="mx-auto aspect-[16/10] w-[80%] self-center rounded-[24px] border-[7px] border-black bg-neutral-200" />
           )}
         </motion.div>
       </div>
