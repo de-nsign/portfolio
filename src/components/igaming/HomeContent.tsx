@@ -13,7 +13,7 @@ export default function HomeContent() {
     <main>
       <Hero />
 
-      <Projects title="Latest Projects" items={latestProjects} framed />
+      <Projects title="Latest Projects" items={latestProjects} />
       <SideProjects />
       <Toolkit />
       <Career />
