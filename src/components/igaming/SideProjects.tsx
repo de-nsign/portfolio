@@ -29,7 +29,7 @@ export default function SideProjects() {
     <section className="mx-auto max-w-[900px] px-6 pt-32">
       <SectionHeader title="Side Projects" count={sideProjects.length} />
 
-      <div className="mt-10 grid grid-cols-1 gap-x-3 gap-y-10 sm:grid-cols-2">
+      <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {sideProjects.map((p, i) => {
           const kinds = p.tags.slice(0, 2).map((t) => t.toLowerCase());
           return (
