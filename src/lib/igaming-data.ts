@@ -75,6 +75,20 @@ export const projects: Project[] = [
       "/images/home/vtb/ds-colors.webp",
     ],
   },
+  {
+    slug: "stroika",
+    title: "Stroika",
+    role: "Product Designer",
+    period: "2026",
+    tags: ["Web Design", "Construction", "Branding"],
+    description:
+      "A heavy-equipment rental brand for Cyprus construction, designed end to end to read as the partner you trust with a whole site — not a vendor. One orange-forward identity, a hero that stages the entire fleet in a single frame, an equipment taxonomy across three weight classes, a 30+ service catalog where every line gets its own 3D render, and a spec-driven quote funnel built around how contractors actually order machines",
+    image: "/images/projects/stroika/stroika-hero.webp",
+    logoBg: "#e2571e",
+    logoText: "S",
+    badges: ["Brand → Site", "30+ 3D renders", "Quote funnel"],
+    metrics: ["30+ machines", "3 equipment classes", "30+ services", "Single-contract"],
+  },
 ];
 
 export type CareerEntry = {

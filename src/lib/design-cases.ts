@@ -714,10 +714,152 @@ const casinoDesign: DesignCaseData = {
   prev: { href: "/igaming", label: "all projects" },
 };
 
+/* ------------------------------------------------------------------ */
+/*  Stroika — a heavy-equipment rental brand for Cyprus construction.   */
+/*  Product-design case: brand, fleet system, rendered service catalog  */
+/*  and a spec-driven quote funnel. Lives at /projects/stroika and is    */
+/*  linked from the iGaming home, right after VTB.                        */
+/* ------------------------------------------------------------------ */
+
+const stroika: DesignCaseData = {
+  brand: "Stroika",
+  monogram: "S",
+  monogramBg: "#e2571e",
+  tags: ["construction • marketing site", "web • heavy-equipment rental", "2026"],
+  title: "a heavy-equipment rental brand, built to win contracts",
+  subtitle:
+    "Designing Stroika end to end — a Cyprus construction-equipment rental company that had to read as the partner you trust with a whole site, not a vendor you haggle with. One orange-forward brand, a fleet staged as the hero, a 30+ service catalog where every line gets its own 3D render, and a quote funnel built around how contractors actually spec a job.",
+  coverImage: "/images/projects/stroika/stroika-hero.webp",
+  coverAlt:
+    "The Stroika hero — the whole fleet of orange construction machinery staged on one lot",
+
+  problemLabel: "brief",
+  problemHeading: "one contract-winning site, from a commodity category",
+  problems: [
+    {
+      n: "01",
+      title: "A commodity category",
+      body: "Equipment rental reads as interchangeable — price lists and stock photos. Stroika had to look like the integrated partner you hand a whole site to, under a single contract.",
+    },
+    {
+      n: "02",
+      title: "A fleet nobody could picture",
+      body: "30+ machines across three weight classes, with no way for a contractor to grasp the range at a glance or map it to the job in front of them.",
+    },
+    {
+      n: "03",
+      title: "Services buried in text",
+      body: "Land clearing to final landscaping — 20+ services and 13 rental types — the kind of list that blurs into a wall of words on every competitor's site.",
+    },
+    {
+      n: "04",
+      title: "Quotes that went nowhere",
+      body: "The whole funnel is the quote request, but a generic contact box never captures what a contractor needs — machine, attachment, project phase, location.",
+    },
+  ],
+
+  doingLabel: "what i did",
+  doingHeading: "a brand, a fleet system and a quote funnel",
+  doingDesc:
+    "Designed the whole site — brand and hero, an equipment taxonomy, a fully-rendered service catalog, the trust layer and a structured quote funnel — around one idea: Stroika as an integrated partner, not a vendor.",
+  doingMetrics: [
+    { value: "30+", label: "machines, one system" },
+    { value: "3 classes", label: "light · medium · heavy" },
+    { value: "30+", label: "services, each rendered" },
+  ],
+  steps: [
+    {
+      n: "01",
+      body: "Set the brand — an orange-forward identity and a hero that stages the whole fleet in one shot, so the range registers before a word is read.",
+    },
+    {
+      n: "02",
+      body: "Built the equipment taxonomy — three weight classes (light / medium / heavy) that let a contractor place their job in seconds instead of reading a spec sheet.",
+    },
+    {
+      n: "03",
+      body: "Rendered the catalog — every service and rental type gets its own 3D render in one consistent orange style, so a wall of text becomes a scannable grid.",
+    },
+    {
+      n: "04",
+      body: "Wrote the trust layer — 'Partners, not vendors', certified-operator and single-contract messaging, and client reviews tied to real Limassol sites.",
+    },
+    {
+      n: "05",
+      body: "Designed the quote funnel — a structured equipment picker (machine, attachment, phase, location) that captures a real spec instead of a blank message box.",
+    },
+  ],
+
+  showcases: [
+    {
+      label: "01 — the hero",
+      title: "the whole fleet in one frame",
+      body: "The hero stages light, medium and heavy machines together on one lot — the range lands before the headline does, and the orange runs from the logo straight through the fleet.",
+      image: "/images/projects/stroika/stroika-hero.webp",
+      alt: "The Stroika hero photograph — forklift, sweeper, tipper truck, excavator and tanker staged together",
+      bleed: true,
+    },
+    {
+      label: "02 — equipment classes",
+      title: "three weight classes, one glance",
+      body: "Light (< 5t), medium (5–20t) and heavy (20t+) — the fleet is grouped so a contractor places their job in seconds. Each class is anchored by a clean 3D render on a bright stage, all in the same orange language.",
+      image: "/images/projects/stroika/class-medium.webp",
+      alt: "A medium-class crawler excavator rendered in Stroika's orange 3D style",
+      contain: true,
+    },
+    {
+      label: "03 — a render for every service",
+      title: "a wall of text, turned into a grid",
+      body: "Land grading, excavation, crane & lifting, piling, muck-away — 30+ services and 13 rental types, each drawn as its own 3D object in one orange language. The catalog scans instead of reads.",
+      image: "/images/projects/stroika/mission.webp",
+      alt: "A 3D kit of construction objects — hard hat, blueprint, wrench, cone and keys — in Stroika's render style",
+      contain: true,
+    },
+    {
+      label: "04 — site & earthworks",
+      title: "the ground itself, made legible",
+      body: "From land clearing to deep foundations, the site work gets its own imagery — soil strata and a survey level rendered in the same style — so earthworks read as a designed service, not a line item.",
+      image: "/images/projects/stroika/services-hero.webp",
+      alt: "A rendered cutaway of layered soil strata with a survey level on top",
+      contain: true,
+    },
+    {
+      label: "05 — partners, not vendors",
+      title: "trust, designed in",
+      body: "A 'Partners, not vendors' section carries the promise — modern fleet, certified operators and complete logistics under a single contract — backed by client reviews tied to real, named Limassol sites.",
+      image: "/images/projects/stroika/solutions-hero.webp",
+      alt: "A 3D composition of construction tools — wrench, hard hat, rebar coil, blueprint, cone and keys",
+      contain: true,
+    },
+  ],
+
+  resultLabel: "result",
+  resultHeading: "a rental company that reads like a partner",
+  resultLead:
+    "Stroika ships as one system — brand, fleet, catalog and quote funnel — so a first-time visitor grasps the range, trusts the operator, and requests a real spec in a single scroll.",
+  forEngineers: [
+    "A componentized service catalog — 30+ cards from one template, each swapping only its render and label.",
+    "A structured quote schema (machine · attachment · phase · location) instead of a free-text message.",
+    "One image system — consistent 3D renders on transparent backgrounds, drop-in across the site.",
+  ],
+  forDesigners: [
+    "One orange brand language running from logo to fleet to every service render.",
+    "An equipment taxonomy that makes 30+ machines graspable at a glance.",
+    "Trust designed in — partner messaging and site-tied reviews, not stock filler.",
+  ],
+  resultMetrics: [
+    { value: "1 partner", label: "read, not a vendor" },
+    { value: "3 classes", label: "fleet at a glance" },
+    { value: "1 funnel", label: "spec-driven quote" },
+  ],
+  prev: { href: "/projects/vtb-design", label: "previous case · VTB" },
+};
+
 export const designCases: Record<string, DesignCaseData> = {
   "casino-design": casinoDesign,
   "casino-library": casinoLibrary,
   vtb,
   "vtb-design": vtbDesign,
+  stroika,
   "mobile-design-system": mobileDesignSystem,
 };

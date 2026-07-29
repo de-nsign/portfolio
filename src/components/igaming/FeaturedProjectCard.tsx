@@ -29,14 +29,59 @@ type CardProject = {
 };
 
 // Hover gradient wash. Default is the reference purple; VTB reads blue to match
-// its brand. Keyed by slug so more per-project accents can be added later.
+// its brand, Stroika reads construction-orange. Keyed by slug so more
+// per-project accents can be added later.
 const PURPLE_WASH =
   "linear-gradient(to top, #a069d6 0%, #b98ce6 34%, #e7d6f6 66%, #ffffff 100%)";
 const BLUE_WASH =
   "linear-gradient(to top, #2f62d6 0%, #7fa2ea 34%, #d8e2f7 66%, #ffffff 100%)";
+const ORANGE_WASH =
+  "linear-gradient(to top, #e2571e 0%, #f0885a 34%, #fbddcd 66%, #ffffff 100%)";
 const WASH_BY_SLUG: Record<string, string> = {
   vtb: BLUE_WASH,
   "vtb-design": BLUE_WASH,
+  stroika: ORANGE_WASH,
+};
+
+// Per-slug crop for the illustration. Defaults to object-top; Stroika's hero is
+// a wide fleet shot, so centre the crop to keep the machines in frame.
+const IMAGE_POS_BY_SLUG: Record<string, string> = {
+  stroika: "object-center",
+};
+
+// Decorative "stickers" that pop in around the illustration on hover. Cut-out
+// PNGs, positioned + rotated so they peek past the illustration's edges; each
+// flies in from a small offset and staggers by index. Keyed by slug.
+type Sticker = {
+  src: string;
+  /** Position + size (absolute, relative to the card). */
+  className: string;
+  /** Resting rotation, degrees. */
+  rotate: number;
+  /** Entry offset in px before settling to 0,0. */
+  from: { x: number; y: number };
+};
+const STICKERS_BY_SLUG: Record<string, Sticker[]> = {
+  stroika: [
+    {
+      src: "/images/projects/stroika/stickers/crane-truck.png",
+      className: "left-[-5%] top-[16%] w-[42%]",
+      rotate: -9,
+      from: { x: -36, y: -14 },
+    },
+    {
+      src: "/images/projects/stroika/stickers/excavator-large.png",
+      className: "right-[-6%] top-[34%] w-[42%]",
+      rotate: 8,
+      from: { x: 38, y: 12 },
+    },
+    {
+      src: "/images/projects/stroika/stickers/excavator-mini.png",
+      className: "bottom-[3%] left-[6%] w-[34%]",
+      rotate: -5,
+      from: { x: -14, y: 34 },
+    },
+  ],
 };
 
 export default function FeaturedProjectCard({
@@ -50,6 +95,8 @@ export default function FeaturedProjectCard({
   disableLink?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
+  const stickers = STICKERS_BY_SLUG[project.slug];
+  const imagePos = IMAGE_POS_BY_SLUG[project.slug] ?? "object-top";
   const ref = useRef<HTMLAnchorElement>(null);
   // Pointer position, kept in motion values so the pill can follow without
   // re-rendering the whole card on every mouse move.
@@ -120,7 +167,7 @@ export default function FeaturedProjectCard({
                 alt={`${project.title} — illustration`}
                 width={1920}
                 height={1080}
-                className="h-full w-full object-cover object-top"
+                className={`h-full w-full object-cover ${imagePos}`}
                 priority={priority}
               />
             </div>
@@ -129,6 +176,37 @@ export default function FeaturedProjectCard({
           )}
         </motion.div>
       </div>
+
+      {/* Decorative machinery stickers — pop in around the illustration on hover */}
+      {stickers && (
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-[9]">
+          {stickers.map((s, i) => (
+            <motion.img
+              key={s.src}
+              src={s.src}
+              alt=""
+              className={`absolute drop-shadow-[0_16px_28px_rgba(40,20,10,0.28)] ${s.className}`}
+              initial={false}
+              animate={
+                hovered
+                  ? { opacity: 1, scale: 1, x: 0, y: 0, rotate: s.rotate }
+                  : {
+                      opacity: 0,
+                      scale: 0.6,
+                      x: s.from.x,
+                      y: s.from.y,
+                      rotate: s.rotate * 0.4,
+                    }
+              }
+              transition={{
+                duration: 0.42,
+                ease: [0.22, 1, 0.36, 1],
+                delay: hovered ? i * 0.06 : 0,
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Custom "View project" cursor pill */}
       <AnimatePresence>
