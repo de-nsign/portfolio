@@ -168,18 +168,18 @@ export default function FeaturedProjectCard({
           transition={{ duration: 0.32, ease: [0.22, 0.61, 0.36, 1] }}
         >
           {project.image ? (
-            <div className="mx-auto h-full w-[78%] overflow-hidden rounded-t-[26px] border-[7px] border-b-0 border-black bg-black shadow-[0_24px_60px_-20px_rgba(40,20,70,0.35)]">
+            <div className="mx-auto flex h-full w-[82%] items-center justify-center overflow-hidden rounded-[24px] border-[7px] border-black bg-black shadow-[0_24px_60px_-20px_rgba(40,20,70,0.35)]">
               <Image
                 src={project.image}
                 alt={`${project.title} — illustration`}
                 width={1920}
                 height={1080}
-                className={`h-full w-full rounded-t-[19px] object-cover ${imagePos}`}
+                className="h-full w-full rounded-[16px] object-contain"
                 priority={priority}
               />
             </div>
           ) : (
-            <div className="mx-auto h-full w-[78%] rounded-t-[26px] border-[7px] border-b-0 border-black bg-neutral-200" />
+            <div className="mx-auto h-full w-[82%] rounded-[24px] border-[7px] border-black bg-neutral-200" />
           )}
         </motion.div>
       </div>
