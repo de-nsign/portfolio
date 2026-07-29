@@ -12,7 +12,7 @@ const PANEL_TINTS = ["#f2eee7", "#eceef0", "#efedf2", "#f4ece2"];
 
 function PhoneMock({ src, alt }: { src?: string; alt: string }) {
   return (
-    <div className="relative w-[62%] max-w-[232px] rounded-[2.2rem] border-[6px] border-neutral-900 bg-neutral-900 shadow-[0_18px_36px_-20px_rgba(15,10,5,0.45)] transition-[transform,box-shadow] duration-300 ease-out will-change-transform group-hover:-translate-y-3.5 group-hover:shadow-[0_44px_70px_-28px_rgba(15,10,5,0.55)]">
+    <div className="relative w-[62%] max-w-[232px] rounded-[2.2rem] border-[6px] border-neutral-900 bg-neutral-900 shadow-[0_5px_15px_0_rgba(90,50,40,0.15),0_4px_8px_0_rgba(80,40,30,0.1)] transition-[transform,box-shadow] duration-[400ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] will-change-transform group-hover:-translate-y-[15px] group-hover:shadow-[0_10px_21px_0_rgba(100,60,50,0.1),0_47px_72px_0_rgba(100,60,50,0.4)]">
       <div className="relative aspect-[9/19] overflow-hidden rounded-[1.7rem] bg-neutral-800">
         {src ? (
           <Image src={src} alt={alt} fill className="object-cover object-top" />
