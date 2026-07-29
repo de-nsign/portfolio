@@ -226,7 +226,7 @@ export default function FeaturedProjectCard({
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.16, ease: "easeOut" }}
           >
-            <span className="absolute left-3 top-3 whitespace-nowrap rounded-full bg-neutral-900 px-5 py-3 text-[15px] font-medium text-white shadow-lg">
+            <span className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-neutral-900 px-5 py-3 text-[15px] font-medium text-white shadow-lg">
               View project
             </span>
           </motion.div>
