@@ -109,13 +109,20 @@ export default function FeaturedProjectCard({
     py.set(e.clientY - rect.top);
   }
 
+  // Seed the pointer position on enter so the "View project" pill grows from the
+  // cursor, not from the card's top-left corner (px/py default to 0,0).
+  function onEnter(e: React.MouseEvent) {
+    onMove(e);
+    setHovered(true);
+  }
+
   const wrapperClassName =
     "group relative block overflow-hidden rounded-3xl border border-[rgba(12,19,27,0.1)] bg-neutral-50";
 
   // Link when the project has a case page; a plain div for linkless side projects.
   const Wrapper = (disableLink ? "div" : Link) as React.ElementType;
   const wrapperProps: Record<string, unknown> = {
-    onMouseEnter: () => setHovered(true),
+    onMouseEnter: onEnter,
     onMouseLeave: () => setHovered(false),
     onMouseMove: onMove,
   };
