@@ -29,7 +29,7 @@ export default function SideProjects() {
     <section className="mx-auto max-w-[900px] px-6 pt-32">
       <SectionHeader title="Side Projects" count={sideProjects.length} />
 
-      <div className="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2">
+      <div className="mt-10 grid grid-cols-1 gap-x-3 gap-y-10 sm:grid-cols-2">
         {sideProjects.map((p, i) => {
           const kinds = p.tags.slice(0, 2).map((t) => t.toLowerCase());
           return (
@@ -40,15 +40,13 @@ export default function SideProjects() {
               >
                 <PhoneMock src={p.image} alt={`${p.title} — concept`} />
 
-                {/* Caption tucked into the bottom corner — title first, tags below */}
-                <div className="absolute bottom-6 left-6">
-                  <h3 className="text-[17px] font-medium leading-none tracking-tight text-ink">
-                    {p.title}
-                  </h3>
-                  <p className="mt-2 font-mono text-[13px] tracking-wide text-neutral-500">
-                    {kinds.join(" · ")}
-                  </p>
-                </div>
+                {/* Caption tucked into the bottom corners — title left, tags right */}
+                <h3 className="absolute bottom-6 left-6 text-[17px] font-medium tracking-tight text-ink">
+                  {p.title}
+                </h3>
+                <p className="absolute bottom-6 right-6 font-mono text-[13px] tracking-wide text-neutral-500">
+                  {kinds.join(" · ")}
+                </p>
               </div>
             </article>
           );
