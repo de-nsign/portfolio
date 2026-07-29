@@ -42,9 +42,12 @@ const WASH_BY_SLUG: Record<string, string> = {
 export default function FeaturedProjectCard({
   project,
   priority = false,
+  disableLink = false,
 }: {
   project: CardProject;
   priority?: boolean;
+  /** Side projects have no case page — render a static card, no link/pill. */
+  disableLink?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
   const ref = useRef<HTMLAnchorElement>(null);
@@ -54,22 +57,28 @@ export default function FeaturedProjectCard({
   const py = useMotionValue(0);
 
   function onMove(e: React.MouseEvent) {
-    const rect = ref.current?.getBoundingClientRect();
-    if (!rect) return;
+    const rect = e.currentTarget.getBoundingClientRect();
     px.set(e.clientX - rect.left);
     py.set(e.clientY - rect.top);
   }
 
+  const wrapperClassName =
+    "group relative block overflow-hidden rounded-3xl border border-[rgba(12,19,27,0.1)] bg-neutral-50";
+
+  // Link when the project has a case page; a plain div for linkless side projects.
+  const Wrapper = (disableLink ? "div" : Link) as React.ElementType;
+  const wrapperProps: Record<string, unknown> = {
+    onMouseEnter: () => setHovered(true),
+    onMouseLeave: () => setHovered(false),
+    onMouseMove: onMove,
+  };
+  if (!disableLink) {
+    wrapperProps.href = `/projects/${project.slug}`;
+    wrapperProps.style = { cursor: hovered ? "none" : undefined };
+  }
+
   return (
-    <Link
-      ref={ref}
-      href={`/projects/${project.slug}`}
-      className="group relative block overflow-hidden rounded-3xl border border-[rgba(12,19,27,0.1)] bg-neutral-50"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onMouseMove={onMove}
-      style={{ cursor: hovered ? "none" : undefined }}
-    >
+    <Wrapper ref={ref} className={wrapperClassName} {...wrapperProps}>
       {/* Gradient wash — fades up from the bottom on hover */}
       <motion.div
         aria-hidden
@@ -122,7 +131,7 @@ export default function FeaturedProjectCard({
 
       {/* Custom "View project" cursor pill */}
       <AnimatePresence>
-        {hovered && (
+        {hovered && !disableLink && (
           <motion.div
             className="pointer-events-none absolute left-0 top-0 z-20"
             style={{ x: px, y: py }}
@@ -137,6 +146,6 @@ export default function FeaturedProjectCard({
           </motion.div>
         )}
       </AnimatePresence>
-    </Link>
+    </Wrapper>
   );
 }

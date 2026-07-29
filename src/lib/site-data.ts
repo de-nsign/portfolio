@@ -142,6 +142,42 @@ export const articles: Article[] = [
 export const latestProjects = projects.slice(0, 6);
 export const sideActivity = projects.slice(6);
 
+/* Side Projects — concept explorations and personal design experiments,
+   rendered with the same featured-card layout as Latest Projects (no case
+   pages, so the cards are static). Swap in real titles/copy as needed. */
+export const sideProjects: Project[] = [
+  {
+    slug: "gem-x",
+    title: "GEM X",
+    role: "Concept · UI",
+    period: "2024",
+    tags: ["Concept", "Mobile", "Rewards"],
+    description:
+      "A concept rewards app — collectible gem cases, a points balance and a clean, glassy mobile UI explored end to end.",
+    image: "/images/home/gallery/variants/gemx-grid.jpg",
+  },
+  {
+    slug: "swipedish",
+    title: "SwipeDish",
+    role: "Concept · UI",
+    period: "2024",
+    tags: ["Concept", "Mobile", "Food"],
+    description:
+      "A swipe-to-choose food concept — a playful card interface for picking what to eat, with bold color and motion.",
+    image: "/images/home/gallery/variants/swipedish-green.jpg",
+  },
+  {
+    slug: "dreamguard",
+    title: "DreamGuard",
+    role: "Concept · Visual",
+    period: "2024",
+    tags: ["Concept", "Branding", "Poster"],
+    description:
+      "A sleep-tech visual exploration — poster and identity direction for a fictional dream-tracking product.",
+    image: "/images/home/gallery/variants/dreamguard-poster.jpg",
+  },
+];
+
 export const servicesIntro =
   "Digital aesthetics that engage and emotionally connect with your users";
 
