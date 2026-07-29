@@ -65,21 +65,21 @@ const STICKERS_BY_SLUG: Record<string, Sticker[]> = {
   stroika: [
     {
       src: "/images/projects/stroika/stickers/crane-truck.png",
-      className: "left-[-5%] top-[16%] w-[42%]",
-      rotate: -9,
-      from: { x: -36, y: -14 },
+      className: "left-[-3%] top-[26%] w-[25%]",
+      rotate: -8,
+      from: { x: 18, y: -6 },
     },
     {
       src: "/images/projects/stroika/stickers/excavator-large.png",
-      className: "right-[-6%] top-[34%] w-[42%]",
-      rotate: 8,
-      from: { x: 38, y: 12 },
+      className: "right-[-4%] top-[42%] w-[25%]",
+      rotate: 7,
+      from: { x: -18, y: 8 },
     },
     {
       src: "/images/projects/stroika/stickers/excavator-mini.png",
-      className: "bottom-[3%] left-[6%] w-[34%]",
-      rotate: -5,
-      from: { x: -14, y: 34 },
+      className: "bottom-[7%] left-[3%] w-[20%]",
+      rotate: -6,
+      from: { x: 10, y: 12 },
     },
   ],
 };
@@ -192,16 +192,16 @@ export default function FeaturedProjectCard({
                   ? { opacity: 1, scale: 1, x: 0, y: 0, rotate: s.rotate }
                   : {
                       opacity: 0,
-                      scale: 0.6,
+                      scale: 0.72,
                       x: s.from.x,
                       y: s.from.y,
                       rotate: s.rotate * 0.4,
                     }
               }
               transition={{
-                duration: 0.42,
+                duration: hovered ? 0.34 : 0.2,
                 ease: [0.22, 1, 0.36, 1],
-                delay: hovered ? i * 0.06 : 0,
+                delay: hovered ? i * 0.05 : 0,
               }}
             />
           ))}
