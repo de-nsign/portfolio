@@ -12,7 +12,7 @@ const PANEL_TINTS = ["#f2eee7", "#eceef0", "#efedf2", "#f4ece2"];
 
 function PhoneMock({ src, alt }: { src?: string; alt: string }) {
   return (
-    <div className="relative w-[62%] max-w-[232px] rounded-[2.2rem] border-[6px] border-neutral-900 bg-neutral-900 shadow-[0_34px_64px_-26px_rgba(15,10,5,0.5)]">
+    <div className="relative w-[62%] max-w-[232px] rounded-[2.2rem] border-[6px] border-neutral-900 bg-neutral-900 shadow-[0_18px_36px_-20px_rgba(15,10,5,0.45)] transition-[transform,box-shadow] duration-300 ease-out will-change-transform group-hover:-translate-y-3.5 group-hover:shadow-[0_44px_70px_-28px_rgba(15,10,5,0.55)]">
       <div className="relative aspect-[9/19] overflow-hidden rounded-[1.7rem] bg-neutral-800">
         {src ? (
           <Image src={src} alt={alt} fill className="object-cover object-top" />
@@ -35,7 +35,7 @@ export default function SideProjects() {
           return (
             <article key={p.slug} className="group">
               <div
-                className="flex items-center justify-center rounded-[28px] py-12 shadow-[0_0_0_rgba(0,0,0,0)] transition-[transform,box-shadow] duration-300 ease-out will-change-transform group-hover:-translate-y-2.5 group-hover:scale-[1.03] group-hover:shadow-[0_34px_70px_-28px_rgba(20,15,10,0.32)]"
+                className="flex items-center justify-center rounded-[28px] py-12"
                 style={{ backgroundColor: PANEL_TINTS[i % PANEL_TINTS.length] }}
               >
                 <PhoneMock src={p.image} alt={`${p.title} — concept`} />
