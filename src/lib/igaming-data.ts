@@ -164,7 +164,7 @@ export const sideProjects: Project[] = [
     tags: ["Concept", "Coaching", "Mobile"],
     description:
       "The everything coach app — a client-roster concept for fitness coaches, keeping athletes and their check-ins connected in one clean mobile UI.",
-    image: "/images/projects/tanemi/tanemi-screen.png",
+    image: "/images/projects/tanemi/tanemi.png",
   },
   {
     slug: "swipedish",
