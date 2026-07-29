@@ -33,9 +33,9 @@ export default function SideProjects() {
         {sideProjects.map((p, i) => {
           const kinds = p.tags.slice(0, 2).map((t) => t.toLowerCase());
           return (
-            <article key={p.slug}>
+            <article key={p.slug} className="group">
               <div
-                className="flex items-center justify-center rounded-[28px] py-12"
+                className="flex items-center justify-center rounded-[28px] py-12 shadow-[0_0_0_rgba(0,0,0,0)] transition-[transform,box-shadow] duration-300 ease-out will-change-transform group-hover:-translate-y-2.5 group-hover:scale-[1.03] group-hover:shadow-[0_34px_70px_-28px_rgba(20,15,10,0.32)]"
                 style={{ backgroundColor: PANEL_TINTS[i % PANEL_TINTS.length] }}
               >
                 <PhoneMock src={p.image} alt={`${p.title} — concept`} />
