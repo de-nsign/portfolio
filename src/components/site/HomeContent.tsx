@@ -5,7 +5,6 @@ import Toolkit from "./Toolkit";
 import Career from "./Career";
 import AboutMe from "./AboutMe";
 import Testimonials from "./Testimonials";
-import LetsConnect from "./LetsConnect";
 import SiteFooter from "./SiteFooter";
 import { latestProjects } from "@/lib/site-data";
 
@@ -20,7 +19,6 @@ export default function HomeContent() {
       <Career />
       <AboutMe />
       <Testimonials />
-      <LetsConnect />
       <SiteFooter />
     </main>
   );

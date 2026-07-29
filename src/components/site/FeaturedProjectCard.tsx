@@ -86,8 +86,8 @@ export default function FeaturedProjectCard({
         transition={{ duration: 0.26, ease: "easeOut" }}
       />
 
-      {/* Content */}
-      <div className="relative z-[5] flex min-h-[460px] flex-col px-6 pt-14 text-center">
+      {/* Content — fixed height so every case card is the same size */}
+      <div className="relative z-[5] flex h-[560px] flex-col px-6 pt-14 text-center">
         <h3 className="mx-auto max-w-[640px] text-[28px] font-semibold leading-tight tracking-[-0.02em] text-ink sm:text-[32px]">
           {project.title}
         </h3>
@@ -102,26 +102,27 @@ export default function FeaturedProjectCard({
           ))}
         </div>
 
-        {/* Illustration — scales up on hover (placeholder: project cover) */}
+        {/* Illustration — fills the remaining height (cropped) so cards match,
+            scales up on hover. */}
         <motion.div
-          className="mt-auto w-full origin-bottom pt-10"
+          className="mt-auto flex min-h-0 w-full flex-1 origin-bottom items-end pt-10"
           initial={false}
           animate={{ scale: hovered ? 1.08 : 1 }}
           transition={{ duration: 0.32, ease: [0.22, 0.61, 0.36, 1] }}
         >
           {project.image ? (
-            <div className="mx-auto w-[78%] overflow-hidden rounded-t-2xl shadow-[0_24px_60px_-20px_rgba(40,20,70,0.35)]">
+            <div className="mx-auto h-full w-[78%] overflow-hidden rounded-t-2xl shadow-[0_24px_60px_-20px_rgba(40,20,70,0.35)]">
               <Image
                 src={project.image}
                 alt={`${project.title} — illustration`}
                 width={1920}
                 height={1080}
-                className="h-auto w-full object-cover"
+                className="h-full w-full object-cover object-top"
                 priority={priority}
               />
             </div>
           ) : (
-            <div className="mx-auto h-40 w-[78%] rounded-t-2xl bg-neutral-200" />
+            <div className="mx-auto h-full w-[78%] rounded-t-2xl bg-neutral-200" />
           )}
         </motion.div>
       </div>
