@@ -160,7 +160,7 @@ export default function FeaturedProjectCard({
           transition={{ duration: 0.32, ease: [0.22, 0.61, 0.36, 1] }}
         >
           {project.image ? (
-            <div className="mx-auto w-[80%] self-center overflow-hidden rounded-t-[24px] border-[7px] border-b-0 border-black bg-black shadow-[0_24px_60px_-20px_rgba(40,20,70,0.35)]">
+            <div className="mx-auto w-[80%] self-end overflow-hidden rounded-t-[24px] border-[7px] border-b-0 border-black bg-black shadow-[0_24px_60px_-20px_rgba(40,20,70,0.35)]">
               {/* Natural aspect ratio — the frame hugs the whole screenshot, no crop */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -170,7 +170,7 @@ export default function FeaturedProjectCard({
               />
             </div>
           ) : (
-            <div className="mx-auto aspect-[16/10] w-[80%] self-center rounded-t-[24px] border-[7px] border-b-0 border-black bg-neutral-200" />
+            <div className="mx-auto aspect-[16/10] w-[80%] self-end rounded-t-[24px] border-[7px] border-b-0 border-black bg-neutral-200" />
           )}
         </motion.div>
       </div>
