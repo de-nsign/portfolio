@@ -4,30 +4,177 @@
 
 @layer base {
   :root {
-    --col-count: 5;
-    --nav-height: 3.5rem;
+    --ink: 22 21 21;
+    --bg: 255 255 255;
   }
 
   html {
     scroll-behavior: smooth;
   }
 
+  html.dark {
+    --ink: 235 235 235;
+    --bg: 10 10 10;
+  }
+
   body {
-    @apply bg-bg-dark text-white antialiased;
+    background: rgb(var(--bg));
+    color: rgb(var(--ink));
+    @apply antialiased;
     overflow-x: hidden;
+    font-feature-settings: "cv11", "ss01";
   }
 
   ::selection {
-    background: rgb(255, 115, 0);
-    color: #000;
+    background: #dff3e4;
+    color: #1c1b1b;
   }
 }
 
-@layer utilities {
-  .text-gradient {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(to right,
-        rgb(255, 115, 0),
-        rgb(255, 0, 0));
+@layer components {
+  .hero-heading {
+    background-image: linear-gradient(
+      180deg,
+      #9a9a9a 0%,
+      #2c2c2c 55%,
+      #4a4a4a 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  html.dark .hero-heading {
+    background-image: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #8a8a8a 100%
+    );
+  }
+
+  .chrome-text {
+    font-family: var(--font-blackletter), serif;
+    font-size: clamp(64px, 13vw, 168px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    background-color: #8fa3ba;
+    background-image: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #dbe4ef 8%,
+      #9fb2c7 25%,
+      #566d88 44%,
+      #2c3d52 50%,
+      #6a7f97 56%,
+      #bccadb 70%,
+      #eef4fa 80%,
+      #9db0c6 92%,
+      #c6d3e1 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* ── Career ladder ─────────────────────────────────── */
+  .ladder-rail {
+    background-image:
+      /* left rail */
+      linear-gradient(rgb(var(--ink)), rgb(var(--ink))),
+      /* right rail */
+      linear-gradient(rgb(var(--ink)), rgb(var(--ink))),
+      /* rungs */
+      repeating-linear-gradient(
+        to bottom,
+        rgb(var(--ink)) 0 2px,
+        transparent 2px 24px
+      );
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-position: left top, right top, center 6px;
+    background-size: 2px 100%, 2px 100%, 100% 100%;
+    opacity: 0.16;
+  }
+
+  .climber {
+    image-rendering: pixelated;
+    shape-rendering: crispEdges;
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.18));
+    will-change: transform;
+  }
+
+  /* second (stepped) frame hidden until climbing */
+  .climber .frame-b {
+    opacity: 0;
+  }
+  .climber.is-climbing .frame-a {
+    animation: climb-flick 0.26s steps(1) infinite;
+  }
+  .climber.is-climbing .frame-b {
+    animation: climb-flick 0.26s steps(1) infinite;
+    animation-delay: 0.13s;
+  }
+  .climber.is-climbing {
+    animation: climb-bob 0.26s steps(2) infinite;
+  }
+
+  @keyframes climb-flick {
+    0%,
+    49.9% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes climb-bob {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-1.5px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .climber.is-climbing .frame-a,
+    .climber.is-climbing .frame-b,
+    .climber.is-climbing {
+      animation: none;
+    }
+  }
+
+  /* ── Testimonials marquee ──────────────────────────── */
+  .testimonials-track {
+    animation: testimonials-scroll 60s linear infinite;
+    /* extra headroom so the tilted / lifted cards never clip */
+    padding-top: 8px;
+    padding-bottom: 64px;
+    will-change: transform;
+  }
+  .testimonials-marquee:hover .testimonials-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes testimonials-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      /* half, because the track holds two copies of the list */
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonials-track {
+      animation: none;
+    }
   }
 }
